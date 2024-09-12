@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63060a168a1e1b74cadcee7ab04373ea, type: 3}
+  m_Name: PatissonSeed
+  m_EditorClassIdentifier: 
+  Object: {fileID: 0}
+  Type: 2
+  ID: 200
+  Sprite: {fileID: 21300000, guid: e2e10dac45a39bb4a822bea484356277, type: 3}
+  TestSt: PatiSSeeD
+  MaxStack: 10
+  PlantMeshes:
+  - {fileID: -2432090755550338912, guid: e49094eb905a47c45b547ebe295299d9, type: 3}
+  - {fileID: -2432090755550338912, guid: 005451fa43e34694d936b96b5bf73dce, type: 3}
+  - {fileID: -2432090755550338912, guid: 8ec757083129b6c4d95928ce89f22513, type: 3}
+  Harvest: {fileID: 11400000, guid: d52a72fcd10eaa444858b155e111f434, type: 2}
