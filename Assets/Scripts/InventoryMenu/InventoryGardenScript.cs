@@ -4,6 +4,12 @@ public class InventoryGardenScript : Inventory
 
     public override bool CanAddItem(Slot slot) => _gardenStrategy.CanAddSeed(slot);
 
+    public override void SetOpen(bool open)
+    {
+        _isOpen = open;
+        _gardenStrategy.SetOpen(open);
+    }
+
     public void SetStrategy(GardenStrategy strategy) => _gardenStrategy = strategy;
 
     public override void AddItem(Slot slot)

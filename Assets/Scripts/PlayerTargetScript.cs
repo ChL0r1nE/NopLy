@@ -7,28 +7,22 @@ public class PlayerTargetScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Interact"))
-        {
-            if (_target != null)
-                _target.TargetDisable();
+        if (_target)
+            _target.TargetDisable();
 
-            _target = col.gameObject.GetComponent<TargetActivateScript>();
-            _target.TargetEnable(out _targetStrategy);
-        }
+        _target = col.GetComponent<TargetActivateScript>();
+        _target.TargetEnable(out _targetStrategy);
     }
 
     private void OnTriggerExit(Collider col)
     {
-        if (col.CompareTag("Interact"))
-        {
-            _targetStrategy = null;
-            col.gameObject.GetComponent<TargetActivateScript>().TargetDisable();
-        }
+        _targetStrategy = null;
+        col.GetComponent<TargetActivateScript>().TargetDisable();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _targetStrategy != null)
+        if (Input.GetKeyDown(KeyCode.E) && _targetStrategy)
             _targetStrategy.Interact();
     }
 

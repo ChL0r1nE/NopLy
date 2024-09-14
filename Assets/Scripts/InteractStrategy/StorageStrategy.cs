@@ -10,6 +10,12 @@ public class StorageStrategy : Strategy
     private InventoryStorageScript _inventoryStorageScript;
     private bool _isOpen = false;
 
+    public void SetOpen(bool isOpen)
+    {
+        _isOpen = isOpen;
+        _animator.SetBool("IsOpen", _isOpen);
+    }
+
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -18,10 +24,8 @@ public class StorageStrategy : Strategy
 
     public override void Interact()
     {
-        PlayerWeaponScript.CanAttack = !PlayerWeaponScript.CanAttack;
-
         _isOpen = !_isOpen;
-        _animator.SetTrigger("SwitchStorage");
+        _animator.SetBool("IsOpen", _isOpen);
         _inventoryStorageScript.SwitchMenu(true, "InventoryStorage");
         _inventoryStorageScript.SetStrategy(this);
         _inventoryStorageScript.UpdateMenu(Slots);
@@ -29,16 +33,10 @@ public class StorageStrategy : Strategy
 
     private void OnTriggerExit(Collider col)
     {
-        PlayerWeaponScript.CanAttack = true;
-
-        if (col.CompareTag("Player"))
+        if (col.CompareTag("Player") && _isOpen)
         {
-            if (_isOpen)
-            {
-                _isOpen = false;
-                _animator.SetTrigger("SwitchStorage");
-            }
-
+            _isOpen = false;
+            _animator.SetBool("IsOpen", _isOpen);
             _inventoryStorageScript.SwitchMenu(false, "InventoryStorage");
         }
     }
@@ -47,7 +45,7 @@ public class StorageStrategy : Strategy
     {
         for (int i = 0; i < Slots.Length; i++)
         {
-            if (Slots[i].Info != null && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
+            if (Slots[i].Info && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
             {
                 Slots[i].AddCount(slot.Count, out int remain);
 

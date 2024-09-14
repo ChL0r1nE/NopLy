@@ -54,9 +54,9 @@ public class OutlineScript : MonoBehaviour
     }
 
     [SerializeField] private Renderer[] _renderers;
-    [SerializeField] private Mode _outlineMode;
+    [SerializeField] private Mode _outlineMode = Mode.OutlineVisible;
     [SerializeField] private Color _outlineColor = Color.white;
-    [SerializeField, Range(0f, 10f)] private float _outlineWidth = 2f;
+    [SerializeField, Range(0f, 10f)] private float _outlineWidth = 0f;
 
     [SerializeField, HideInInspector] private List<Mesh> _bakeKeys = new();
     [SerializeField, HideInInspector] private List<ListVector3> _bakeValues = new();
@@ -127,7 +127,7 @@ public class OutlineScript : MonoBehaviour
 
             _renderer = meshFilter.GetComponent<Renderer>();
 
-            if (_renderer != null)
+            if (_renderer)
                 CombineSubmeshes(meshFilter.sharedMesh, _renderer.sharedMaterials.Length);
         }
 

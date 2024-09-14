@@ -24,7 +24,7 @@ public class PlayerInventoryScript : MonoBehaviour
 
         for (int i = 0; i < Slots.Length; i++)
         {
-            if (Slots[i].Info != null && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
+            if (Slots[i].Info && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
             {
                 Slots[i].AddCount(slot.Count, out int remain);
 

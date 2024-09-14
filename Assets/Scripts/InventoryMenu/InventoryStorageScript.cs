@@ -4,6 +4,12 @@ public class InventoryStorageScript : Inventory
 
     public void SetStrategy(StorageStrategy strategy) => _storageStrategy = strategy;
 
+    public override void SetOpen(bool open)
+    {
+        _isOpen = open;
+        _storageStrategy.SetOpen(open);
+    }
+
     public override void DeleteItem(int id)
     {
         _inventoryPlayerScript.AddItem(_storageStrategy.GetInfo(id));

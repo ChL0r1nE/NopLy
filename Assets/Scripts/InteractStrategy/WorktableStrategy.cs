@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class WorktableStrategy : Strategy
 {
     [System.Serializable]
@@ -10,12 +12,25 @@ public class WorktableStrategy : Strategy
     public Recipe[] Recipes;
 
     private InventoryWorktableScript _inventoryWorktableScript;
+    private bool _isOpen = false;
+
+    public void SetOpen(bool isOpen) => _isOpen = isOpen;
 
     private void Start() => _inventoryWorktableScript = FindObjectOfType<InventoryWorktableScript>();
 
     public override void Interact()
     {
+        _isOpen = !_isOpen;
         _inventoryWorktableScript.SetStrategy(this);
         _inventoryWorktableScript.SwitchMenu(true, "InventoryWorktable");
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.CompareTag("Player") && _isOpen)
+        {
+            _isOpen = false;
+            _inventoryWorktableScript.SwitchMenu(false, "InventoryWortable");
+        }
     }
 }

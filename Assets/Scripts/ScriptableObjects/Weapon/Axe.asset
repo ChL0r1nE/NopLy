@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e83fbef89805f8a44a2819ef3ec0f0aa, type: 3}
-  m_Name: SpearInfo
+  m_Name: Axe
   m_EditorClassIdentifier: 
   Object: {fileID: 0}
   Type: 3
-  ID: 401
-  Sprite: {fileID: 21300000, guid: c8e5d7dd67d8bf5408ed51dbc807fb69, type: 3}
-  TestSt: SpeaR!
+  ID: 402
+  Sprite: {fileID: 21300000, guid: 2aa3af56dce7bcd419a76c48957800c7, type: 3}
+  TestSt: Axe!
   MaxStack: 1
   WeaponPlace: 0
-  WeaponType: 1
-  WeaponMesh: {fileID: -2432090755550338912, guid: e2fc6f72e548be74ca494ebb73fa8b27, type: 3}
-  Damage: 2
+  WeaponType: 2
+  WeaponMesh: {fileID: -2432090755550338912, guid: 1744b37b5b169624e9d41c8872422d4c, type: 3}
+  Damage: 3

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyMoveScript : MonoBehaviour
+public class EnemyFollowingScript : MonoBehaviour
 {
     public float Speed;
 
@@ -39,11 +39,12 @@ public class EnemyMoveScript : MonoBehaviour
     IEnumerator WaitAttack()
     {
         _isAttack = true;
-        yield return new WaitForSeconds(_attackTime);
+        yield return new WaitForSeconds(_attackTime / 2);
 
         if (Vector3.Distance(transform.position, _playerTransform.position) < 1.5f)
             _playerTransform.gameObject.GetComponent<PlayerHealthScript>().TakeDamage(_damage);
 
+        yield return new WaitForSeconds(_attackTime / 2);
         _isAttack = false;
     }
 }

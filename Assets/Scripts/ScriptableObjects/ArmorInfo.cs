@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public enum ArmorType
+public enum ArmorType : int
 {
-    Head,
+    Head = 0,
     Body,
-    LeftHand,
     RightHand,
+    LeftHand,
     Legs
 }
 

@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices.WindowsRuntime;
-
 public class InventoryPlayerScript : Inventory
 {
     public Inventory SecondInventory;

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class InventoryAmmunitionScript : Inventory
 {
+    [SerializeField] private ArmorInfo[] _defaultArmors;
+    [SerializeField] private WeaponInfo _defaultMainWeapon;
     private PlayerArmorScript _playerArmorScript;
     private PlayerWeaponScript _playerMainWeaponScript;
     private PlayerWeaponScript _playerSubWeaponScript; //for future
@@ -19,6 +21,9 @@ public class InventoryAmmunitionScript : Inventory
         {
             WeaponInfo weaponInfo = slot.Info as WeaponInfo;
 
+            if (_playerMainWeaponScript.WeaponInfo != _defaultMainWeapon)
+                _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
+
             if (weaponInfo.WeaponPlace == WeaponPlace.Main)
                 _playerMainWeaponScript.SetWeapon(weaponInfo);
         }
@@ -26,7 +31,7 @@ public class InventoryAmmunitionScript : Inventory
         {
             ArmorInfo armorInfo = slot.Info as ArmorInfo;
 
-            _playerArmorScript.AddArmor(armorInfo);
+            _playerArmorScript.SetArmor(armorInfo);
         }
 
         UpdateMenu(null);
@@ -37,7 +42,14 @@ public class InventoryAmmunitionScript : Inventory
         if (id == 0)
         {
             _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
-            _playerMainWeaponScript.SetWeapon(null);
+            _playerMainWeaponScript.SetWeapon(_defaultMainWeapon);
+        }
+        else if (id == 1)
+            Debug.Log("Sub");
+        else
+        {
+            _inventoryPlayerScript.AddItem(new Slot(_playerArmorScript.Armors[id - 2], 1));
+            _playerArmorScript.SetArmor(_defaultArmors[id - 2]);
         }
 
         UpdateMenu(null);
@@ -45,7 +57,7 @@ public class InventoryAmmunitionScript : Inventory
 
     public override void UpdateMenu(Slot[] slots, bool WithText = false)
     {
-        if (_playerMainWeaponScript.WeaponInfo != null)
+        if (_playerMainWeaponScript.WeaponInfo.WeaponType != WeaponType.Hand)
         {
             _images[0].gameObject.SetActive(true);
             _images[0].sprite = _playerMainWeaponScript.WeaponInfo.Sprite;
@@ -53,9 +65,9 @@ public class InventoryAmmunitionScript : Inventory
         else
             _images[0].gameObject.SetActive(false);
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 5; i++)
         {
-            if (_playerArmorScript.Armors[i] != null)
+            if (_playerArmorScript.Armors[i].Sprite)
             {
                 _images[i + 2].gameObject.SetActive(true);
                 _images[i + 2].sprite = _playerArmorScript.Armors[i].Sprite;

@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: SwitchStorage
+    m_ConditionEvent: IsOpen
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8891664801545732288}
@@ -33,8 +33,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: SwitchStorage
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsOpen
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8033338447790517028}
@@ -59,8 +59,8 @@ AnimatorController:
   m_Name: Chest
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: SwitchStorage
-    m_Type: 9
+  - m_Name: IsOpen
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -92,7 +92,7 @@ AnimatorStateMachine:
     m_Position: {x: 280, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8891664801545732288}
-    m_Position: {x: 510, y: 110, z: 0}
+    m_Position: {x: 550, y: 110, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

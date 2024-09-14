@@ -9,7 +9,8 @@ public enum WeaponPlace
 public enum WeaponType
 {
     Hand,
-    Shaft
+    Shaft,
+    Chopping
 }
 
 [CreateAssetMenu(fileName = "New WeaponInfo", menuName = "WeaponInfo", order = 2)]

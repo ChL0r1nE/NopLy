@@ -4,8 +4,6 @@ public delegate void Attack();
 
 public class PlayerWeaponScript : MonoBehaviour
 {
-    public static bool CanAttack = true;
-
     public WeaponInfo WeaponInfo;
     public Animator Animator;
     public Attack Attack;
@@ -32,23 +30,13 @@ public class PlayerWeaponScript : MonoBehaviour
         WeaponInfo = info;
         _playerAttackScript.SetWeaponInfo(info);
 
-        if (info == null)
-        {
-            _meshFilter.mesh = null;
-            Animator.SetTrigger("IsNothing");
-
-            return;
-        }
-
+        Animator.SetTrigger(info.WeaponType.ToString());
         _meshFilter.mesh = info.WeaponMesh;
-
-        if (info.WeaponType == WeaponType.Shaft)
-            Animator.SetTrigger("IsShaft");
     }
 
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Q) && _isMainWeapon && CanAttack))
+        if (Input.GetKeyDown(KeyCode.Q) && _isMainWeapon)
         {
             if (WeaponInfo.WeaponType == WeaponType.Shaft)
             {
@@ -57,10 +45,9 @@ public class PlayerWeaponScript : MonoBehaviour
             }
         }
 
-        if ((Input.GetKeyDown(KeyCode.Mouse0) && _isMainWeapon && CanAttack))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _isMainWeapon)
         {
-
-            if (_enemyActivateScript.HaveEnemy)
+            if (_enemyActivateScript.EnemyTransform)
             {
                 _nowRotation = _playerTransform.rotation.eulerAngles;
 
