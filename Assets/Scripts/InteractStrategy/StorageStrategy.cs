@@ -26,9 +26,9 @@ public class StorageStrategy : Strategy
     {
         _isOpen = !_isOpen;
         _animator.SetBool("IsOpen", _isOpen);
-        _inventoryStorageScript.SwitchMenu(true, "InventoryStorage");
-        _inventoryStorageScript.SetStrategy(this);
         _inventoryStorageScript.UpdateMenu(Slots);
+        _inventoryStorageScript.SetStrategy(this);
+        _inventoryStorageScript.SwitchOpen(true);
     }
 
     private void OnTriggerExit(Collider col)
@@ -36,8 +36,8 @@ public class StorageStrategy : Strategy
         if (col.CompareTag("Player") && _isOpen)
         {
             _isOpen = false;
-            _animator.SetBool("IsOpen", _isOpen);
-            _inventoryStorageScript.SwitchMenu(false, "InventoryStorage");
+            _animator.SetBool("IsOpen", false);
+            _inventoryStorageScript.SwitchOpen(false);
         }
     }
 

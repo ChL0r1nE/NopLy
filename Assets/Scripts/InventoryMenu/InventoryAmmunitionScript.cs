@@ -3,16 +3,27 @@ using UnityEngine;
 public class InventoryAmmunitionScript : Inventory
 {
     [SerializeField] private ArmorInfo[] _defaultArmors;
+    [SerializeField] private CameraFollowingScript _cameraFollowingScript;
     [SerializeField] private WeaponInfo _defaultMainWeapon;
-    private PlayerArmorScript _playerArmorScript;
     private PlayerWeaponScript _playerMainWeaponScript;
-    private PlayerWeaponScript _playerSubWeaponScript; //for future
+    private PlayerArmorScript _playerArmorScript;
 
     private void Start()
     {
         _playerArmorScript = FindObjectOfType<PlayerArmorScript>();
-        _playerMainWeaponScript = GameObject.FindGameObjectWithTag("MainWeapon").GetComponent<PlayerWeaponScript>();
-        _playerSubWeaponScript = GameObject.FindGameObjectWithTag("SubWeapon").GetComponent<PlayerWeaponScript>();
+        _playerMainWeaponScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerWeaponScript>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+            SwitchOpen(true);
+    }
+
+    public override void SwitchOpen(bool baseOpen)
+    {
+        base.SwitchOpen(baseOpen);
+        _cameraFollowingScript.SwitchToPlayer();
     }
 
     public override void AddItem(Slot slot)
@@ -44,8 +55,6 @@ public class InventoryAmmunitionScript : Inventory
             _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
             _playerMainWeaponScript.SetWeapon(_defaultMainWeapon);
         }
-        else if (id == 1)
-            Debug.Log("Sub");
         else
         {
             _inventoryPlayerScript.AddItem(new Slot(_playerArmorScript.Armors[id - 2], 1));
@@ -79,9 +88,5 @@ public class InventoryAmmunitionScript : Inventory
 
     public override bool CanAddItem(Slot slot) => slot.Info.Type == ItemType.Weapon || slot.Info.Type == ItemType.Armor;
 
-    public void SetPlayerAmmunitionScript(PlayerArmorScript playerArmorScript, out InventoryAmmunitionScript inventoryAmmunitionScript)
-    {
-        _playerArmorScript = playerArmorScript;
-        inventoryAmmunitionScript = this;
-    }
+    public void SetPlayerAmmunitionScript(PlayerArmorScript playerArmorScript) => _playerArmorScript = playerArmorScript;
 }

@@ -2,16 +2,28 @@ using UnityEngine;
 
 public class SwitchMenuScript : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
-    public Inventory _nowInventory; //pub
-    public bool isOpen = false; //pub
+    [SerializeField] private InventoryPlayerScript _inventoryPlayerScript;
+    private Inventory _nowInventory;
 
-    public void SetMenu(Inventory inventory, string animName, bool isOpen)
+    private void Start() => _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
+
+    public void SetMenu(Inventory inventory)
     {
-        if (_nowInventory && _nowInventory != inventory)
-            _nowInventory.SetOpen(false);
+        if (!_nowInventory)
+        {
+            _nowInventory = inventory;
+            _inventoryPlayerScript.SetSecondInventory(_nowInventory);
+            return;
+        }
 
-        _nowInventory = inventory;
-        _animator.SetTrigger(isOpen ? animName : "Close");
+        if (_nowInventory != inventory)
+        {
+            _nowInventory.SwitchOpen(false);
+            _nowInventory = inventory;
+        }
+        else
+            _nowInventory = null;
+
+        _inventoryPlayerScript.SetSecondInventory(_nowInventory);
     }
 }

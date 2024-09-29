@@ -4,10 +4,12 @@ public class InventoryWorktableScript : Inventory
 
     public void SetStrategy(WorktableStrategy strategy) => _worktableStrategy = strategy;
 
-    public override void SetOpen(bool open)
+    public override void SwitchOpen(bool baseOpen)
     {
-        _isOpen = open;
-        _worktableStrategy.SetOpen(open);
+        base.SwitchOpen(baseOpen);
+
+        if (!baseOpen)
+            _worktableStrategy.SetOpen(false);
     }
 
     public void CraftItem(int id)

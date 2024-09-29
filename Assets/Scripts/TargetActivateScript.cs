@@ -11,11 +11,10 @@ public class TargetActivateScript : MonoBehaviour
     private float _alphaTarget;
     private bool _canBeActive = true;
 
-    public void SetCanBeActive(bool canBeActive)
+    public void SetOffActive()
     {
-        _canBeActive = canBeActive;
-        _outlineScript.OutlineWidth = 0f;
-        _alphaTarget = 0f;
+        _canBeActive = false;
+        TargetEvent(0f, 0f);
     }
 
     public void TargetEnable(out Strategy strategy)

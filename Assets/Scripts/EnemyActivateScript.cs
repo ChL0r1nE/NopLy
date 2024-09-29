@@ -15,10 +15,9 @@ public class EnemyActivateScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (EnemyTransform && Vector3.Distance(transform.position, EnemyTransform.position) > 15)
-        {
-            EnemyTransform.GetComponent<OutlineScript>().OutlineWidth = 0;
-            EnemyTransform = null;
-        }
+        if (!EnemyTransform || Vector3.Distance(transform.position, EnemyTransform.position) < 15) return;
+
+        EnemyTransform.GetComponent<OutlineScript>().OutlineWidth = 0;
+        EnemyTransform = null;
     }
 }

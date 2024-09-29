@@ -47,26 +47,14 @@ public class OutlineScript : MonoBehaviour
         }
     }
 
-    [Serializable]
-    private class ListVector3
-    {
-        public List<Vector3> data;
-    }
-
     [SerializeField] private Renderer[] _renderers;
-    [SerializeField] private Mode _outlineMode = Mode.OutlineVisible;
-    [SerializeField] private Color _outlineColor = Color.white;
-    [SerializeField, Range(0f, 10f)] private float _outlineWidth = 0f;
-
-    [SerializeField, HideInInspector] private List<Mesh> _bakeKeys = new();
-    [SerializeField, HideInInspector] private List<ListVector3> _bakeValues = new();
-
     private List<Material> _materials = new();
-
+    [SerializeField] private Color _outlineColor = Color.white;
+    [SerializeField] private Mode _outlineMode = Mode.OutlineVisible;
+    [SerializeField, Range(0f, 10f)] private float _outlineWidth = 0f;
     private Renderer _renderer;
     private Material _outlineMaskMaterial;
     private Material _outlineFillMaterial;
-
     private Vector3 _smoothNormal;
 
     private void Awake()
@@ -120,8 +108,7 @@ public class OutlineScript : MonoBehaviour
             if (!registeredMeshes.Add(meshFilter.sharedMesh))
                 continue;
 
-            int index = _bakeKeys.IndexOf(meshFilter.sharedMesh);
-            List<Vector3> smoothNormals = index >= 0 ? _bakeValues[index].data : SmoothNormals(meshFilter.sharedMesh);
+            List<Vector3> smoothNormals = SmoothNormals(meshFilter.sharedMesh);
 
             meshFilter.sharedMesh.SetUVs(3, smoothNormals);
 
@@ -169,8 +156,7 @@ public class OutlineScript : MonoBehaviour
 
     private void CombineSubmeshes(Mesh mesh, int lenght)
     {
-        if (mesh.subMeshCount == 1 | mesh.subMeshCount > lenght)
-            return;
+        if (mesh.subMeshCount == 1 || mesh.subMeshCount > lenght) return;
 
         mesh.subMeshCount++;
         mesh.SetTriangles(mesh.triangles, mesh.subMeshCount - 1);

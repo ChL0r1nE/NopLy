@@ -351,11 +351,9 @@ MonoBehaviour:
   - {fileID: 3300509759160741613}
   - {fileID: 7919224475970342420}
   - {fileID: 8933273092051481671}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
-  _bakeKeys: []
-  _bakeValues: []
 --- !u!114 &3039788467174877031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,9 +380,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetActivateScript: {fileID: 0}
   Loot: {fileID: 3347451292053938830, guid: 3a5f55f92183122489ff9e35fc293d58, type: 3}
-  Billboard: {fileID: 3039788467043093372}
+  _barRenderer: {fileID: 0}
+  _animator: {fileID: 3039788467174877029}
+  _targetActivateScript: {fileID: 3039788467174877031}
+  _health: 1
   _destroyObjectAfter: 1
 --- !u!65 &3039788467174877025
 BoxCollider:

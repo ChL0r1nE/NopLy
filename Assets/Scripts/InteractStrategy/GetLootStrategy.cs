@@ -1,29 +1,35 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(TargetActivateScript))]
 public class GetLootStrategy : Strategy
 {
-    public GameObject Loot;
-    public GameObject Billboard;
-
+    [SerializeField] private GameObject Loot;
+    [SerializeField] private SpriteRenderer _barRenderer;
+    [SerializeField] private Animator _animator;
     [SerializeField] private TargetActivateScript _targetActivateScript;
+    [SerializeField] private int _health = 1;
     [SerializeField] private bool _destroyObjectAfter;
-    private Animator _animator;
+    private Vector2 _barScale = new(0, 0.04f);
     private bool _isDestroy = false;
-
-    private void Start()
-    {
-        _targetActivateScript = GetComponent<TargetActivateScript>();
-        _animator = GetComponent<Animator>();
-    }
 
     public override void Interact()
     {
         if (_isDestroy) return;
 
+        _health--;
+
+        if (_barRenderer)
+        {
+            _barScale.x = _health * 0.09f;
+            _barRenderer.size = _barScale;
+        }
+
+        if (_health > 0) return;
+
         _isDestroy = true;
-        _targetActivateScript.SetCanBeActive(false);
-        _animator.SetTrigger("Collect");
+        _animator.SetTrigger("Destroy");
+        _targetActivateScript.SetOffActive();
 
         Instantiate(Loot, transform.position, Quaternion.identity);
 

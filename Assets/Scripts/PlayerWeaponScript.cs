@@ -5,24 +5,23 @@ public delegate void Attack();
 public class PlayerWeaponScript : MonoBehaviour
 {
     public WeaponInfo WeaponInfo;
-    public Animator Animator;
     public Attack Attack;
 
-    [SerializeField] private Transform _playerTransform;
-    [SerializeField] private PlayerMoveScript _playerMoveScript;
     [SerializeField] private PlayerAttackScript _playerAttackScript;
     [SerializeField] private EnemyActivateScript _enemyActivateScript;
-    [SerializeField] private bool _isMainWeapon;
-    private MeshFilter _meshFilter;
+    [SerializeField] private MeshFilter _meshFilter;
+    private Transform _playerTransform;
+    private Animator _animator;
+    private PlayerMoveScript _playerMoveScript;
     private Vector3 _nowRotation;
 
     private void Start()
     {
         Attack = Strike;
-        _meshFilter = GetComponent<MeshFilter>();
-
-        if (_isMainWeapon)
-            _playerAttackScript.SetWeaponInfo(WeaponInfo);
+        _animator = GetComponent<Animator>();
+        _playerTransform = GetComponent<Transform>();
+        _playerMoveScript = GetComponent<PlayerMoveScript>();
+        SetWeapon(WeaponInfo);
     }
 
     public void SetWeapon(WeaponInfo info)
@@ -30,13 +29,13 @@ public class PlayerWeaponScript : MonoBehaviour
         WeaponInfo = info;
         _playerAttackScript.SetWeaponInfo(info);
 
-        Animator.SetTrigger(info.WeaponType.ToString());
+        _animator.SetTrigger(info.WeaponType.ToString());
         _meshFilter.mesh = info.WeaponMesh;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && _isMainWeapon)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             if (WeaponInfo.WeaponType == WeaponType.Shaft)
             {
@@ -45,7 +44,7 @@ public class PlayerWeaponScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _isMainWeapon)
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (_enemyActivateScript.EnemyTransform)
             {
@@ -60,5 +59,5 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
-    private void Strike() => Animator.SetTrigger("Strike");
+    private void Strike() => _animator.SetTrigger("Strike");
 }

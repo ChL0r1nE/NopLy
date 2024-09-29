@@ -22,15 +22,15 @@ public class WorktableStrategy : Strategy
     {
         _isOpen = !_isOpen;
         _inventoryWorktableScript.SetStrategy(this);
-        _inventoryWorktableScript.SwitchMenu(true, "InventoryWorktable");
+        _inventoryWorktableScript.SwitchOpen(true);
     }
 
     private void OnTriggerExit(Collider col)
     {
-        if (col.CompareTag("Player") && _isOpen)
+        if (_isOpen && col.CompareTag("Player"))
         {
             _isOpen = false;
-            _inventoryWorktableScript.SwitchMenu(false, "InventoryWortable");
+            _inventoryWorktableScript.SwitchOpen(false);
         }
     }
 }

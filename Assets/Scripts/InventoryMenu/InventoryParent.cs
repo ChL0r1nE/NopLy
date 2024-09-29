@@ -7,13 +7,24 @@ public abstract class Inventory : MonoBehaviour
     [SerializeField] protected Text[] _textes;
     [SerializeField] protected SwitchMenuScript _switchMenuScript;
     protected InventoryPlayerScript _inventoryPlayerScript;
+    protected Vector2 _inventoryTargetPosition = new(400, 0);
     protected int _maxSlotCount;
     protected int _nowSlotCount;
     protected bool _isOpen = false;
 
-    public virtual void SetOpen(bool open) => _isOpen = open;
+    private RectTransform _rectTransform;
 
-    private void Awake() => _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
+    private void Awake()
+    {
+        _rectTransform = GetComponent<RectTransform>();
+        _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
+    }
+
+    private void LateUpdate()
+    {
+        _inventoryTargetPosition.y = _isOpen ? 0 : -1000;
+        _rectTransform.anchoredPosition = Vector2.MoveTowards(_rectTransform.anchoredPosition, _inventoryTargetPosition, 30);
+    }
 
     public virtual void AddItem(Slot slot) { }
 
@@ -21,14 +32,10 @@ public abstract class Inventory : MonoBehaviour
 
     public virtual bool CanAddItem(Slot slot) => _nowSlotCount + 1 <= _maxSlotCount;
 
-    public virtual void SwitchMenu(bool isThere, string animName)
+    public virtual void SwitchOpen(bool baseOpen)
     {
-        _isOpen = !_isOpen && isThere;
-
-        _switchMenuScript.SetMenu(this, animName, _isOpen);
-
-        if (_isOpen)
-            _inventoryPlayerScript.SecondInventory = this;
+        _isOpen = !_isOpen && baseOpen;
+        _switchMenuScript.SetMenu(this);
     }
 
     public virtual void UpdateMenu(Slot[] slots, bool WithText = true)

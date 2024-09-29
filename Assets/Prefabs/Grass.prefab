@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 3535163779419656163}
   - component: {fileID: 3535163779419656160}
   - component: {fileID: 3535163779419656161}
-  - component: {fileID: 3535163779419656173}
+  - component: {fileID: 7420542892416586033}
   m_Layer: 6
   m_Name: Grass
   m_TagString: Interact
@@ -232,11 +232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderers:
   - {fileID: 400195763046944467}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
-  _bakeKeys: []
-  _bakeValues: []
 --- !u!114 &3535163779419656163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,9 +261,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetActivateScript: {fileID: 0}
   Loot: {fileID: 3347451292053938830, guid: 9982a7e6b6996dd4c9f8c2ee2fd93c0d, type: 3}
-  Billboard: {fileID: 5085475490983329431}
+  _barRenderer: {fileID: 0}
+  _animator: {fileID: 7420542892416586033}
+  _targetActivateScript: {fileID: 3535163779419656163}
+  _health: 1
   _destroyObjectAfter: 1
 --- !u!65 &3535163779419656161
 BoxCollider:
@@ -280,7 +280,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!95 &3535163779419656173
+--- !u!95 &7420542892416586033
 Animator:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -290,7 +290,7 @@ Animator:
   m_GameObject: {fileID: 7453013833735398807}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4a2008f2dc4632f42a91504e83eef997, type: 2}
+  m_Controller: {fileID: 9100000, guid: ba7b5a97517c0024b95e2c4b0eefdcba, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

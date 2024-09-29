@@ -6,16 +6,9 @@ public class PlayerArmorScript : MonoBehaviour
     public ArmorInfo[] Armors = new ArmorInfo[5];
     public int ArmorValue;
 
-    private InventoryAmmunitionScript _inventoryAmmunitionScript;
     private int _partID;
 
-    private void Start() => FindObjectOfType<InventoryAmmunitionScript>().SetPlayerAmmunitionScript(this, out _inventoryAmmunitionScript);
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-            _inventoryAmmunitionScript.SwitchMenu(true, "InventoryAmmunition");
-    }
+    private void Start() => FindObjectOfType<InventoryAmmunitionScript>().SetPlayerAmmunitionScript(this);
 
     public void SetArmor(ArmorInfo armorInfo)
     {

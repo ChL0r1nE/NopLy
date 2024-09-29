@@ -4,10 +4,12 @@ public class InventoryStorageScript : Inventory
 
     public void SetStrategy(StorageStrategy strategy) => _storageStrategy = strategy;
 
-    public override void SetOpen(bool open)
+    public override void SwitchOpen(bool baseOpen)
     {
-        _isOpen = open;
-        _storageStrategy.SetOpen(open);
+        base.SwitchOpen(baseOpen);
+
+        if (!baseOpen)
+            _storageStrategy.SetOpen(false);
     }
 
     public override void DeleteItem(int id)

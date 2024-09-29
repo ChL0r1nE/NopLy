@@ -9,10 +9,9 @@ public class GardenStrategy : Strategy
     public Slot[] Slots = new Slot[4];
 
     [SerializeField] private MeshFilter[] _plantMeshes = new MeshFilter[4];
-    [SerializeField] private Mesh _grass;
-
     private int[] _plantProgress = new int[4];
     private InventoryGardenScript _inventoryGardenScript;
+    private int _nowPlants = 0;
     private bool _isOpen = false;
 
     private void OnEnable() => TickMachineScript.OnTick += OnTick;
@@ -26,23 +25,24 @@ public class GardenStrategy : Strategy
         if (col.CompareTag("Player") && _isOpen)
         {
             _isOpen = false;
-            _inventoryGardenScript.SwitchMenu(false, "InventoryGarden");
+            _inventoryGardenScript.SwitchOpen(false);
         }
     }
 
-    public bool CanAddSeed(Slot slot) => slot.Info.Type == ItemType.Seed;
+    public bool CanAddSeed(Slot slot) => slot.Info.Type == ItemType.Seed && _nowPlants < 4;
 
     public override void Interact()
     {
         _isOpen = !_isOpen;
-        _inventoryGardenScript.SwitchMenu(true, "InventoryGarden");
         _inventoryGardenScript.SetStrategy(this);
         _inventoryGardenScript.UpdateMenu(Slots, false);
+        _inventoryGardenScript.SwitchOpen(true);
     }
 
     public void AddSeed(Slot slot)
     {
         slot.Count = 1;
+        _nowPlants++;
         int plantNumber = 0;
 
         for (int i = 0; i < 4; i++)
@@ -92,12 +92,13 @@ public class GardenStrategy : Strategy
                 }
             }
             else
-                _plantMeshes[i].mesh = _grass;
+                _plantMeshes[i].mesh = null;
         }
     }
 
     public void DeleteItem(int id)
     {
+        _nowPlants--;
         Slots[id] = new Slot(null, 0);
 
         ShowPlants();
