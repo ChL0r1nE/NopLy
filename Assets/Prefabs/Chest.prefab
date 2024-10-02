@@ -317,11 +317,9 @@ MonoBehaviour:
   _renderers:
   - {fileID: 8497323347404029135}
   - {fileID: 7677141277338033055}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
-  _bakeKeys: []
-  _bakeValues: []
 --- !u!114 &7151686383577284014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +367,7 @@ MonoBehaviour:
     Count: 0
   - Info: {fileID: 0}
     Count: 0
-  _maxSlotCount: 10
+  _animator: {fileID: 1724691828770215044}
 --- !u!65 &7151686383577284012
 BoxCollider:
   m_ObjectHideFlags: 0

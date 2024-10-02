@@ -1,14 +1,11 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class StorageStrategy : Strategy
 {
     public Slot GetInfo(int id) => Slots[id];
 
     public Slot[] Slots = new Slot[10];
-
-    private Animator _animator;
-    private InventoryStorageScript _inventoryStorageScript;
-    private bool _isOpen = false;
 
     public void SetOpen(bool isOpen)
     {
@@ -16,41 +13,39 @@ public class StorageStrategy : Strategy
         _animator.SetBool("IsOpen", _isOpen);
     }
 
-    private void Start()
+    [SerializeField] private Animator _animator;
+    private InventoryStorageScript _inventoryStorageScript;
+    private bool _isOpen = false;
+
+    private void Start() => _inventoryStorageScript = FindObjectOfType<InventoryStorageScript>();
+
+    private void OnTriggerExit()
     {
-        _animator = GetComponent<Animator>();
-        _inventoryStorageScript = FindObjectOfType<InventoryStorageScript>();
+        if (_isOpen)
+            _inventoryStorageScript.SwitchOpen(false);
     }
 
     public override void Interact()
     {
-        _isOpen = !_isOpen;
-        _animator.SetBool("IsOpen", _isOpen);
-        _inventoryStorageScript.UpdateMenu(Slots);
         _inventoryStorageScript.SetStrategy(this);
         _inventoryStorageScript.SwitchOpen(true);
+
+        if (_isOpen)
+            _inventoryStorageScript.UpdateMenu(Slots);
     }
 
-    private void OnTriggerExit(Collider col)
+    public void AddItem(Slot slot, out int countRemain)
     {
-        if (col.CompareTag("Player") && _isOpen)
-        {
-            _isOpen = false;
-            _animator.SetBool("IsOpen", false);
-            _inventoryStorageScript.SwitchOpen(false);
-        }
-    }
+        countRemain = 0;
 
-    public void AddItem(Slot slot)
-    {
-        for (int i = 0; i < Slots.Length; i++)
+        foreach (Slot foreachSlot in Slots)
         {
-            if (Slots[i].Info && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
+            if (foreachSlot.Info && foreachSlot.Info.ID == slot.Info.ID)
             {
-                Slots[i].AddCount(slot.Count, out int remain);
+                foreachSlot.AddCount(slot.Count, out int remain);
 
                 if (remain != 0)
-                    slot = new Slot(slot.Info, remain);
+                    slot.Count = remain;
                 else
                 {
                     _inventoryStorageScript.UpdateMenu(Slots);
@@ -59,21 +54,23 @@ public class StorageStrategy : Strategy
             }
         }
 
+        countRemain = slot.Count;
+
         for (int i = 0; i < Slots.Length; i++)
         {
-            if (Slots[i].Info == null)
-            {
-                Slots[i] = slot;
-                _inventoryStorageScript.UpdateMenu(Slots);
+            if (Slots[i].Info) continue;
 
-                return;
-            }
+            Slots[i] = slot;
+            countRemain = 0;
+            break;
         }
+
+        _inventoryStorageScript.UpdateMenu(Slots);
     }
 
     public void DeleteItem(int id)
     {
-        Slots[id] = new Slot(null, 0);
+        Slots[id] = new(null, 0);
         _inventoryStorageScript.UpdateMenu(Slots);
     }
 }

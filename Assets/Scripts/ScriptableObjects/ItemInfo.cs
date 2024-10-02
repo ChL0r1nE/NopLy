@@ -15,33 +15,45 @@ public class Slot
     public Slot(ItemInfo info, int count)
     {
         Info = info;
-        Count = count;
+        _count = count;
+    }
+
+    public int Count
+    {
+        get { return _count; }
+        set
+        {
+            _count = value;
+
+            if (_count == 0)
+                Info = null;
+        }
     }
 
     public ItemInfo Info;
-    public int Count;
+    [SerializeField] private int _count;
 
     public void AddCount(int count, out int remain)
     {
-        remain = Count + count > Info.MaxStack ? Count + count - Info.MaxStack : 0;
-        Count = Mathf.Clamp(Count + count, 0, Info.MaxStack);
+        remain = _count + count > Info.MaxStack ? _count + count - Info.MaxStack : 0;
+        _count = _count + count - remain;
     }
 
     public void DeleteCount(int count, out int remain)
     {
-        remain = Count - count < 0 ? count - Count : 0;
-        Count = Mathf.Clamp(Count - count, 0, Info.MaxStack);
+        remain = _count - count < 0 ? count - _count : 0;
+        _count = Mathf.Clamp(_count - count, 0, Info.MaxStack);
 
-        if (Count == 0)
+        if (_count == 0)
             Info = null;
     }
 
     public bool CanDeleteCount(int count, out int remain)
     {
-        int MayCount = Count - count;
-        remain = MayCount < 0 ? -MayCount : 0;
+        int May_count = _count - count;
+        remain = May_count < 0 ? -May_count : 0;
 
-        return MayCount >= 0;
+        return May_count >= 0;
     }
 }
 

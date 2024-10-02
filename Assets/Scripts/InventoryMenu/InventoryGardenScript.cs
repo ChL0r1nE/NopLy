@@ -2,23 +2,23 @@ public class InventoryGardenScript : Inventory
 {
     private GardenStrategy _gardenStrategy;
 
-    public override bool CanAddItem(Slot slot) => _gardenStrategy.CanAddSeed(slot);
-
-    public override void SetOpenStrategy(bool open) => _gardenStrategy.SetOpen(open);
-
     public void SetStrategy(GardenStrategy strategy) => _gardenStrategy = strategy;
 
-    public override void AddItem(Slot slot)
+    public override void SwitchOpen(bool baseOpen)
     {
-        if (slot.Count > 1)
-            _inventoryPlayerScript.AddItem(new Slot(slot.Info, slot.Count - 1));
+        base.SwitchOpen(baseOpen);
+        _gardenStrategy.SetOpen(_isOpen);
+    }
 
-        _gardenStrategy.AddSeed(slot);
+    public override void AddItem(Slot slot, out int countRemain)
+    {
+        _gardenStrategy.AddSeed(slot, out int remain);
+        countRemain = remain;
     }
 
     public override void DeleteItem(int id)
     {
-        _inventoryPlayerScript.AddItem(_gardenStrategy.GetInfo(id));
+        _inventoryPlayerScript.AddItem(_gardenStrategy.GetSlot(id), out int remain);
         _gardenStrategy.DeleteItem(id);
     }
 }

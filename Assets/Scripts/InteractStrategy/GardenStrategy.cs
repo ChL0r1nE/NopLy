@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class GardenStrategy : Strategy
 {
-    public Slot GetInfo(int id) => Slots[id];
-
-    public bool CanAddSeed(Slot slot) => slot.Info.Type == ItemType.Seed && _nowPlants < 4;
+    public Slot GetSlot(int id) => Slots[id];
 
     public void SetOpen(bool isOpen) => _isOpen = isOpen;
 
@@ -15,54 +13,56 @@ public class GardenStrategy : Strategy
 
     private InventoryGardenScript _inventoryGardenScript;
     private int _nowPlants = 0;
-    [SerializeField] private bool _isOpen = false; //ser
-
-    private void Start() => _inventoryGardenScript = FindObjectOfType<InventoryGardenScript>();
+    private int _plantNumber;
+    private bool _isOpen = false;
 
     private void OnEnable() => TickMachineScript.OnTick += OnTick;
 
     private void OnDisable() => TickMachineScript.OnTick -= OnTick;
 
-    private void OnTriggerExit(Collider col)
+    private void Start() => _inventoryGardenScript = FindObjectOfType<InventoryGardenScript>();
+
+    private void OnTriggerExit()
     {
-        if (col.CompareTag("Player") && _isOpen)
-        {
-            _isOpen = false;
-            _inventoryGardenScript.SwitchOpen(false);
-        }
+        if (_isOpen)
+            _inventoryGardenScript?.SwitchOpen(false);
     }
 
     public override void Interact()
     {
-        _isOpen = !_isOpen;
         _inventoryGardenScript.SetStrategy(this);
-        _inventoryGardenScript.UpdateMenu(Slots, false);
         _inventoryGardenScript.SwitchOpen(true);
+
+        if (_isOpen)
+            _inventoryGardenScript.UpdateMenu(Slots);
     }
 
-    public void AddSeed(Slot slot)
+    public void AddSeed(Slot slot, out int countRemain)
     {
-        slot.Count = 1;
+        countRemain = slot.Count;
+
+        if (slot.Info.Type != ItemType.Seed) return;
+
         _nowPlants++;
-        int plantNumber = 0;
 
         for (int i = 0; i < 4; i++)
         {
-            if (Slots[i].Info == null)
-            {
-                Slots[i] = slot;
-                plantNumber = i;
+            if (Slots[i].Info) continue;
 
-                break;
-            }
+            Slots[i] = slot;
+            Slots[i].Count = 1;
+            _plantNumber = i;
+            countRemain--;
+
+            break;
         }
 
-        SeedInfo seedInfo = Slots[plantNumber].Info as SeedInfo;
+        SeedInfo seedInfo = Slots[_plantNumber].Info as SeedInfo;
 
-        _plantProgress[plantNumber] = -1;
-        _plantMeshes[plantNumber].mesh = seedInfo.PlantMeshes[0];
+        _plantProgress[_plantNumber] = 0;
+        _plantMeshes[_plantNumber].mesh = seedInfo.PlantMeshes[0];
 
-        _inventoryGardenScript.UpdateMenu(Slots, false);
+        _inventoryGardenScript.UpdateMenu(Slots);
     }
 
     private void OnTick()
@@ -77,34 +77,34 @@ public class GardenStrategy : Strategy
     {
         for (int i = 0; i < 4; i++)
         {
-            if (Slots[i].Info)
+            if (!Slots[i].Info)
             {
-                if (Slots[i].Info.Type != ItemType.Seed || _plantProgress[i] > 2) continue;
-
-                SeedInfo info = Slots[i].Info as SeedInfo;
-
-                if (_plantProgress[i] == 2)
-                {
-                    _plantMeshes[i].mesh = info.PlantMeshes[2];
-                    Slots[i].Info = info.Harvest;
-
-                    _inventoryGardenScript.UpdateMenu(Slots, false);
-                    continue;
-                }
-                else
-                    _plantMeshes[i].mesh = info.PlantMeshes[Mathf.Clamp(_plantProgress[i], 0, 1)];
-            }
-            else
                 _plantMeshes[i].mesh = null;
+                continue;
+            }
+
+            if (_plantProgress[i] > 2) continue;
+
+            SeedInfo seedInfo = Slots[i].Info as SeedInfo;
+            _plantMeshes[i].mesh = seedInfo.PlantMeshes[_plantProgress[i]];
+
+            if (_plantProgress[i] == 2)
+            {
+                _plantProgress[i]++;
+                Slots[i].Info = seedInfo.Harvest;
+                Slots[i].Count = Random.Range(2, 5);
+
+                _inventoryGardenScript.UpdateMenu(Slots);
+            }
         }
     }
 
     public void DeleteItem(int id)
     {
         _nowPlants--;
-        Slots[id] = new Slot(null, 0);
+        Slots[id] = new(null, 0);
 
         ShowPlants();
-        _inventoryGardenScript.UpdateMenu(Slots, false);
+        _inventoryGardenScript.UpdateMenu(Slots);
     }
 }

@@ -7,16 +7,18 @@ public class InventoryStorageScript : Inventory
     public override void SwitchOpen(bool baseOpen)
     {
         base.SwitchOpen(baseOpen);
-
-        if (!baseOpen)
-            _storageStrategy.SetOpen(false);
+        _storageStrategy.SetOpen(_isOpen);
     }
 
     public override void DeleteItem(int id)
     {
-        _inventoryPlayerScript.AddItem(_storageStrategy.GetInfo(id));
+        _inventoryPlayerScript.AddItem(_storageStrategy.GetInfo(id), out int remain);
         _storageStrategy.DeleteItem(id);
     }
 
-    public override void AddItem(Slot slot) => _storageStrategy.AddItem(slot);
+    public override void AddItem(Slot slot, out int countRemain)
+    {
+        _storageStrategy.AddItem(slot, out int remain);
+        countRemain = remain;
+    }
 }

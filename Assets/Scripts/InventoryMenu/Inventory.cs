@@ -17,6 +17,7 @@ public abstract class Inventory : MonoBehaviour
 
     private void Awake()
     {
+        _maxSlotCount = _images.Length;
         _rectTransform = GetComponent<RectTransform>();
         _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
     }
@@ -29,42 +30,29 @@ public abstract class Inventory : MonoBehaviour
             _rectTransform.anchoredPosition = Vector2.MoveTowards(_rectTransform.anchoredPosition, _inventoryTargetPosition, 30);
     }
 
-    public virtual void AddItem(Slot slot) { }
+    public virtual void AddItem(Slot slot, out int countRemain) { countRemain = slot.Count; }
 
     public virtual void DeleteItem(int id) { }
-
-    public virtual bool CanAddItem(Slot slot) => _nowSlotCount + 1 <= _maxSlotCount;
-
-    public virtual void SetOpenStrategy(bool open) { }
 
     public virtual void SwitchOpen(bool baseOpen)
     {
         _isOpen = !_isOpen && baseOpen;
-        _switchMenuScript.SetMenu(this);
+        _switchMenuScript.SetMenu(this, _isOpen);
     }
 
-    public virtual void UpdateMenu(Slot[] slots, bool WithText = true)
+    public virtual void UpdateMenu(Slot[] slots)
     {
         _nowSlotCount = 0;
-        _maxSlotCount = slots.Length;
-
-        foreach (Slot slot in slots)
-            if (slot.Info)
-                _nowSlotCount++;
 
         for (int i = 0; i < _maxSlotCount; i++)
         {
-            if (i < slots.Length && slots[i].Info)
-            {
-                _images[i].gameObject.SetActive(true);
-                _images[i].sprite = slots[i].Info.Sprite;
+            _images[i].gameObject.SetActive(slots[i].Info);
 
-                if (WithText)
-                    _textes[i].text = slots[i].Count != 1 ? slots[i].Count.ToString() : "";
+            if (!slots[i].Info) continue;
 
-            }
-            else
-                _images[i].gameObject.SetActive(false);
+            _nowSlotCount++;
+            _images[i].sprite = slots[i].Info.Sprite;
+            _textes[i].text = slots[i].Count != 1 ? slots[i].Count.ToString() : "";
         }
     }
 }

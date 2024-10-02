@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Object: {fileID: 0}
   Type: 4
-  ID: -1
+  ID: 3
   Sprite: {fileID: 0}
   TestSt: NoB0dy
   MaxStack: 1

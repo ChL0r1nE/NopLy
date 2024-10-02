@@ -55,12 +55,12 @@ public class InventoryPlayerScript : Inventory
     {
         if (_enterID == -1)
         {
-            if (_quickPanelLink[selectID] == -1 || !_inventoryAmmunition.CanAddItem(_playerInventory.GetSlot(_quickPanelLink[selectID]))) return;
+            if (_quickPanelLink[selectID] == -1) return;
 
-            Slot slot = _playerInventory.GetSlot(_quickPanelLink[selectID]);
+            Slot slot = _playerInventory.Slots[_quickPanelLink[selectID]];
 
-            _playerInventory.DeleteItem(_quickPanelLink[selectID]);
-            _inventoryAmmunition.AddItem(slot);
+            _inventoryAmmunition.AddItem(slot, out int remain);
+            _playerInventory.SetSlotCount(_quickPanelLink[selectID], remain);
 
             if (_playerInventory.Slots[_quickPanelLink[selectID]].Count == 0)
             {
@@ -87,15 +87,17 @@ public class InventoryPlayerScript : Inventory
 
     public void SetEnterID(int id) => _enterID = id;
 
-    public override void AddItem(Slot slot) => _playerInventory.AddItem(slot);
+    public override void AddItem(Slot slot, out int remainCount)
+    {
+        _playerInventory.AddItem(slot, out int remain);
+        remainCount = remain;
+    }
 
     public override void DeleteItem(int id)
     {
-        if (!_secondInventory.CanAddItem(_playerInventory.GetSlot(id))) return;
+        Slot slot = new(_playerInventory.Slots[id].Info, _playerInventory.Slots[id].Count);
 
-        Slot slot = _playerInventory.GetSlot(id);
-
-        _playerInventory.DeleteItem(id);
-        _secondInventory.AddItem(slot);
+        _secondInventory.AddItem(slot, out int remain);
+        _playerInventory.SetSlotCount(id, remain);
     }
 }

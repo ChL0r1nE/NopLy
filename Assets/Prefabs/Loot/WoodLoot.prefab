@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Slot:
     Info: {fileID: 11400000, guid: 9d219969b5f0c9d4ab46030882923e64, type: 2}
-    Count: 1
+    _count: 1
 --- !u!33 &8652972981597767935
 MeshFilter:
   m_ObjectHideFlags: 0

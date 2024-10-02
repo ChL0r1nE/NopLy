@@ -7,19 +7,19 @@ public class SwitchMenuScript : MonoBehaviour
 
     private void Start() => _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
 
-    public void SetMenu(Inventory inventory)
+    public void SetMenu(Inventory inventory, bool isOpenInventory)
     {
-        if (!_nowInventory)
-            _nowInventory = inventory;
-        else if (_nowInventory != inventory)
+        if (!isOpenInventory)
         {
-            Debug.Log("Other");
-            _nowInventory.SetOpenStrategy(false);
-            _nowInventory = inventory;
-        }
-        else
             _nowInventory = null;
+            _inventoryPlayerScript.SetSecondInventory(_nowInventory);
+            return;
+        }
 
+        if (_nowInventory)
+            _nowInventory.SwitchOpen(false);
+
+        _nowInventory = inventory;
         _inventoryPlayerScript.SetSecondInventory(_nowInventory);
     }
 }

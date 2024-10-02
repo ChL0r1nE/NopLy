@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerInventoryScript : MonoBehaviour
 {
-    public Slot GetSlot(int id) => Slots[id];
-
     public Slot[] Slots;
 
     private InventoryPlayerScript _inventoryPlayerScript;
@@ -14,42 +12,56 @@ public class PlayerInventoryScript : MonoBehaviour
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
 
-    public void AddItem(Slot slot, bool destroyObject = false)
+    public void SetSlotCount(int i, int count)
     {
-        if (destroyObject)
-            Destroy(slot.Info.Object);
+        Slots[i].Count = count;
+        _inventoryPlayerScript.UpdateMenu(Slots);
+    }
 
-        for (int i = 0; i < Slots.Length; i++)
+    public void AddItem(Slot slot, out int countRemain, bool destroyObject = false)
+    {
+        countRemain = 0;
+
+        foreach (Slot foreachSlot in Slots)
         {
-            if (Slots[i].Info && Slots[i].Info.ID == slot.Info.ID && Slots[i].Count != Slots[i].Info.MaxStack)
+            if (foreachSlot.Info && foreachSlot.Info.ID == slot.Info.ID)
             {
-                Slots[i].AddCount(slot.Count, out int remain);
+                foreachSlot.AddCount(slot.Count, out int remain);
 
                 if (remain != 0)
-                    slot = new Slot(slot.Info, remain);
+                    slot.Count = remain;
                 else
                 {
                     _inventoryPlayerScript.UpdateMenu(Slots);
+
+                    if (destroyObject)
+                        Destroy(slot.Info.Object);
+
                     return;
                 }
             }
         }
 
+        countRemain = slot.Count;
+
         for (int i = 0; i < Slots.Length; i++)
         {
-            if (Slots[i].Info == null)
-            {
-                Slots[i] = slot;
-                _inventoryPlayerScript.UpdateMenu(Slots);
+            if (Slots[i].Info) continue;
 
-                return;
-            }
+            Slots[i] = slot;
+            countRemain = 0;
+            break;
         }
+
+        _inventoryPlayerScript.UpdateMenu(Slots);
+
+        if (destroyObject && countRemain == 0)
+            Destroy(slot.Info.Object);
     }
 
     public void DeleteItem(int id)
     {
-        Slots[id] = new Slot(null, 0);
+        Slots[id] = new(null, 0);
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
 

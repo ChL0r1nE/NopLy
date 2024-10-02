@@ -15,6 +15,6 @@ public class InventoryWorktableScript : Inventory
     public void CraftItem(int id)
     {
         if (_inventoryPlayerScript.GetPlayerInventoryScript().DeleteRecipe(_worktableStrategy.Recipes[id].Materials))
-            _inventoryPlayerScript.AddItem(_worktableStrategy.Recipes[id].Result);
+            _inventoryPlayerScript.AddItem(_worktableStrategy.Recipes[id].Result, out int remain);
     }
 }

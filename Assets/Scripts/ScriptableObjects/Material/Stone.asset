@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Object: {fileID: 0}
   Type: 0
-  ID: 101
+  ID: 13
   Sprite: {fileID: 21300000, guid: 01f418a2d1f68e9479504357f35117e1, type: 3}
   TestSt: StoNe_
   MaxStack: 10

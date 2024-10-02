@@ -28,17 +28,16 @@ public class InventoryAmmunitionScript : Inventory
         _cameraFollowingScript.SwitchToPlayer();
     }
 
-    public override void AddItem(Slot slot)
+    public override void AddItem(Slot slot, out int countRemain)
     {
+        countRemain = slot.Count - 1;
+
         switch (slot.Info.Type)
         {
             case ItemType.Food:
                 {
                     FoodInfo foodInfo = slot.Info as FoodInfo;
                     _playerHealthScript.Heal(foodInfo.Health);
-
-                    if (slot.Count > 1)
-                        _inventoryPlayerScript.AddItem(new Slot(slot.Info, slot.Count - 1));
 
                     break;
                 }
@@ -47,7 +46,7 @@ public class InventoryAmmunitionScript : Inventory
                     WeaponInfo weaponInfo = slot.Info as WeaponInfo;
 
                     if (_playerMainWeaponScript.WeaponInfo != _defaultMainWeapon)
-                        _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
+                        _inventoryPlayerScript.AddItem(new(_playerMainWeaponScript.WeaponInfo, 1), out int remain); //AddItemOff
 
                     if (weaponInfo.WeaponPlace == WeaponPlace.Main)
                         _playerMainWeaponScript.SetWeapon(weaponInfo);
@@ -60,6 +59,11 @@ public class InventoryAmmunitionScript : Inventory
                     _playerArmorScript.SetArmor(armorInfo);
                     break;
                 }
+            default:
+                {
+                    countRemain = slot.Count;
+                    break;
+                }
         }
 
         UpdateMenu(null);
@@ -69,19 +73,19 @@ public class InventoryAmmunitionScript : Inventory
     {
         if (id == 0)
         {
-            _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
+            _inventoryPlayerScript.AddItem(new(_playerMainWeaponScript.WeaponInfo, 1), out int remain);
             _playerMainWeaponScript.SetWeapon(_defaultMainWeapon);
         }
         else
         {
-            _inventoryPlayerScript.AddItem(new Slot(_playerArmorScript.Armors[id - 2], 1));
+            _inventoryPlayerScript.AddItem(new(_playerArmorScript.Armors[id - 2], 1), out int remain);
             _playerArmorScript.SetArmor(_defaultArmors[id - 2]);
         }
 
         UpdateMenu(null);
     }
 
-    public override void UpdateMenu(Slot[] slots, bool WithText = false)
+    public override void UpdateMenu(Slot[] slots)
     {
         if (_playerMainWeaponScript.WeaponInfo.WeaponType != WeaponType.Hand)
         {
@@ -102,8 +106,6 @@ public class InventoryAmmunitionScript : Inventory
                 _images[i + 2].gameObject.SetActive(false);
         }
     }
-
-    public override bool CanAddItem(Slot slot) => slot.Info.Type == ItemType.Weapon || slot.Info.Type == ItemType.Armor || slot.Info.Type == ItemType.Food;
 
     public void SetPlayerAmmunitionScript(PlayerArmorScript playerArmorScript) => _playerArmorScript = playerArmorScript;
 }
