@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d1d3e6a3160a1e478c78551f48942f1, type: 3}
+  m_Script: {fileID: 11500000, guid: e60c6a9e3972fe54fb99177783b4cf1e, type: 3}
   m_Name: Patisson
   m_EditorClassIdentifier: 
   Object: {fileID: 0}
   Type: 1
   ID: 300
   Sprite: {fileID: 21300000, guid: 01e74d7dc3ff40c47a61426f2743f74d, type: 3}
-  TestSt: Patisson!
+  TestSt: P4t1sS0n-
   MaxStack: 10
+  Health: 10

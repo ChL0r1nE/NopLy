@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerTargetScript : MonoBehaviour
+public class PlayerInteractTargetScript : MonoBehaviour
 {
     private TargetActivateScript _target;
     private Strategy _targetStrategy;
@@ -22,9 +22,7 @@ public class PlayerTargetScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _targetStrategy)
-            _targetStrategy.Interact();
+        if (Input.GetKeyDown(KeyCode.E))
+            _targetStrategy?.Interact();
     }
-
-    public void SetStrategy(Strategy strategy) => _targetStrategy = strategy;
 }

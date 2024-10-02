@@ -11,13 +11,12 @@ public class GetLootStrategy : Strategy
     [SerializeField] private int _health = 1;
     [SerializeField] private bool _destroyObjectAfter;
     private Vector2 _barScale = new(0, 0.04f);
-    private bool _isDestroy = false;
 
     public override void Interact()
     {
-        if (_isDestroy) return;
-
         _health--;
+
+        if (_health < 0) return;
 
         if (_barRenderer)
         {
@@ -27,8 +26,7 @@ public class GetLootStrategy : Strategy
 
         if (_health > 0) return;
 
-        _isDestroy = true;
-        _animator.SetTrigger("Destroy");
+        _animator.SetTrigger("Collect");
         _targetActivateScript.SetOffActive();
 
         Instantiate(Loot, transform.position, Quaternion.identity);

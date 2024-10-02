@@ -8,7 +8,7 @@ public class PlayerWeaponScript : MonoBehaviour
     public Attack Attack;
 
     [SerializeField] private PlayerAttackScript _playerAttackScript;
-    [SerializeField] private EnemyActivateScript _enemyActivateScript;
+    [SerializeField] private PlayerEnemyTargetScript _playerEnemyTargetScript;
     [SerializeField] private MeshFilter _meshFilter;
     private Transform _playerTransform;
     private Animator _animator;
@@ -46,11 +46,11 @@ public class PlayerWeaponScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (_enemyActivateScript.EnemyTransform)
+            if (_playerEnemyTargetScript.EnemyTransform)
             {
                 _nowRotation = _playerTransform.rotation.eulerAngles;
 
-                _playerTransform.LookAt(_enemyActivateScript.EnemyTransform.position);
+                _playerTransform.LookAt(_playerEnemyTargetScript.EnemyTransform.position);
                 _playerMoveScript.SetTargetRotation(_playerTransform.rotation.eulerAngles.y, Attack);
                 _playerTransform.rotation = Quaternion.Euler(_nowRotation);
             }

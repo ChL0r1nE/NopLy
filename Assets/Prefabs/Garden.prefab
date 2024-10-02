@@ -597,8 +597,8 @@ MonoBehaviour:
   - {fileID: 7709439203705850690}
   - {fileID: 7709439204500931948}
   - {fileID: 7709439204886231808}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
 --- !u!114 &7709439205577058204
 MonoBehaviour:
@@ -625,5 +625,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.5, y: 0.8, z: 4.5}
+  m_Size: {x: 4.3, y: 0.8, z: 4.3}
   m_Center: {x: 0, y: 0.4, z: 0}

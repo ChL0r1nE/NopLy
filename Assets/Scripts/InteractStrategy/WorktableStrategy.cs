@@ -27,10 +27,9 @@ public class WorktableStrategy : Strategy
 
     private void OnTriggerExit(Collider col)
     {
-        if (_isOpen && col.CompareTag("Player"))
-        {
-            _isOpen = false;
-            _inventoryWorktableScript.SwitchOpen(false);
-        }
+        if (!_isOpen || !col.CompareTag("Player")) return;
+
+        _inventoryWorktableScript.SwitchOpen(false);
+        _isOpen = false;
     }
 }

@@ -4,6 +4,7 @@ public class PlayerArmorScript : MonoBehaviour
 {
     public MeshFilter[] ArmorMeshes = new MeshFilter[5];
     public ArmorInfo[] Armors = new ArmorInfo[5];
+
     public int ArmorValue;
 
     private int _partID;

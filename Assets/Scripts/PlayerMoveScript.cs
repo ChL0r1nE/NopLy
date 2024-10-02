@@ -41,16 +41,14 @@ public class PlayerMoveScript : MonoBehaviour
     {
         if (_isAttack) return;
 
-        _targetRotationAngle = -1f;
-
         if (_forward)
             _targetRotationAngle = _right ? 45f : _left ? 315f : 0f;
         else if (_back)
             _targetRotationAngle = _right ? 135f : _left ? 225f : 180f;
-        else if (_right)
-            _targetRotationAngle = 90f;
-        else if (_left)
-            _targetRotationAngle = 270f;
+        else if (_right || _left)
+            _targetRotationAngle = _right ? 90f : 270f;
+        else
+            _targetRotationAngle = -1f;
     }
 
     private void FixedUpdate()
@@ -63,27 +61,25 @@ public class PlayerMoveScript : MonoBehaviour
                 _attack.Invoke();
 
             _nowRotation = Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 15f);
-            transform.localRotation = Quaternion.Euler(0, _nowRotation, 0);
+            transform.rotation = Quaternion.Euler(0, _nowRotation, 0);
             return;
         }
 
         if (_targetRotationAngle == -1f)
         {
-            Animator.SetBool("IsWalk", false);
-            Animator.SetBool("IsRun", false);
+            Animator.SetInteger("MoveModifier", 0); //LugeMoveModifier 3
 
-            if (!(_isAttack || _isLunge))
+            if (!_isLunge)
                 _rigidbody.velocity = Vector3.zero;
 
             return;
         }
 
-        Animator.SetBool("IsRun", _isRun);
-        Animator.SetBool("IsWalk", !_isRun);
+        Animator.SetInteger("MoveModifier", _isRun ? 2 : 1);
 
         _nowRotation = Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 7f);
 
-        transform.localRotation = Quaternion.Euler(0, _nowRotation, 0);
+        transform.rotation = Quaternion.Euler(0, _nowRotation, 0);
         _rigidbody.velocity = transform.forward * (_isRun ? Speed : Speed / 2f);
     }
 }

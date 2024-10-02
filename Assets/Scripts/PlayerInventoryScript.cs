@@ -2,18 +2,15 @@ using UnityEngine;
 
 public class PlayerInventoryScript : MonoBehaviour
 {
-    public Slot GetInfo(int id) => Slots[id];
+    public Slot GetSlot(int id) => Slots[id];
 
     public Slot[] Slots;
 
-    private QuickPanelScript _quickPanelScript; //Now never Used
     private InventoryPlayerScript _inventoryPlayerScript;
 
     private void Start()
     {
-        _quickPanelScript = FindObjectOfType<QuickPanelScript>();
         _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
-
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
 

@@ -47,11 +47,13 @@ public class OutlineScript : MonoBehaviour
         }
     }
 
-    [SerializeField] private Renderer[] _renderers;
     private List<Material> _materials = new();
+
+    [SerializeField] private Renderer[] _renderers;
+
     [SerializeField] private Color _outlineColor = Color.white;
     [SerializeField] private Mode _outlineMode = Mode.OutlineVisible;
-    [SerializeField, Range(0f, 10f)] private float _outlineWidth = 0f;
+    [SerializeField] private float _outlineWidth = 0f;
     private Renderer _renderer;
     private Material _outlineMaskMaterial;
     private Material _outlineFillMaterial;

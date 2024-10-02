@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyActivateScript : MonoBehaviour
+public class PlayerEnemyTargetScript : MonoBehaviour
 {
     public Transform EnemyTransform;
 

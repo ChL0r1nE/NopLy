@@ -4,21 +4,24 @@ public class GardenStrategy : Strategy
 {
     public Slot GetInfo(int id) => Slots[id];
 
+    public bool CanAddSeed(Slot slot) => slot.Info.Type == ItemType.Seed && _nowPlants < 4;
+
     public void SetOpen(bool isOpen) => _isOpen = isOpen;
 
     public Slot[] Slots = new Slot[4];
 
     [SerializeField] private MeshFilter[] _plantMeshes = new MeshFilter[4];
     private int[] _plantProgress = new int[4];
+
     private InventoryGardenScript _inventoryGardenScript;
     private int _nowPlants = 0;
-    private bool _isOpen = false;
+    [SerializeField] private bool _isOpen = false; //ser
+
+    private void Start() => _inventoryGardenScript = FindObjectOfType<InventoryGardenScript>();
 
     private void OnEnable() => TickMachineScript.OnTick += OnTick;
 
     private void OnDisable() => TickMachineScript.OnTick -= OnTick;
-
-    private void Start() => _inventoryGardenScript = FindObjectOfType<InventoryGardenScript>();
 
     private void OnTriggerExit(Collider col)
     {
@@ -28,8 +31,6 @@ public class GardenStrategy : Strategy
             _inventoryGardenScript.SwitchOpen(false);
         }
     }
-
-    public bool CanAddSeed(Slot slot) => slot.Info.Type == ItemType.Seed && _nowPlants < 4;
 
     public override void Interact()
     {
@@ -78,18 +79,20 @@ public class GardenStrategy : Strategy
         {
             if (Slots[i].Info)
             {
+                if (Slots[i].Info.Type != ItemType.Seed || _plantProgress[i] > 2) continue;
+
                 SeedInfo info = Slots[i].Info as SeedInfo;
 
-                if (Slots[i].Info.Type != ItemType.Seed) continue;
-
-                if(_plantProgress[i] < 2)
-                    _plantMeshes[i].mesh = info.PlantMeshes[Mathf.Clamp(_plantProgress[i], 0, 1)];
-                else if (_plantProgress[i] == 2)
+                if (_plantProgress[i] == 2)
                 {
                     _plantMeshes[i].mesh = info.PlantMeshes[2];
-                    Slots[i] = new Slot(info.Harvest, 1);
+                    Slots[i].Info = info.Harvest;
+
+                    _inventoryGardenScript.UpdateMenu(Slots, false);
                     continue;
                 }
+                else
+                    _plantMeshes[i].mesh = info.PlantMeshes[Mathf.Clamp(_plantProgress[i], 0, 1)];
             }
             else
                 _plantMeshes[i].mesh = null;

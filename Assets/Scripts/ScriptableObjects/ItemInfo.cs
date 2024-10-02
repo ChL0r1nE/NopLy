@@ -21,44 +21,27 @@ public class Slot
     public ItemInfo Info;
     public int Count;
 
-    public void SetCount(int count) => Count = count;
-
     public void AddCount(int count, out int remain)
     {
-        remain = 0;
-        Count += count;
-
-        if (Count > Info.MaxStack)
-        {
-            remain = Count - Info.MaxStack;
-            Count = Info.MaxStack;
-        }
+        remain = Count + count > Info.MaxStack ? Count + count - Info.MaxStack : 0;
+        Count = Mathf.Clamp(Count + count, 0, Info.MaxStack);
     }
 
     public void DeleteCount(int count, out int remain)
     {
-        remain = 0;
-        Count -= count;
+        remain = Count - count < 0 ? count - Count : 0;
+        Count = Mathf.Clamp(Count - count, 0, Info.MaxStack);
 
-        if (Count <= 0)
-        {
-            remain = -Count;
+        if (Count == 0)
             Info = null;
-        }
     }
 
     public bool CanDeleteCount(int count, out int remain)
     {
-        remain = 0;
         int MayCount = Count - count;
+        remain = MayCount < 0 ? -MayCount : 0;
 
-        if (MayCount >= 0)
-            return true;
-        else
-        {
-            remain = -MayCount;
-            return false;
-        }
+        return MayCount >= 0;
     }
 }
 

@@ -5,6 +5,7 @@ public abstract class Inventory : MonoBehaviour
 {
     [SerializeField] protected Image[] _images;
     [SerializeField] protected Text[] _textes;
+
     [SerializeField] protected SwitchMenuScript _switchMenuScript;
     protected InventoryPlayerScript _inventoryPlayerScript;
     protected Vector2 _inventoryTargetPosition = new(400, 0);
@@ -23,7 +24,9 @@ public abstract class Inventory : MonoBehaviour
     private void LateUpdate()
     {
         _inventoryTargetPosition.y = _isOpen ? 0 : -1000;
-        _rectTransform.anchoredPosition = Vector2.MoveTowards(_rectTransform.anchoredPosition, _inventoryTargetPosition, 30);
+
+        if (_rectTransform.anchoredPosition.y != _inventoryTargetPosition.y)
+            _rectTransform.anchoredPosition = Vector2.MoveTowards(_rectTransform.anchoredPosition, _inventoryTargetPosition, 30);
     }
 
     public virtual void AddItem(Slot slot) { }
@@ -31,6 +34,8 @@ public abstract class Inventory : MonoBehaviour
     public virtual void DeleteItem(int id) { }
 
     public virtual bool CanAddItem(Slot slot) => _nowSlotCount + 1 <= _maxSlotCount;
+
+    public virtual void SetOpenStrategy(bool open) { }
 
     public virtual void SwitchOpen(bool baseOpen)
     {
@@ -44,10 +49,8 @@ public abstract class Inventory : MonoBehaviour
         _maxSlotCount = slots.Length;
 
         foreach (Slot slot in slots)
-        {
             if (slot.Info)
                 _nowSlotCount++;
-        }
 
         for (int i = 0; i < _maxSlotCount; i++)
         {

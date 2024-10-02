@@ -22,4 +22,4 @@ MonoBehaviour:
   - {fileID: -2432090755550338912, guid: e49094eb905a47c45b547ebe295299d9, type: 3}
   - {fileID: -2432090755550338912, guid: 005451fa43e34694d936b96b5bf73dce, type: 3}
   - {fileID: -2432090755550338912, guid: 8ec757083129b6c4d95928ce89f22513, type: 3}
-  Harvest: {fileID: 11400000, guid: d52a72fcd10eaa444858b155e111f434, type: 2}
+  Harvest: {fileID: 11400000, guid: 6ec23bc120d812c44bd38f6e5bb4c27a, type: 2}

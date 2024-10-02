@@ -9,23 +9,20 @@ public class TargetActivateScript : MonoBehaviour
     private OutlineScript _outlineScript;
     private Color _billboardColor = new(255, 255, 255, 0);
     private float _alphaTarget;
-    private bool _canBeActive = true;
+
+    public void TargetDisable() => TargetEvent(0f, 0f);
 
     public void SetOffActive()
     {
-        _canBeActive = false;
         TargetEvent(0f, 0f);
+        Destroy(GetComponent<BoxCollider>());
     }
 
     public void TargetEnable(out Strategy strategy)
     {
         strategy = Strategy;
-
-        if (_canBeActive)
-            TargetEvent(5f, 1f);
+        TargetEvent(5f, 1f);
     }
-
-    public void TargetDisable() => TargetEvent(0f, 0f);
 
     private void Start() => _outlineScript = GetComponent<OutlineScript>();
 

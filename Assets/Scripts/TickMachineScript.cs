@@ -8,7 +8,7 @@ public class TickMachineScript : MonoBehaviour
 
     private WaitForSecondsRealtime _waitFiveSecond = new WaitForSecondsRealtime(5);
 
-    private void Start() => StartCoroutine(TickCoroutine());
+    private void OnEnable() => StartCoroutine(TickCoroutine());
 
     IEnumerator TickCoroutine()
     {

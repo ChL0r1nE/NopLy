@@ -8,8 +8,7 @@ public class LootScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (!col.CompareTag("Player")) return;
-
-        col.gameObject.GetComponent<PlayerInventoryScript>().AddItem(Slot, true);
+        if (col.CompareTag("Player"))
+            col.gameObject.GetComponent<PlayerInventoryScript>().AddItem(Slot, true);
     }
 }

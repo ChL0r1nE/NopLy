@@ -3,7 +3,9 @@ using UnityEngine;
 public class InventoryAmmunitionScript : Inventory
 {
     [SerializeField] private ArmorInfo[] _defaultArmors;
+
     [SerializeField] private CameraFollowingScript _cameraFollowingScript;
+    [SerializeField] private PlayerHealthScript _playerHealthScript;
     [SerializeField] private WeaponInfo _defaultMainWeapon;
     private PlayerWeaponScript _playerMainWeaponScript;
     private PlayerArmorScript _playerArmorScript;
@@ -28,21 +30,36 @@ public class InventoryAmmunitionScript : Inventory
 
     public override void AddItem(Slot slot)
     {
-        if (slot.Info.Type == ItemType.Weapon)
+        switch (slot.Info.Type)
         {
-            WeaponInfo weaponInfo = slot.Info as WeaponInfo;
+            case ItemType.Food:
+                {
+                    FoodInfo foodInfo = slot.Info as FoodInfo;
+                    _playerHealthScript.Heal(foodInfo.Health);
 
-            if (_playerMainWeaponScript.WeaponInfo != _defaultMainWeapon)
-                _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
+                    if (slot.Count > 1)
+                        _inventoryPlayerScript.AddItem(new Slot(slot.Info, slot.Count - 1));
 
-            if (weaponInfo.WeaponPlace == WeaponPlace.Main)
-                _playerMainWeaponScript.SetWeapon(weaponInfo);
-        }
-        else if (slot.Info.Type == ItemType.Armor)
-        {
-            ArmorInfo armorInfo = slot.Info as ArmorInfo;
+                    break;
+                }
+            case ItemType.Weapon:
+                {
+                    WeaponInfo weaponInfo = slot.Info as WeaponInfo;
 
-            _playerArmorScript.SetArmor(armorInfo);
+                    if (_playerMainWeaponScript.WeaponInfo != _defaultMainWeapon)
+                        _inventoryPlayerScript.AddItem(new Slot(_playerMainWeaponScript.WeaponInfo, 1));
+
+                    if (weaponInfo.WeaponPlace == WeaponPlace.Main)
+                        _playerMainWeaponScript.SetWeapon(weaponInfo);
+
+                    break;
+                }
+            case ItemType.Armor:
+                {
+                    ArmorInfo armorInfo = slot.Info as ArmorInfo;
+                    _playerArmorScript.SetArmor(armorInfo);
+                    break;
+                }
         }
 
         UpdateMenu(null);
@@ -86,7 +103,7 @@ public class InventoryAmmunitionScript : Inventory
         }
     }
 
-    public override bool CanAddItem(Slot slot) => slot.Info.Type == ItemType.Weapon || slot.Info.Type == ItemType.Armor;
+    public override bool CanAddItem(Slot slot) => slot.Info.Type == ItemType.Weapon || slot.Info.Type == ItemType.Armor || slot.Info.Type == ItemType.Food;
 
     public void SetPlayerAmmunitionScript(PlayerArmorScript playerArmorScript) => _playerArmorScript = playerArmorScript;
 }

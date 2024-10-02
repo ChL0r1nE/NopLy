@@ -28,7 +28,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1835166548247305612}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -253,9 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf9b427ae64dc345b1ae8173beffe66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 0.1
   _animator: {fileID: 1835166548782797508}
   _damage: 10
+  _speed: 0.1
   _attackTime: 1.5
 --- !u!54 &1835166548782797504
 Rigidbody:
@@ -372,11 +372,9 @@ MonoBehaviour:
   - {fileID: 1713166527002703549}
   - {fileID: 1835166549069548947}
   - {fileID: 5788335361334950223}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
-  _bakeKeys: []
-  _bakeValues: []
 --- !u!65 &1835166549063211922
 BoxCollider:
   m_ObjectHideFlags: 0
