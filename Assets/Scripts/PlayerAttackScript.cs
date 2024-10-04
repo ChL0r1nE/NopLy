@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerAttackScript : MonoBehaviour
 {
-    private WeaponInfo _weaponInfo;
+    public void SetWeaponDamage(int i) => _weaponDamage = i;
 
-    public void SetWeaponInfo(WeaponInfo info) => _weaponInfo = info;
+    private int _weaponDamage;
 
-    private void OnTriggerEnter(Collider col) => col.GetComponent<EnemyHealthScript>().TakeDamage(_weaponInfo.Damage);
+    private void OnTriggerEnter(Collider col) => col.GetComponent<EnemyHealthScript>().TakeDamage(_weaponDamage);
 }

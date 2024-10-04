@@ -62,22 +62,20 @@ public class InventoryPlayerScript : Inventory
             _inventoryAmmunition.AddItem(slot, out int remain);
             _playerInventory.SetSlotCount(_quickPanelLink[selectID], remain);
 
-            if (_playerInventory.Slots[_quickPanelLink[selectID]].Count == 0)
-            {
-                _quickPanelImages[selectID].gameObject.SetActive(false);
-                _quickPanelLink[selectID] = -1;
-            }
+            if (remain != 0) return;
+
+            _quickPanelImages[selectID].gameObject.SetActive(false);
+            _quickPanelLink[selectID] = -1;
 
             return;
         }
 
         for (int i = 0; i < 10; i++)
         {
-            if (_quickPanelLink[i] == _enterID)
-            {
-                _quickPanelImages[i].gameObject.SetActive(false);
-                _quickPanelLink[i] = -1;
-            }
+            if (_quickPanelLink[i] != _enterID) continue;
+
+            _quickPanelImages[i].gameObject.SetActive(false);
+            _quickPanelLink[i] = -1;
         }
 
         _quickPanelLink[selectID] = _enterID;

@@ -18,7 +18,9 @@ public class InventoryGardenScript : Inventory
 
     public override void DeleteItem(int id)
     {
-        _inventoryPlayerScript.AddItem(_gardenStrategy.GetSlot(id), out int remain);
-        _gardenStrategy.DeleteItem(id);
+        Slot slot = new(_gardenStrategy.Slots[id].Info, _gardenStrategy.Slots[id].Count);
+
+        _inventoryPlayerScript.AddItem(slot, out int remain);
+        _gardenStrategy.SetSlotCount(id, remain);
     }
 }

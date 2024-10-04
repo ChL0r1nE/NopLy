@@ -8,7 +8,9 @@ public class TargetActivateScript : MonoBehaviour
 
     private OutlineScript _outlineScript;
     private Color _billboardColor = new(255, 255, 255, 0);
+    private float _widthTarget;
     private float _alphaTarget;
+    private float _time = 2;
 
     public void TargetDisable() => TargetEvent(0f, 0f);
 
@@ -28,15 +30,20 @@ public class TargetActivateScript : MonoBehaviour
 
     private void Update()
     {
-        if (BillboardRenderer.color.a == _alphaTarget) return;
+        if (_time > 1) return;
 
-        _billboardColor.a = Mathf.MoveTowards(_billboardColor.a, _alphaTarget, Time.deltaTime * 2);
+        _time += Time.deltaTime;
+
+        _outlineScript.OutlineWidth = Mathf.Lerp(_outlineScript.OutlineWidth, _widthTarget, _time);
+
+        _billboardColor.a = Mathf.Lerp(_billboardColor.a, _alphaTarget, _time);
         BillboardRenderer.color = _billboardColor;
     }
 
     private void TargetEvent(float outlineWidth, float alphaTarget)
     {
-        _outlineScript.OutlineWidth = outlineWidth;
+        _time = 0;
+        _widthTarget = outlineWidth;
         _alphaTarget = alphaTarget;
     }
 }

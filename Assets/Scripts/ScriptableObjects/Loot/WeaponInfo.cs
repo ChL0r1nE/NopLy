@@ -8,7 +8,7 @@ public enum WeaponPlace
 
 public enum WeaponType
 {
-    Hand,
+    Default,
     Shaft,
     Chopping
 }

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class GardenStrategy : Strategy
 {
-    public Slot GetSlot(int id) => Slots[id];
-
     public void SetOpen(bool isOpen) => _isOpen = isOpen;
 
     public Slot[] Slots = new Slot[4];
@@ -12,7 +10,6 @@ public class GardenStrategy : Strategy
     private int[] _plantProgress = new int[4];
 
     private InventoryGardenScript _inventoryGardenScript;
-    private int _nowPlants = 0;
     private int _plantNumber;
     private bool _isOpen = false;
 
@@ -25,7 +22,7 @@ public class GardenStrategy : Strategy
     private void OnTriggerExit()
     {
         if (_isOpen)
-            _inventoryGardenScript?.SwitchOpen(false);
+            _inventoryGardenScript.SwitchOpen(false);
     }
 
     public override void Interact()
@@ -42,8 +39,6 @@ public class GardenStrategy : Strategy
         countRemain = slot.Count;
 
         if (slot.Info.Type != ItemType.Seed) return;
-
-        _nowPlants++;
 
         for (int i = 0; i < 4; i++)
         {
@@ -70,11 +65,6 @@ public class GardenStrategy : Strategy
         for (int i = 0; i < 4; i++)
             _plantProgress[i]++;
 
-        ShowPlants();
-    }
-
-    private void ShowPlants()
-    {
         for (int i = 0; i < 4; i++)
         {
             if (!Slots[i].Info)
@@ -99,12 +89,12 @@ public class GardenStrategy : Strategy
         }
     }
 
-    public void DeleteItem(int id)
+    public void SetSlotCount(int id, int count)
     {
-        _nowPlants--;
-        Slots[id] = new(null, 0);
-
-        ShowPlants();
+        Slots[id].Count = count;
         _inventoryGardenScript.UpdateMenu(Slots);
+
+        if (count == 0)
+            _plantMeshes[id].mesh = null;
     }
 }

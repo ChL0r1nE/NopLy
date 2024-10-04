@@ -31,6 +31,7 @@ public class Slot
     }
 
     public ItemInfo Info;
+
     [SerializeField] private int _count;
 
     public void AddCount(int count, out int remain)
@@ -61,12 +62,9 @@ public class Slot
 public class ItemInfo : ScriptableObject
 {
     [HideInInspector] public GameObject Object = null;
-
-    [Header("Main")]
-    public ItemType Type;
-    public int ID;
-
     public Sprite Sprite;
+    public ItemType Type;
     public string TestSt;
+    public int ID;
     public int MaxStack;
 }

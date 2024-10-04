@@ -5,6 +5,7 @@ public class DamageTextScript : MonoBehaviour
 {
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private RectTransform _rectTransform;
+    [SerializeField] private BillboardScript _billboardScript;
     private Color _textColor = new(255, 69, 69, 1);
     private Vector3 _position = new(0, 2.5f, 0);
     private int _damageStack;
@@ -29,6 +30,7 @@ public class DamageTextScript : MonoBehaviour
             {
                 _damageStack = 0;
                 _isWork = false;
+                _billboardScript.SetFollowing(false);
             }
         }
     }
@@ -36,6 +38,7 @@ public class DamageTextScript : MonoBehaviour
     public void ResetTextDelay(int damage)
     {
         _isWork = true;
+        _billboardScript.SetFollowing(true);
 
         _damageStack += damage;
         _text.text = "-" + _damageStack.ToString();

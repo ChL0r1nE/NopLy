@@ -2,72 +2,46 @@ using UnityEngine;
 
 public class PlayerMoveScript : MonoBehaviour
 {
-    public Animator Animator;
+    public void AddImpulse() => _rigidbody.AddForce(transform.forward * 1500);
+
+    private bool IsRun => Input.GetKey(KeyCode.LeftShift);
+
+    private bool Forward => Input.GetKey(KeyCode.W);
+
+    private bool Back => Input.GetKey(KeyCode.S);
+
+    private bool Left => Input.GetKey(KeyCode.A);
+
+    private bool Right => Input.GetKey(KeyCode.D);
+
     public float Speed;
 
+    [SerializeField, HideInInspector] private bool _isLunge = false;
+    [SerializeField] private Animator _animator;
     private Rigidbody _rigidbody;
-    private Attack _attack;
     private float _targetRotationAngle = -1;
-    private float _nowRotation;
     private bool _isAttack = false;
-    private bool _isLunge = false;
-
-    private bool _forward => Input.GetKey(KeyCode.W);
-    private bool _back => Input.GetKey(KeyCode.S);
-    private bool _right => Input.GetKey(KeyCode.D);
-    private bool _left => Input.GetKey(KeyCode.A);
-    private bool _isRun => Input.GetKey(KeyCode.LeftShift);
-
-    public void SetTargetRotation(float target, Attack attack)
-    {
-        _attack = attack;
-        _targetRotationAngle = target;
-        _isAttack = true;
-    }
-
-    public void Lunge()
-    {
-        _isLunge = true;
-        _rigidbody.AddForce(transform.forward * 1500);
-
-        Invoke("LungeOff", 0.5f);
-    }
-
-    private void LungeOff() => _isLunge = false;
 
     private void Start() => _rigidbody = GetComponent<Rigidbody>();
 
-    private void Update()
-    {
-        if (_isAttack) return;
-
-        if (_forward)
-            _targetRotationAngle = _right ? 45f : _left ? 315f : 0f;
-        else if (_back)
-            _targetRotationAngle = _right ? 135f : _left ? 225f : 180f;
-        else if (_right || _left)
-            _targetRotationAngle = _right ? 90f : 270f;
-        else
-            _targetRotationAngle = -1f;
-    }
-
     private void FixedUpdate()
     {
+        if (_isLunge) return;
+
         if (_isAttack)
         {
-            _isAttack = !Mathf.Approximately(transform.rotation.eulerAngles.y, _targetRotationAngle);
+            _isAttack = !Mathf.Approximately(transform.rotation.eulerAngles.y / 10, _targetRotationAngle / 10f);
 
-            if (Mathf.Approximately(transform.rotation.eulerAngles.y / 20f, _targetRotationAngle / 20f))
-                _attack.Invoke();
+            if (!_isAttack)
+                _animator.SetTrigger("Strike");
 
-            _nowRotation = Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 15f);
-            transform.rotation = Quaternion.Euler(0, _nowRotation, 0);
+            transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 12f), 0);
             return;
         }
 
         if (_targetRotationAngle == -1f)
         {
-            Animator.SetInteger("MoveModifier", 0); //LugeMoveModifier 3
+            _animator.SetInteger("MoveModifier", 0);
 
             if (!_isLunge)
                 _rigidbody.velocity = Vector3.zero;
@@ -75,11 +49,27 @@ public class PlayerMoveScript : MonoBehaviour
             return;
         }
 
-        Animator.SetInteger("MoveModifier", _isRun ? 2 : 1);
+        _animator.SetInteger("MoveModifier", IsRun ? 2 : 1);
 
-        _nowRotation = Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 7f);
+        transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 7f), 0);
+        _rigidbody.velocity = transform.forward * (IsRun ? Speed : Speed / 2);
+    }
 
-        transform.rotation = Quaternion.Euler(0, _nowRotation, 0);
-        _rigidbody.velocity = transform.forward * (_isRun ? Speed : Speed / 2f);
+    private void Update()
+    {
+        if (_isAttack) return;
+
+        if (Forward)
+            _targetRotationAngle = Right ? 45f : Left ? 315f : 0f;
+        else if (Back)
+            _targetRotationAngle = Right ? 135f : Left ? 225f : 180f;
+        else
+            _targetRotationAngle = Right ? 90f : Left ? 270f : -1f;
+    }
+
+    public void SetTargetRotation(float target)
+    {
+        _targetRotationAngle = Mathf.Repeat(target, 359);
+        _isAttack = true;
     }
 }

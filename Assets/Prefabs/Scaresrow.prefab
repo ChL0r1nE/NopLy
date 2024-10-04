@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 3085944716459974720}
   _rectTransform: {fileID: 3085944716459974721}
+  _billboardScript: {fileID: 3085944716459974726}
 --- !u!114 &3085944716459974726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,11 +267,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderers:
   - {fileID: 2644004602143872755}
-  _outlineMode: 1
   _outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  _outlineMode: 1
   _outlineWidth: 0
-  _bakeKeys: []
-  _bakeValues: []
 --- !u!33 &1555111915576603239
 MeshFilter:
   m_ObjectHideFlags: 0

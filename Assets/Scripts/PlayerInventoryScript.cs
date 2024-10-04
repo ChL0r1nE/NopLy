@@ -18,7 +18,7 @@ public class PlayerInventoryScript : MonoBehaviour
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
 
-    public void AddItem(Slot slot, out int countRemain, bool destroyObject = false)
+    public void AddItem(Slot slot, out int countRemain)
     {
         countRemain = 0;
 
@@ -33,36 +33,22 @@ public class PlayerInventoryScript : MonoBehaviour
                 else
                 {
                     _inventoryPlayerScript.UpdateMenu(Slots);
-
-                    if (destroyObject)
-                        Destroy(slot.Info.Object);
-
                     return;
                 }
             }
         }
-
-        countRemain = slot.Count;
 
         for (int i = 0; i < Slots.Length; i++)
         {
             if (Slots[i].Info) continue;
 
             Slots[i] = slot;
-            countRemain = 0;
-            break;
+            _inventoryPlayerScript.UpdateMenu(Slots);
+            return;
         }
 
         _inventoryPlayerScript.UpdateMenu(Slots);
-
-        if (destroyObject && countRemain == 0)
-            Destroy(slot.Info.Object);
-    }
-
-    public void DeleteItem(int id)
-    {
-        Slots[id] = new(null, 0);
-        _inventoryPlayerScript.UpdateMenu(Slots);
+        countRemain = slot.Count;
     }
 
     public bool DeleteRecipe(Slot[] recipe)
@@ -79,7 +65,10 @@ public class PlayerInventoryScript : MonoBehaviour
                 if (slot.Info == recipeSlot.Info)
                 {
                     CanDeleteSlot |= slot.CanDeleteCount(remainCount, out int remain);
+
                     remainCount = remain;
+
+                    if (remain == 0) break;
                 }
             }
 
@@ -99,6 +88,8 @@ public class PlayerInventoryScript : MonoBehaviour
                 {
                     slot.DeleteCount(remainCount, out int remain);
                     remainCount = remain;
+
+                    if (remain == 0) break;
                 }
             }
         }

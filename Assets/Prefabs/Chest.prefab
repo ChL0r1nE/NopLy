@@ -241,7 +241,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 21062e039e4794c4fb943cc13799f176, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -348,25 +348,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Slots:
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   - Info: {fileID: 0}
-    Count: 0
+    _count: 0
   _animator: {fileID: 1724691828770215044}
 --- !u!65 &7151686383577284012
 BoxCollider:
