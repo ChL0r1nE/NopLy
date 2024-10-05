@@ -6,7 +6,7 @@ public class TickMachineScript : MonoBehaviour
 {
     public static Action OnTick;
 
-    private WaitForSecondsRealtime _waitFiveSecond = new WaitForSecondsRealtime(5);
+    private WaitForSecondsRealtime _waitFiveSecond = new(5);
 
     private void OnEnable() => StartCoroutine(TickCoroutine());
 

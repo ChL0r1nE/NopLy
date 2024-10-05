@@ -14,6 +14,7 @@ public class InventoryAmmunitionScript : Inventory
 
     private void Start()
     {
+        _inventoryTargetPosition.x = -300;
         _playerArmorScript = FindObjectOfType<PlayerArmorScript>();
         _playerMainWeaponScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerWeaponScript>();
     }
@@ -84,23 +85,17 @@ public class InventoryAmmunitionScript : Inventory
 
     public override void UpdateMenu(Slot[] slots)
     {
+        _images[0].gameObject.SetActive(_playerMainWeaponScript.WeaponInfo.WeaponType != WeaponType.Default);
+
         if (_playerMainWeaponScript.WeaponInfo.WeaponType != WeaponType.Default)
-        {
-            _images[0].gameObject.SetActive(true);
             _images[0].sprite = _playerMainWeaponScript.WeaponInfo.Sprite;
-        }
-        else
-            _images[0].gameObject.SetActive(false);
 
         for (int i = 0; i < 5; i++)
         {
+            _images[i + 2].gameObject.SetActive(_playerArmorScript.Armors[i].Sprite);
+
             if (_playerArmorScript.Armors[i].Sprite)
-            {
-                _images[i + 2].gameObject.SetActive(true);
                 _images[i + 2].sprite = _playerArmorScript.Armors[i].Sprite;
-            }
-            else
-                _images[i + 2].gameObject.SetActive(false);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(TargetActivateScript))]
 public class GetLootStrategy : Strategy
 {
+
     [SerializeField] private GameObject Loot;
     [SerializeField] private Animator _animator;
     [SerializeField] private TargetActivateScript _targetActivateScript;
@@ -14,7 +15,12 @@ public class GetLootStrategy : Strategy
     [SerializeField] private SpriteRenderer _barRenderer;
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private int _health = 1;
+    private bool _isHardLoot;
     private PlayerWeaponScript _playerWeaponScript;
+
+#if UNITY_EDITOR
+    private void OnValidate() => _isHardLoot = _health != 1;
+#endif
 
     private void Start()
     {
@@ -22,20 +28,21 @@ public class GetLootStrategy : Strategy
             _playerWeaponScript = FindObjectOfType<PlayerWeaponScript>();
     }
 
-    public override void Interact() //ReFactor??
+    public override void Interact()
     {
-        if (_barRenderer && _playerWeaponScript.WeaponInfo.WeaponType != _weaponType) return;
-
-        _health--;
-
-        if (_health > 0)
+        if (_isHardLoot)
         {
-            _playerWeaponScript.RotateToTransforn(transform.position);
-            _barScale.x = _health * 0.09f;
-            _barRenderer.size = _barScale;
-        }
+            if (_playerWeaponScript.WeaponInfo.WeaponType != _weaponType) return;
 
-        if (_health != 0) return;
+            if (_health > 0)
+            {
+                _playerWeaponScript.RotateToTransforn(transform.position);
+                _barScale.x = --_health * 0.09f;
+                _barRenderer.size = _barScale;
+
+                if (_health != 0) return;
+            }
+        }
 
         _animator.SetTrigger("Collect");
         _targetActivateScript.SetOffActive();

@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerArmorScript : MonoBehaviour
 {
-    public int ArmorBuff
+    public float ArmorBuffModifier
     {
-        get => _armorBuff;
+        get => _armorBuffModifier;
         set
         {
-            _armorBuff = Mathf.Clamp(value, 0, int.MaxValue);
+            _armorBuffModifier = Mathf.Clamp(value, 1, int.MaxValue);
             CalculateArmorValue();
         }
     }
@@ -15,10 +15,10 @@ public class PlayerArmorScript : MonoBehaviour
     public MeshFilter[] ArmorMeshes = new MeshFilter[5];
     public ArmorInfo[] Armors = new ArmorInfo[5];
 
-    public int ArmorValue;
+    public float ArmorModifier;
 
     private int _partID;
-    private int _armorBuff = 0;
+    private float _armorBuffModifier = 1;
 
     private void Start() => FindObjectOfType<InventoryAmmunitionScript>().SetPlayerAmmunitionScript(this);
 
@@ -37,8 +37,8 @@ public class PlayerArmorScript : MonoBehaviour
 
     private void CalculateArmorValue()
     {
-        ArmorValue = ArmorBuff;
+        ArmorModifier = ArmorBuffModifier;
         foreach (ArmorInfo info in Armors)
-            ArmorValue += info.Armor;
+            ArmorModifier += info.ArmorModifier;
     }
 }

@@ -1,27 +1,24 @@
-﻿//
-//  OutlineFill.shader
-//  QuickOutline
-//
-//  Created by Chris Nolet on 2/21/18.
-//  Copyright © 2018 Chris Nolet. All rights reserved.
-//
-
-Shader "Custom/Outline Fill" {
-  Properties {
+﻿Shader "Custom/Outline Fill"
+{
+  Properties
+  {
     [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
 
     _OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
     _OutlineWidth("Outline Width", Range(0, 10)) = 2
   }
 
-  SubShader {
-    Tags {
+  SubShader 
+  {
+    Tags 
+    {
       "Queue" = "Transparent+110"
       "RenderType" = "Transparent"
       "DisableBatching" = "True"
     }
 
-    Pass {
+    Pass
+    {
       Name "Fill"
       Cull Off
       ZTest [_ZTest]
@@ -29,7 +26,8 @@ Shader "Custom/Outline Fill" {
       Blend SrcAlpha OneMinusSrcAlpha
       ColorMask RGB
 
-      Stencil {
+      Stencil
+      {
         Ref 1
         Comp NotEqual
       }
@@ -40,14 +38,16 @@ Shader "Custom/Outline Fill" {
       #pragma vertex vert
       #pragma fragment frag
 
-      struct appdata {
+      struct appdata
+      {
         float4 vertex : POSITION;
         float3 normal : NORMAL;
         float3 smoothNormal : TEXCOORD3;
         UNITY_VERTEX_INPUT_INSTANCE_ID
       };
 
-      struct v2f {
+      struct v2f 
+      {
         float4 position : SV_POSITION;
         fixed4 color : COLOR;
         UNITY_VERTEX_OUTPUT_STEREO
@@ -56,7 +56,8 @@ Shader "Custom/Outline Fill" {
       uniform fixed4 _OutlineColor;
       uniform float _OutlineWidth;
 
-      v2f vert(appdata input) {
+      v2f vert(appdata input) 
+      {
         v2f output;
 
         UNITY_SETUP_INSTANCE_ID(input);
@@ -72,9 +73,11 @@ Shader "Custom/Outline Fill" {
         return output;
       }
 
-      fixed4 frag(v2f input) : SV_Target {
+      fixed4 frag(v2f input) : SV_Target 
+      {
         return input.color;
       }
+
       ENDCG
     }
   }

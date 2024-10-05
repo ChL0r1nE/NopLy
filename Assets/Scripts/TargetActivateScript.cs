@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(OutlineScript))]
 public class TargetActivateScript : MonoBehaviour
 {
-    public SpriteRenderer BillboardRenderer;
-    public Strategy Strategy;
+    [SerializeField] private SpriteRenderer[] BillboardRendereres;
 
+    [SerializeField] private Strategy Strategy;
     private OutlineScript _outlineScript;
     private Color _billboardColor = new(255, 255, 255, 0);
     private float _widthTarget;
@@ -37,7 +37,9 @@ public class TargetActivateScript : MonoBehaviour
         _outlineScript.OutlineWidth = Mathf.Lerp(_outlineScript.OutlineWidth, _widthTarget, _time);
 
         _billboardColor.a = Mathf.Lerp(_billboardColor.a, _alphaTarget, _time);
-        BillboardRenderer.color = _billboardColor;
+
+        foreach (SpriteRenderer billboardRenderer in BillboardRendereres)
+            billboardRenderer.color = _billboardColor;
     }
 
     private void TargetEvent(float outlineWidth, float alphaTarget)

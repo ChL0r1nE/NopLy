@@ -17,7 +17,7 @@ public class PlayerInteractTargetScript : MonoBehaviour
     private void OnTriggerExit(Collider col)
     {
         _targetStrategy = null;
-        col.GetComponent<TargetActivateScript>().TargetDisable();
+        _target.TargetDisable();
     }
 
     private void Update()

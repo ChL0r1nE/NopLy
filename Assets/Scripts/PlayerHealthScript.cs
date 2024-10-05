@@ -13,16 +13,12 @@ public class PlayerHealthScript : MonoBehaviour
     public void Heal(int heal)
     {
         _nowHealth += heal;
-        _nowHealth = (int)Mathf.Clamp(_nowHealth, 0, (float)_maxHealth);
+        _nowHealth = Mathf.Clamp(_nowHealth, 0, _maxHealth);
     }
 
     public void TakeDamage(int damage)
     {
-        if (_playerArmorScript.ArmorValue == 0)
-            _nowHealth -= damage;
-        else
-            _nowHealth -= (int)(damage * (((float)damage / _playerArmorScript.ArmorValue) / ((float)damage / _playerArmorScript.ArmorValue + 1)));
-
-        _nowHealth = (int)Mathf.Clamp(_nowHealth, 0, (float)_maxHealth);
+        _nowHealth -= (int)Mathf.Round(damage / _playerArmorScript.ArmorModifier);
+        _nowHealth = Mathf.Clamp(_nowHealth, 0, _maxHealth);
     }
 }

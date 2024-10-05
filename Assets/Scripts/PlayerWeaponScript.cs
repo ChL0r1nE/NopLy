@@ -6,9 +6,15 @@ public class PlayerWeaponScript : MonoBehaviour
     [System.Serializable]
     public class Skill
     {
-        public void SetImage(Image image) => _skillImage = image;
-
         public bool SkillReady => _resetTimer > 1;
+
+        public void SetImage(Image image)
+        {
+            _skillImage = image;
+
+            if (!_skillImage)
+                _resetTimer = 0;
+        }
 
         public SkillInfo[] SkillComponents;
         public string[] AnimTriggers;
@@ -42,7 +48,7 @@ public class PlayerWeaponScript : MonoBehaviour
     public WeaponInfo WeaponInfo;
 
     [SerializeField] private Image[] _skillImages;
-    [SerializeField] private Skill[] _skills; //AddArrayOfAktiveSkills
+    [SerializeField] private Skill[] _skills; //AddArrayOfAktiveSkills?
 
     [SerializeField] private Image _weaponImage;
     [SerializeField] private Animator _animator;
@@ -50,6 +56,7 @@ public class PlayerWeaponScript : MonoBehaviour
     [SerializeField] private PlayerMoveScript _playerMoveScript;
     [SerializeField] private PlayerAttackScript _playerAttackScript;
     [SerializeField] private PlayerEnemyTargetScript _playerEnemyTargetScript;
+    private Vector2 _targetImagePos = new(-150, 0);
     private int _nowSkills;
     private float _imageMoveTime = 0;
 
@@ -61,26 +68,26 @@ public class PlayerWeaponScript : MonoBehaviour
         {
             _imageMoveTime += Time.deltaTime;
 
-            for (int i = 0; i < _skillImages.Length; i++) //new Vector x_x
-                _skillImages[i].transform.parent.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150, 150 + Mathf.Lerp(0, 150 * (i + 1), _imageMoveTime * 3));
+            for (int i = 0; i < _skillImages.Length; i++)
+            {
+                _targetImagePos.y = 150 + Mathf.Lerp(0, 150 * (i + 1), _imageMoveTime * 3);
+                _skillImages[i].transform.parent.GetComponent<RectTransform>().anchoredPosition = _targetImagePos;
+            }
         }
 
         foreach (Skill skill in _skills)
             skill.FrameUpdate();
 
-        if (WeaponInfo.WeaponType == WeaponType.Shaft) //TypeLock
+        int skillNumber = Input.GetKeyDown(KeyCode.Q) ? 0 : Input.GetKeyDown(KeyCode.E) ? 1 : -1;
+
+        if (skillNumber != -1 && _skills[skillNumber].SkillReady)
         {
-            int skillNumber = Input.GetKeyDown(KeyCode.Q) ? 0 : Input.GetKeyDown(KeyCode.E) ? 1 : -1;
+            foreach (string name in _skills[skillNumber].AnimTriggers)
+                _animator.SetTrigger(name);
 
-            if (skillNumber != -1 && _skills[skillNumber].SkillReady)
-            {
-                foreach (string name in _skills[skillNumber].AnimTriggers)
-                    _animator.SetTrigger(name);
+            _skills[skillNumber].Execute();
 
-                _skills[skillNumber].Execute();
-
-                return;
-            }
+            return;
         }
 
         if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
@@ -103,16 +110,13 @@ public class PlayerWeaponScript : MonoBehaviour
         _playerMoveScript.SetTargetRotation(Angle);
     }
 
-    public void SetWeapon(WeaponInfo info) //ReFactor
+    public void SetWeapon(WeaponInfo info)
     {
         if (WeaponInfo.WeaponType != info.WeaponType)
         {
             _nowSkills = -1;
             _imageMoveTime = 0;
             _animator.SetTrigger(info.WeaponType.ToString());
-
-            foreach (Image image in _skillImages)
-                image.transform.parent.gameObject.SetActive(false);
 
             foreach (Skill skill in _skills)
             {
@@ -130,6 +134,9 @@ public class PlayerWeaponScript : MonoBehaviour
                 _skillImages[_nowSkills].sprite = skill.Sprite;
             }
         }
+
+        for (int i = _nowSkills + 1; i < +_skillImages.Length; i++)
+            _skillImages[i].transform.parent.gameObject.SetActive(false);
 
         WeaponInfo = info;
 

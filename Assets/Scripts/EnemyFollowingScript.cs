@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class EnemyFollowingScript : MonoBehaviour
 {
+    private bool IsMoveDistance => _distance < 20f;
+    private bool IsAttackDistance => _distance < 1.5f;
+
     [SerializeField] private Animator _animator;
     [SerializeField] private int _damage;
     [SerializeField] public float _speed;
@@ -12,28 +15,23 @@ public class EnemyFollowingScript : MonoBehaviour
     private float _distance;
     private bool _isAttack;
 
-    private bool _isMoveDistance => _distance < 20;
-    private bool _isAttackDistance => _distance < 1;
-
     private void Start()
     {
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        _halfAttackTime = new WaitForSeconds(_attackTime / 2);
+        _halfAttackTime = new(_attackTime / 2);
     }
 
     private void FixedUpdate()
     {
-        _animator.SetBool("IsMove", _isMoveDistance);
+        if (_isAttack) return;
+
         _distance = Vector3.Distance(transform.position, _playerTransform.position);
+        _animator.SetBool("IsMove", IsMoveDistance && !IsAttackDistance);
+        _animator.SetBool("IsAttack", IsAttackDistance);
 
-        if (_isAttackDistance)
-        {
-            _animator.SetTrigger("Attack");
-
-            if (!_isAttack)
-                StartCoroutine(WaitAttack());
-        }
-        else if (_isMoveDistance)
+        if (IsAttackDistance)
+            StartCoroutine(WaitAttack());
+        else if (IsMoveDistance)
         {
             transform.LookAt(_playerTransform.position);
             transform.Translate(Vector3.forward * _speed);
