@@ -48,7 +48,7 @@ public class PlayerEditor : Editor
         GUI.DrawTexture(rect, cover, ScaleMode.ScaleToFit);
 
         //Mark
-        GUILayout.Label("By Cosyplaid", new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+        GUILayout.Label("1mM0rT4L_", new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
         _serializedPlayerScript.Update();
 
         //TastenBegin

@@ -5,9 +5,12 @@ public class PlayerInventoryScript : MonoBehaviour
     public Slot[] Slots;
 
     private InventoryPlayerScript _inventoryPlayerScript;
+    private LootListScript _lootListScript;
+    private int _slotCount;
 
     private void Start()
     {
+        _lootListScript = FindObjectOfType<LootListScript>();
         _inventoryPlayerScript = FindObjectOfType<InventoryPlayerScript>();
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
@@ -18,79 +21,77 @@ public class PlayerInventoryScript : MonoBehaviour
         _inventoryPlayerScript.UpdateMenu(Slots);
     }
 
-    public void AddItem(Slot slot, out int countRemain)
+    public void AddItem(Slot slot, out int countRemain, bool showLoot = false)
     {
-        countRemain = 0;
+        countRemain = slot.Count;
+        _slotCount = slot.Count;
 
         foreach (Slot foreachSlot in Slots)
         {
-            if (foreachSlot.Info && foreachSlot.Info.ID == slot.Info.ID)
+            if (!foreachSlot.Info || foreachSlot.Info.ID != slot.Info.ID) continue;
+
+            foreachSlot.AddCount(slot.Count, out int remain);
+            countRemain = remain;
+
+            if (countRemain != 0)
+                slot.Count = countRemain;
+            else
+                break;
+        }
+
+        if (countRemain != 0)
+            for (int i = 0; i < Slots.Length; i++)
             {
-                foreachSlot.AddCount(slot.Count, out int remain);
+                if (Slots[i].Info) continue;
 
-                if (remain != 0)
-                    slot.Count = remain;
-                else
-                {
-                    _inventoryPlayerScript.UpdateMenu(Slots);
-                    return;
-                }
+                Slots[i] = slot;
+                countRemain = 0;
+                break;
             }
-        }
-
-        for (int i = 0; i < Slots.Length; i++)
-        {
-            if (Slots[i].Info) continue;
-
-            Slots[i] = slot;
-            _inventoryPlayerScript.UpdateMenu(Slots);
-            return;
-        }
 
         _inventoryPlayerScript.UpdateMenu(Slots);
-        countRemain = slot.Count;
+
+        if (showLoot && countRemain != _slotCount)
+            _lootListScript.AddLootLabel(slot.Info, _slotCount - countRemain);
     }
 
     public bool DeleteRecipe(Slot[] recipe)
     {
         bool CanDeleteRecipe = true;
+        bool CanDeleteSlot;
 
         foreach (Slot recipeSlot in recipe)
         {
-            int remainCount = recipeSlot.Count;
-            bool CanDeleteSlot = false;
+            _slotCount = recipeSlot.Count;
+            CanDeleteSlot = false;
 
             foreach (Slot slot in Slots)
             {
-                if (slot.Info == recipeSlot.Info)
-                {
-                    CanDeleteSlot |= slot.CanDeleteCount(remainCount, out int remain);
+                if (slot.Info != recipeSlot.Info) continue;
 
-                    remainCount = remain;
+                CanDeleteSlot |= slot.CanDeleteCount(_slotCount, out int remain);
+                _slotCount = remain;
 
-                    if (remain == 0) break;
-                }
+                if (remain == 0) break;
             }
 
             CanDeleteRecipe &= CanDeleteSlot;
 
-            if (!CanDeleteRecipe)
-                return false;
+            if (!CanDeleteRecipe) return false;
         }
 
         foreach (Slot recipeSlot in recipe)
         {
-            int remainCount = recipeSlot.Count;
+            _slotCount = recipeSlot.Count;
 
             foreach (Slot slot in Slots)
             {
-                if (slot.Info == recipeSlot.Info)
-                {
-                    slot.DeleteCount(remainCount, out int remain);
-                    remainCount = remain;
+                if (slot.Info != recipeSlot.Info) continue;
 
-                    if (remain == 0) break;
-                }
+                slot.DeleteCount(_slotCount, out int remain);
+                _slotCount = remain;
+
+                if (remain == 0) break;
             }
         }
 

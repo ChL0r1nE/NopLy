@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class BuffZoneScript : MonoBehaviour
+public class ArmorBuffZoneScript : MonoBehaviour
 {
     [SerializeField] private Material _zoneMaterial;
+    [SerializeField] private Sprite _buffSprite;
     [SerializeField] private int _workTime;
     private PlayerArmorScript _playerArmorScript;
+    private BuffListScript _buffListScript;
     private float _timer = 0;
     private bool _isPlayer;
 
     private void OnEnable()
     {
+        _buffListScript = FindObjectOfType<BuffListScript>();
         _playerArmorScript = FindObjectOfType<PlayerArmorScript>();
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(transform.position.x, 0, transform.position.z, 0));
     }
@@ -18,8 +21,10 @@ public class BuffZoneScript : MonoBehaviour
     {
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(0, 100, 0, 0));
 
-        if(_isPlayer)
-            _playerArmorScript.ArmorBuffModifier -= 0.5f;
+        if (!_isPlayer) return;
+
+        _playerArmorScript.ArmorBuffModifier -= 0.5f;
+        _buffListScript.DeleteIcon(_buffSprite);
     }
 
     private void OnTriggerEnter(Collider col)
@@ -28,6 +33,7 @@ public class BuffZoneScript : MonoBehaviour
 
         _isPlayer = true;
         _playerArmorScript.ArmorBuffModifier += 0.5f;
+        _buffListScript.AddIcon(_buffSprite);
     }
 
     private void OnTriggerExit(Collider col)
@@ -36,6 +42,7 @@ public class BuffZoneScript : MonoBehaviour
 
         _isPlayer = false;
         _playerArmorScript.ArmorBuffModifier -= 0.5f;
+        _buffListScript.DeleteIcon(_buffSprite);
     }
 
     private void Update()

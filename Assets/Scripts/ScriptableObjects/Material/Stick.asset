@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Stick
   m_EditorClassIdentifier: 
   Object: {fileID: 0}
-  Type: 0
-  ID: 12
   Sprite: {fileID: 21300000, guid: 792d80223a2696c4694ddef3c6156223, type: 3}
-  TestSt: Khm. It's stick!
+  Type: 0
+  Name: Stick
+  ID: 12
   MaxStack: 10

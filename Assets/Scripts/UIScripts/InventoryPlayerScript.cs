@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class InventoryPlayerScript : Inventory
 {
+    public PlayerInventoryScript GetPlayerInventoryScript() => _playerInventory;
+
+    public void SetEnterID(int id) => _enterID = id;
+
     [SerializeField] private Image[] _quickPanelImages = new Image[10];
     private int[] _quickPanelLink = new int[10];
 
@@ -16,8 +20,6 @@ public class InventoryPlayerScript : Inventory
         _secondInventory = inventory;
         _isOpen = inventory;
     }
-
-    public PlayerInventoryScript GetPlayerInventoryScript() => _playerInventory;
 
     private void Start()
     {
@@ -83,12 +85,10 @@ public class InventoryPlayerScript : Inventory
         _quickPanelImages[selectID].gameObject.SetActive(true);
     }
 
-    public void SetEnterID(int id) => _enterID = id;
-
-    public override void AddItem(Slot slot, out int remainCount)
+    public override void AddItem(Slot slot, out int _slotCount)
     {
         _playerInventory.AddItem(slot, out int remain);
-        remainCount = remain;
+        _slotCount = remain;
     }
 
     public override void DeleteItem(int id)

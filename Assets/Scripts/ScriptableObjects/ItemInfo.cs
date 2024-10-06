@@ -10,7 +10,7 @@ public enum ItemType
 }
 
 [System.Serializable]
-public class Slot
+public record Slot
 {
     public Slot(ItemInfo info, int count)
     {
@@ -64,7 +64,7 @@ public class ItemInfo : ScriptableObject
     [HideInInspector] public GameObject Object = null;
     public Sprite Sprite;
     public ItemType Type;
-    public string TestSt;
+    public string Name;
     public int ID;
     public int MaxStack;
 }

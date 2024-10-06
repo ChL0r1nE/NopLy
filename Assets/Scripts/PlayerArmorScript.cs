@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerArmorScript : MonoBehaviour
+public class PlayerArmorScript : MonoBehaviour //NeedWorkWithBuffLust, not ArmorBuffZone
 {
     public float ArmorBuffModifier
     {

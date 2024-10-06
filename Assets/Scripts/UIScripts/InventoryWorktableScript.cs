@@ -1,10 +1,12 @@
-public class InventoryWorktableScript : Inventory
+using UnityEngine;
+
+public class InventoryWorktableScript : Inventory //MonoBeh?
 {
     private WorktableStrategy _worktableStrategy;
 
     public void SetStrategy(WorktableStrategy strategy) => _worktableStrategy = strategy;
 
-    public override void SwitchOpen(bool baseOpen)
+    public override void SwitchOpen(bool baseOpen) //ToInterface
     {
         base.SwitchOpen(baseOpen);
 
@@ -15,6 +17,6 @@ public class InventoryWorktableScript : Inventory
     public void CraftItem(int id)
     {
         if (_inventoryPlayerScript.GetPlayerInventoryScript().DeleteRecipe(_worktableStrategy.Recipes[id].Materials))
-            _inventoryPlayerScript.AddItem(_worktableStrategy.Recipes[id].Result, out int remain);
+            _inventoryPlayerScript.AddItem(new(_worktableStrategy.Recipes[id].Result.Info, _worktableStrategy.Recipes[id].Result.Count), out int remain);
     }
 }

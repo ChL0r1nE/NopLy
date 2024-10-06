@@ -14,7 +14,7 @@ public class InventoryAmmunitionScript : Inventory
 
     private void Start()
     {
-        _inventoryTargetPosition.x = -300;
+        _inventoryTargetPosition.x = -310;
         _playerArmorScript = FindObjectOfType<PlayerArmorScript>();
         _playerMainWeaponScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerWeaponScript>();
     }

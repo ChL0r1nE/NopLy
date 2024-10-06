@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerMoveScript : MonoBehaviour
 {
-    public void AddImpulse() => _rigidbody.AddForce(transform.forward * 1500);
-
     private bool IsRun => Input.GetKey(KeyCode.LeftShift);
 
     private bool Forward => Input.GetKey(KeyCode.W);
@@ -16,21 +14,30 @@ public class PlayerMoveScript : MonoBehaviour
 
     public float Speed;
 
-    [SerializeField, HideInInspector] private bool _isLunge = false;
     [SerializeField] private Animator _animator;
     private Rigidbody _rigidbody;
     private float _targetRotationAngle = -1;
+    private float _lungeTimer = 0;
     private bool _isAttack = false;
+    private bool _isLunge = false;
 
     private void Start() => _rigidbody = GetComponent<Rigidbody>();
 
     private void FixedUpdate()
     {
-        if (_isLunge) return;
+        if (_isLunge)
+        {
+            _lungeTimer += Time.fixedDeltaTime;
+
+            if (_lungeTimer < 0.33f) return;
+
+            _lungeTimer = 0;
+            _isLunge = false;
+        }
 
         if (_isAttack)
         {
-            _isAttack = !Mathf.Approximately(transform.rotation.eulerAngles.y / 10, _targetRotationAngle / 10f);
+            _isAttack = Mathf.Abs(transform.rotation.eulerAngles.y - _targetRotationAngle) > 5;
 
             if (!_isAttack)
                 _animator.SetTrigger("Strike");
@@ -57,7 +64,7 @@ public class PlayerMoveScript : MonoBehaviour
 
     private void Update()
     {
-        if (_isAttack) return;
+        if (_isAttack || _isLunge) return;
 
         if (Forward)
             _targetRotationAngle = Right ? 45f : Left ? 315f : 0f;
@@ -65,6 +72,12 @@ public class PlayerMoveScript : MonoBehaviour
             _targetRotationAngle = Right ? 135f : Left ? 225f : 180f;
         else
             _targetRotationAngle = Right ? 90f : Left ? 270f : -1f;
+    }
+
+    public void AddImpulse()
+    {
+        _rigidbody.AddForce(transform.forward * 1500);
+        _isLunge = true;
     }
 
     public void SetTargetRotation(float target)

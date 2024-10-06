@@ -1,9 +1,8 @@
-Shader "Custom/RTSCircle"
+Shader "Custom/CircleShader"
 {
     Properties
     {
         _CircleColor ("CircleColor", Color) = (1,1,1,1)
-        _CircleInsideColor ("CircleInsideColor", Color) = (1,1,1,1)
         _CirclePosition ("CirclePosition", Vector) = (0,0,0.0)
         _Angle ("Angle", Float ) = 2
         _Length ("Radius", Float ) = 2
@@ -20,7 +19,6 @@ Shader "Custom/RTSCircle"
             #pragma fragment frag
 
             uniform float4 _CirclePosition;
-            uniform fixed4 _CircleInsideColor;
             uniform fixed4 _CircleColor;
             uniform float _Angle;
             uniform float _Length;
@@ -62,6 +60,6 @@ Shader "Custom/RTSCircle"
             }
 
             ENDCG
-        }
+     }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   Object: {fileID: 0}
   Sprite: {fileID: 21300000, guid: b6150b795b426f7468929c7330a88b7b, type: 3}
   Type: 4
-  TestSt: Kn1GhtHe4D
+  Name: Knight Head
   ID: 7
   MaxStack: 1
   ArmorType: 0
