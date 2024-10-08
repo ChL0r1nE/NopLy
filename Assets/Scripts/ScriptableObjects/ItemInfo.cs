@@ -3,7 +3,7 @@ using UnityEngine;
 public enum ItemType
 {
     Material,
-    Food,
+    Potion,
     Seed,
     Weapon,
     Armor
@@ -61,7 +61,6 @@ public record Slot
 [CreateAssetMenu(fileName = "New ItemInfo", menuName = "ItemInfo", order = 1)]
 public class ItemInfo : ScriptableObject
 {
-    [HideInInspector] public GameObject Object = null;
     public Sprite Sprite;
     public ItemType Type;
     public string Name;

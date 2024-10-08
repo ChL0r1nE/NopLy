@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af3115ab52c6e64bb6133513cb215d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnableFollowing: 0
 --- !u!1 &7453013833735398807
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,12 +264,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Loot: {fileID: 3347451292053938830, guid: 9982a7e6b6996dd4c9f8c2ee2fd93c0d, type: 3}
   _animator: {fileID: 7420542892416586033}
-  _targetActivateScript: {fileID: 3535163779419656163}
+  _targetActivate: {fileID: 3535163779419656163}
   _destroyObjectAfter: 1
   _barRenderer: {fileID: 0}
   _weaponType: 0
   _health: 1
-  _isHardLoot: 0
 --- !u!65 &3535163779419656161
 BoxCollider:
   m_ObjectHideFlags: 0

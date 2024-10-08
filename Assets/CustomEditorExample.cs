@@ -7,18 +7,18 @@ public class PlayerEditor : Editor
 {
     public bool show = false;
 
-    CustomEditorExample _playerScript;
-    SerializedObject _serializedPlayerScript;
+    CustomEditorExample _player;
+    SerializedObject _serializedPlayer;
     SerializedProperty _serializedHealth;
-    SerializedProperty _serializedScript;
+    SerializedProperty _serialized;
 
     private void OnEnable()
     {
-        _serializedScript = serializedObject.FindProperty("PlayerScript");
+        _serialized = serializedObject.FindProperty("Player");
 
-        _playerScript = target as CustomEditorExample;
-        _serializedPlayerScript = new SerializedObject(_playerScript);
-        _serializedHealth = _serializedPlayerScript.FindProperty("_health");
+        _player = target as CustomEditorExample;
+        _serializedPlayer = new SerializedObject(_player);
+        _serializedHealth = _serializedPlayer.FindProperty("_health");
     }
 
     public override void OnInspectorGUI()
@@ -29,15 +29,15 @@ public class PlayerEditor : Editor
         EditorGUILayout.HelpBox("He-He-He. HelL0", MessageType.Error);
         EditorGUILayout.Space();
 
-        _playerScript.Show = EditorGUILayout.Toggle(new GUIContent("Показать что-то", "Нажмите, чтобы узреть какие-то подкапотные переменные."), _playerScript.Show);
-        if (!_playerScript.Show) return;
+        _player.Show = EditorGUILayout.Toggle(new GUIContent("Показать что-то", "Нажмите, чтобы узреть какие-то подкапотные переменные."), _player.Show);
+        if (!_player.Show) return;
 
-        _playerScript.A = EditorGUILayout.IntField(new GUIContent("Переменная А", "Переменная типа int"), _playerScript.A);
-        _playerScript.B = EditorGUILayout.TextField(new GUIContent("Переменная B:", "Переменная типа string"), _playerScript.B);
-        _playerScript.C = EditorGUILayout.FloatField(new GUIContent("Переменная C", "Переменная типа float"), _playerScript.C);
-        EditorGUILayout.PropertyField(_serializedScript);
+        _player.A = EditorGUILayout.IntField(new GUIContent("Переменная А", "Переменная типа int"), _player.A);
+        _player.B = EditorGUILayout.TextField(new GUIContent("Переменная B:", "Переменная типа string"), _player.B);
+        _player.C = EditorGUILayout.FloatField(new GUIContent("Переменная C", "Переменная типа float"), _player.C);
+        EditorGUILayout.PropertyField(_serialized);
 
-        _playerScript.MoveSpeed = EditorGUILayout.Slider(new GUIContent("Скорость игрока", "Настраиваемая скорость игрока"), _playerScript.MoveSpeed, 1, 10);
+        _player.MoveSpeed = EditorGUILayout.Slider(new GUIContent("Скорость игрока", "Настраиваемая скорость игрока"), _player.MoveSpeed, 1, 10);
         _serializedHealth.floatValue = EditorGUILayout.FloatField(new GUIContent("Здоровье", "Уровень здоровья игрока"), _serializedHealth.floatValue);
 
         //Bild
@@ -49,7 +49,7 @@ public class PlayerEditor : Editor
 
         //Mark
         GUILayout.Label("1mM0rT4L_", new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
-        _serializedPlayerScript.Update();
+        _serializedPlayer.Update();
 
         //TastenBegin
         GUILayout.BeginHorizontal();
@@ -60,7 +60,7 @@ public class PlayerEditor : Editor
         }
         if (GUILayout.Button("Ударить игрока", new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter, fixedHeight = 30 }))
         {
-            _playerScript.ApplyDamage(20);
+            _player.ApplyDamage(20);
             ShowHealthMessage();
         }
         GUILayout.EndHorizontal();
@@ -74,8 +74,8 @@ public class PlayerEditor : Editor
 
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(_playerScript);
-            _serializedPlayerScript.ApplyModifiedProperties();
+            EditorUtility.SetDirty(_player);
+            _serializedPlayer.ApplyModifiedProperties();
         }
     }
 }
@@ -84,7 +84,7 @@ public class CustomEditorExample : MonoBehaviour
 {
     public bool Show;
 
-    public PlayerMoveScript PlayerScript;
+    public PlayerComponent.Move Player;
     public int A;
     public float C;
     public float MoveSpeed;

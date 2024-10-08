@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 8917581281442170815}
   - component: {fileID: 8917581281442170812}
   - component: {fileID: 8917581281442170784}
-  - component: {fileID: 8917581281442170785}
   m_Layer: 6
   m_Name: Fir
   m_TagString: Interact
@@ -169,12 +168,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Loot: {fileID: 3347451292053938830, guid: 72ffb079a4eb6584f9ef6aef519d65f4, type: 3}
   _animator: {fileID: 8917581281442170784}
-  _targetActivateScript: {fileID: 8917581281442170813}
+  _targetActivate: {fileID: 8917581281442170813}
   _destroyObjectAfter: 1
   _barRenderer: {fileID: 8917581282707264267}
   _weaponType: 2
   _health: 3
-  _isHardLoot: 1
 --- !u!136 &8917581281442170812
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -209,21 +207,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!111 &8917581281442170785
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8917581281442170810}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &8917581282407646666
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af3115ab52c6e64bb6133513cb215d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnableFollowing: 0
 --- !u!1 &8917581282707264264
 GameObject:
   m_ObjectHideFlags: 0

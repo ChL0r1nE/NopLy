@@ -1,0 +1,103 @@
+using UnityEngine.UI;
+using UnityEngine;
+
+namespace InventoryUI
+{
+    public class Player : AbstractInventory
+    {
+        public void SetEnterID(int id) => _enterID = id;
+
+        [SerializeField] private Image[] _quickPanelImages = new Image[10];
+        private int[] _quickPanelLink = new int[10];
+
+        public PlayerComponent.Inventory PlayerInventory;
+
+        [SerializeField] private Ammunition _inventoryAmmunition;
+        private AbstractInventory _secondInventory;
+        private int _enterID;
+
+        public void SetSecondInventory(AbstractInventory inventory)
+        {
+            _secondInventory = inventory;
+            _isOpen = inventory;
+        }
+
+        private void Start()
+        {
+            for (int i = 0; i < 10; i++)
+                _quickPanelLink[i] = -1;
+
+            _inventoryTargetPosition.x = -400;
+        }
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                InteractQuickPanel(0);
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                InteractQuickPanel(1);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                InteractQuickPanel(2);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                InteractQuickPanel(3);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                InteractQuickPanel(4);
+            else if (Input.GetKeyDown(KeyCode.Alpha6))
+                InteractQuickPanel(5);
+            else if (Input.GetKeyDown(KeyCode.Alpha7))
+                InteractQuickPanel(6);
+            else if (Input.GetKeyDown(KeyCode.Alpha8))
+                InteractQuickPanel(7);
+            else if (Input.GetKeyDown(KeyCode.Alpha9))
+                InteractQuickPanel(8);
+            else if (Input.GetKeyDown(KeyCode.Alpha0))
+                InteractQuickPanel(9);
+        }
+
+        private void InteractQuickPanel(int selectID)
+        {
+            if (_enterID == -1)
+            {
+                if (_quickPanelLink[selectID] == -1) return;
+
+                Slot slot = PlayerInventory.Slots[_quickPanelLink[selectID]];
+
+                _inventoryAmmunition.AddItem(slot, out int remain);
+                PlayerInventory.SetSlotCount(_quickPanelLink[selectID], remain);
+
+                if (remain != 0) return;
+
+                _quickPanelImages[selectID].gameObject.SetActive(false);
+                _quickPanelLink[selectID] = -1;
+
+                return;
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (_quickPanelLink[i] != _enterID) continue;
+
+                _quickPanelImages[i].gameObject.SetActive(false);
+                _quickPanelLink[i] = -1;
+            }
+
+            _quickPanelLink[selectID] = _enterID;
+            _quickPanelImages[selectID].sprite = PlayerInventory.Slots[_enterID].Info.Sprite;
+            _quickPanelImages[selectID].gameObject.SetActive(true);
+        }
+
+        public override void AddItem(Slot slot, out int _slotCount)
+        {
+            PlayerInventory.AddItem(slot, out int remain);
+            _slotCount = remain;
+        }
+
+        public override void DeleteItem(int id)
+        {
+            Slot slot = new(PlayerInventory.Slots[id].Info, PlayerInventory.Slots[id].Count);
+
+            _secondInventory.AddItem(slot, out int remain);
+            PlayerInventory.SetSlotCount(id, remain);
+        }
+    }
+}
