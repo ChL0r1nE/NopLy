@@ -95,8 +95,9 @@ GameObject:
   - component: {fileID: 7790695110154871057}
   - component: {fileID: 4956550801205319771}
   - component: {fileID: 8497323347404029135}
-  m_Layer: 6
-  m_Name: Body
+  - component: {fileID: 5258844909572105528}
+  m_Layer: 0
+  m_Name: BodyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,6 +169,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5258844909572105528
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344382296479330858}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.4, y: 2, z: 2.4}
+  m_Center: {x: -0.050000012, y: 1.22, z: -0.049999952}
 --- !u!1 &7151686382800809081
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ namespace PlayerComponent
 
             public void SetImage(Image image)
             {
-                _skillImage = image;
+                _skillImage = image ? image.transform.GetChild(0).GetComponent<Image>() : null;
 
                 if (!_skillImage)
                     _resetTimer = 0;
@@ -43,8 +43,6 @@ namespace PlayerComponent
 
             public void Execute()
             {
-                if (_resetTimer < 1f) return;
-
                 foreach (Skill.AbstractSkill skillInfo in SkillComponents)
                     skillInfo.Execute();
 
@@ -52,7 +50,13 @@ namespace PlayerComponent
             }
         }
 
-        public WeaponInfo WeaponInfo;
+        public WeaponInfo WeaponInfo
+        {
+            get => _weaponInfo != _defaultMainWeapon ? _weaponInfo : null;
+            set => SetWeapon(value ? value : _defaultMainWeapon);
+        }
+
+        private WeaponInfo _weaponInfo;
 
         private List<int> _activeSkillsID = new();
 
@@ -65,12 +69,17 @@ namespace PlayerComponent
         [SerializeField] private Move _playerMove;
         [SerializeField] private Attack _playerAttack;
         [SerializeField] private EnemyTarget _playerEnemyTarget;
+        [SerializeField] private WeaponInfo _defaultMainWeapon;
         private Vector2 _targetImagePos;
         private int _nowSkills;
         private int _skillNumber;
         private float _imageMoveTime = 0;
 
-        private void Start() => SetWeapon(WeaponInfo);
+        private void Start()
+        {
+            _weaponInfo = _defaultMainWeapon;
+            SetWeapon(_weaponInfo);
+        }
 
         private void Update()
         {
@@ -81,7 +90,7 @@ namespace PlayerComponent
                 for (int i = 0; i < _skillImages.Length; i++)
                 {
                     _targetImagePos.y = Mathf.Lerp(0, 10 + 100 * (i + 1), _imageMoveTime);
-                    _skillImages[i].transform.parent.GetComponent<RectTransform>().anchoredPosition = _targetImagePos;
+                    _skillImages[i].GetComponent<RectTransform>().anchoredPosition = _targetImagePos;
                 }
             }
 
@@ -112,21 +121,22 @@ namespace PlayerComponent
         {
             position = transform.position - position;
 
-            float Angle = Mathf.Atan(position.x / position.z) * 57;
+            float angle = Mathf.Atan(position.x / position.z) * 57;
 
             if (position.z > 0)
-                Angle += 180;
+                angle += 180;
 
-            _playerMove.SetTargetRotation(Angle);
+            angle = Mathf.Repeat(angle, 359);
+            _playerMove.SetTargetRotation(angle);
         }
 
-        public void SetWeapon(WeaponInfo info)
+        private void SetWeapon(WeaponInfo info)
         {
-            if (WeaponInfo.WeaponType != info.WeaponType)
+            if (_weaponInfo.WeaponType != info.WeaponType)
             {
-                _nowSkills = -1;
+                _nowSkills = 0;
                 _imageMoveTime = 0;
-                _animator.SetTrigger(info.WeaponType.ToString());
+                _animator.SetTrigger($"{info.WeaponType}");
 
                 _activeSkillsID.Clear();
 
@@ -138,26 +148,25 @@ namespace PlayerComponent
                         continue;
                     }
 
-                    _nowSkills++;
                     _activeSkillsID.Add(i);
 
                     _skills[i].SetImage(_skillImages[_nowSkills]);
 
-                    _skillImages[_nowSkills].transform.parent.gameObject.SetActive(true);
-                    _skillImages[_nowSkills].transform.parent.GetComponent<Image>().sprite = _skills[i].Sprite;
-                    _skillImages[_nowSkills].transform.parent.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                    _skillImages[_nowSkills].sprite = _skills[i].Sprite;
+                    _skillImages[_nowSkills].gameObject.SetActive(true);
+                    _skillImages[_nowSkills].GetComponent<Image>().sprite = _skills[i].Sprite;
+                    _skillImages[_nowSkills].GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                    _skillImages[_nowSkills++].transform.GetChild(0).GetComponent<Image>().sprite = _skills[i].Sprite;
                 }
 
-                for (int i = _nowSkills + 1; i < +_skillImages.Length; i++)
-                    _skillImages[i].transform.parent.gameObject.SetActive(false);
+                for (int i = _nowSkills; i < _skillImages.Length; i++)
+                    _skillImages[i].gameObject.SetActive(false);
             }
 
-            WeaponInfo = info;
+            _weaponInfo = info;
 
-            _meshFilter.mesh = WeaponInfo.WeaponMesh;
-            _weaponImage.sprite = WeaponInfo.Sprite;
-            _playerAttack.WeaponDamage = WeaponInfo.Damage;
+            _meshFilter.mesh = _weaponInfo.WeaponMesh;
+            _weaponImage.sprite = _weaponInfo.Sprite;
+            _playerAttack.WeaponDamage = _weaponInfo.Damage;
         }
     }
 }

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Loot: {fileID: 3347451292053938830, guid: e373468a983c054449f6c12939ac02db, type: 3}
+  _loot: {fileID: 3347451292053938830, guid: e373468a983c054449f6c12939ac02db, type: 3}
   _animator: {fileID: 350389186083858899}
   _targetActivate: {fileID: 1317161526781870866}
   _destroyObjectAfter: 1

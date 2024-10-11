@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Loot: {fileID: 3347451292053938830, guid: 3a5f55f92183122489ff9e35fc293d58, type: 3}
+  _loot: {fileID: 3347451292053938830, guid: 3a5f55f92183122489ff9e35fc293d58, type: 3}
   _animator: {fileID: 3039788467174877029}
   _targetActivate: {fileID: 3039788467174877031}
   _destroyObjectAfter: 1

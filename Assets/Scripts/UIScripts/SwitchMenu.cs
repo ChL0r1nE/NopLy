@@ -12,7 +12,7 @@ public class SwitchMenu : MonoBehaviour
         if (!isOpenInventory)
         {
             _nowInventory = null;
-            _inventoryPlayer.SetSecondInventory(_nowInventory);
+            _inventoryPlayer.SetSecondInventory(null);
             return;
         }
 

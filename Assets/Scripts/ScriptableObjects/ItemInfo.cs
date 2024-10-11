@@ -20,7 +20,7 @@ public record Slot
 
     public int Count
     {
-        get { return _count; }
+        get => _count;
         set
         {
             _count = value;
@@ -43,18 +43,15 @@ public record Slot
     public void DeleteCount(int count, out int remain)
     {
         remain = _count - count < 0 ? count - _count : 0;
-        _count = Mathf.Clamp(_count - count, 0, Info.MaxStack);
-
-        if (_count == 0)
-            Info = null;
+        Count = _count - count + remain;
     }
 
     public bool CanDeleteCount(int count, out int remain)
     {
-        int May_count = _count - count;
-        remain = May_count < 0 ? -May_count : 0;
+        int mayCount = _count - count;
+        remain = mayCount < 0 ? -mayCount : 0;
 
-        return May_count >= 0;
+        return mayCount >= 0;
     }
 }
 

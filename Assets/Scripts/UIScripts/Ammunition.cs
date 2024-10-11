@@ -11,7 +11,6 @@ namespace InventoryUI
 
         [SerializeField] private CameraFollowing _cameraFollowing;
         [SerializeField] private PlayerComponent.Buff _playerBuff;
-        [SerializeField] private WeaponInfo _defaultMainWeapon;
         private PlayerComponent.Weapon _playerMainWeapon;
 
         private void Start()
@@ -46,11 +45,11 @@ namespace InventoryUI
                 case ItemType.Weapon:
                     WeaponInfo weaponInfo = slot.Info as WeaponInfo;
 
-                    if (_playerMainWeapon.WeaponInfo != _defaultMainWeapon)
+                    if (_playerMainWeapon.WeaponInfo)
                         _inventoryPlayer.AddItem(new(_playerMainWeapon.WeaponInfo, 1), out int remain);
 
                     if (weaponInfo.WeaponPlace == WeaponPlace.Main)
-                        _playerMainWeapon.SetWeapon(weaponInfo);
+                        _playerMainWeapon.WeaponInfo = weaponInfo;
 
                     break;
                 case ItemType.Armor:
@@ -72,7 +71,7 @@ namespace InventoryUI
                 _inventoryPlayer.AddItem(new(_playerMainWeapon.WeaponInfo, 1), out int remain);
 
                 if (remain == 0)
-                    _playerMainWeapon.SetWeapon(_defaultMainWeapon);
+                    _playerMainWeapon.WeaponInfo = null;
             }
             else
             {
@@ -82,14 +81,14 @@ namespace InventoryUI
                     PlayerArmor.SetArmor(_defaultArmors[id - 2]);
             }
 
-            UpdateMenu(null);
+            UpdateMenu(null); //TargetlyOnOff, not all
         }
 
         public override void UpdateMenu(Slot[] slots)
         {
-            _images[0].gameObject.SetActive(_playerMainWeapon.WeaponInfo.WeaponType != WeaponType.Default);
+            _images[0].gameObject.SetActive(_playerMainWeapon.WeaponInfo);
 
-            if (_playerMainWeapon.WeaponInfo.WeaponType != WeaponType.Default)
+            if (_playerMainWeapon.WeaponInfo)
                 _images[0].sprite = _playerMainWeapon.WeaponInfo.Sprite;
 
             for (int i = 0; i < 5; i++)

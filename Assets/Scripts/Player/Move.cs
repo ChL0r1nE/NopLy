@@ -84,7 +84,7 @@ namespace PlayerComponent
 
         public void SetTargetRotation(float target)
         {
-            _targetRotationAngle = Mathf.Repeat(target, 359);
+            _targetRotationAngle = target;
             _isAttack = true;
         }
     }

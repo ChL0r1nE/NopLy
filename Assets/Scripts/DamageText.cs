@@ -18,31 +18,30 @@ public class DamageText : MonoBehaviour
 
         _textDelay += Time.deltaTime;
 
-        if (_textDelay > 1f)
+        if (_textDelay >= 2f)
+        {
+            _damageStack = 0;
+            _isWork = false;
+            _billboard.EnableFollowing = false;
+        }
+        else if (_textDelay > 1f)
         {
             _position.y = Mathf.Lerp(2.5f, 4f, _textDelay - 1f);
             _rectTransform.anchoredPosition = _position;
 
             _textColor.a = Mathf.Lerp(_textColor.a, 0f, _textDelay - 1f);
             _text.color = _textColor;
-
-            if (_textColor.a == 0f)
-            {
-                _damageStack = 0;
-                _isWork = false;
-                _billboard.EnableFollowing = false;
-            }
         }
     }
 
     public void ResetTextDelay(int damage)
     {
+        _textDelay = 0f;
         _isWork = true;
         _billboard.EnableFollowing = true;
 
         _damageStack += damage;
         _text.text = $"- {_damageStack}";
-        _textDelay = 0f;
 
         _position.y = 2.5f;
         _rectTransform.anchoredPosition = _position;

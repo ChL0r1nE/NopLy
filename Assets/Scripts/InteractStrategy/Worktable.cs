@@ -2,36 +2,39 @@ using UnityEngine;
 
 namespace Interact
 {
+    [System.Serializable]
+    public class Recipe
+    {
+        public Slot[] Materials;
+        public Slot Result;
+    }
+
     public class Worktable : AbstractInteract
     {
-        [System.Serializable]
-        public class Recipe
-        {
-            public Slot[] Materials;
-            public Slot Result;
-        }
+        public void SetOpen(bool isOpen) => _isOpen = isOpen;
 
         public Recipe[] Recipes;
 
-        private InventoryUI.Worktable _inventoryWorktable;
+        private InventoryUI.Craft _inventoryCraft;
         private bool _isOpen = false;
 
-        public void SetOpen(bool isOpen) => _isOpen = isOpen;
-
-        private void Start() => _inventoryWorktable = FindObjectOfType<InventoryUI.Worktable>();
+        private void Start() => _inventoryCraft = FindObjectOfType<InventoryUI.Craft>();
 
         public override void Interact()
         {
             _isOpen = !_isOpen;
-            _inventoryWorktable.WorktableStrategy = this;
-            _inventoryWorktable.SwitchOpen(true);
+            _inventoryCraft.WorktableStrategy = this;
+            _inventoryCraft.SwitchOpen(true);
+
+            if (_isOpen)
+                _inventoryCraft.UpdateCraftMenu(Recipes);
         }
 
         private void OnTriggerExit(Collider col)
         {
             if (!_isOpen || !col.CompareTag("Player")) return;
 
-            _inventoryWorktable.SwitchOpen(false);
+            _inventoryCraft.SwitchOpen(false);
             _isOpen = false;
         }
     }

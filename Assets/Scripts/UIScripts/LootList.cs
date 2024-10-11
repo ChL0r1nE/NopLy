@@ -44,6 +44,6 @@ public class LootList : MonoBehaviour
         _lootLabels.Add(new LootLabel(Instantiate(_lootLabel, transform.position, Quaternion.identity, transform)));
 
         _lootLabels[_lootLabels.Count - 1].GameObject.transform.GetChild(1).GetComponent<Image>().sprite = info.Sprite;
-        _lootLabels[_lootLabels.Count - 1].GameObject.GetComponentInChildren<Text>().text = info.Name + (count != 1 ? $" x {count}" : "");
+        _lootLabels[_lootLabels.Count - 1].GameObject.GetComponentInChildren<Text>().text = info.Name + (count != 1 ? $" ({count})" : "");
     }
 }

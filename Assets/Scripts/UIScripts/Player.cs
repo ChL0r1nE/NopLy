@@ -20,6 +20,8 @@ namespace InventoryUI
         {
             _secondInventory = inventory;
             _isOpen = inventory;
+
+            _inventoryTargetPosition.y = _isOpen ? 0 : -1000;
         }
 
         private void Start()
@@ -67,7 +69,7 @@ namespace InventoryUI
 
                 if (remain != 0) return;
 
-                _quickPanelImages[selectID].gameObject.SetActive(false);
+                _quickPanelImages[selectID].enabled = false;
                 _quickPanelLink[selectID] = -1;
 
                 return;
@@ -77,13 +79,13 @@ namespace InventoryUI
             {
                 if (_quickPanelLink[i] != _enterID) continue;
 
-                _quickPanelImages[i].gameObject.SetActive(false);
+                _quickPanelImages[i].enabled = false;
                 _quickPanelLink[i] = -1;
             }
 
             _quickPanelLink[selectID] = _enterID;
             _quickPanelImages[selectID].sprite = PlayerInventory.Slots[_enterID].Info.Sprite;
-            _quickPanelImages[selectID].gameObject.SetActive(true);
+            _quickPanelImages[selectID].enabled = true;
         }
 
         public override void AddItem(Slot slot, out int _slotCount)

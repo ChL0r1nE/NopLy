@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b886abc57e0ec48938fb76c26581c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _afterLoot: {fileID: 7079327550683923678, guid: f9e599f7d2b18404eafcb550188e66fc, type: 3}
   _zoneMaterial: {fileID: 2100000, guid: 5e87779413cba0c4989cacd503231341, type: 2}
-  _buffSprite: {fileID: 21300000, guid: 4fcd08a87ac7f694495702a1ce7e857a, type: 3}
   _buff: {fileID: 11400000, guid: b910eeec87c6783429c4a81e592455b4, type: 2}
   _workTime: 5
 --- !u!136 &4587996896610614180

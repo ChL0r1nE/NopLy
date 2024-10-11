@@ -13,11 +13,11 @@ namespace PlayerComponent
             public BuffClass(BuffInfo info)
             {
                 BuffInfo = info;
-                Length = info.Length;
+                Timer = info.Length;
             }
 
             public BuffInfo BuffInfo;
-            public float Length;
+            public float Timer;
         }
 
         private List<RectTransform> _buffRectTransforms = new();
@@ -28,27 +28,33 @@ namespace PlayerComponent
         [SerializeField] private Armor PlayerArmor;
         [SerializeField] private Health _playerHealth;
         private Vector2 _buffIconOffset = new(45, 0);
+        private float _timer = 0;
 
         private void Start() => StaticBuff = this;
 
         private void FixedUpdate()
         {
+            _timer += Time.fixedDeltaTime;
+
+            if (_timer < 1) return;
+
             for (int i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i].Length == -1) continue;
+                if (_buffs[i].Timer == -1) continue;
 
-                _buffs[i].Length -= Time.fixedDeltaTime;
+                _buffs[i].Timer -= _timer;
 
-                if (_buffs[i].Length > 0) continue;
+                if (_buffs[i].Timer > 0) continue;
 
                 Destroy(_buffRectTransforms[i].gameObject);
-
-                _buffs.RemoveAt(i);
                 _buffRectTransforms.RemoveAt(i);
+                _buffs.RemoveAt(i);
 
                 for (int j = i; j < _buffs.Count; j++)
                     _buffRectTransforms[j].anchoredPosition = _buffIconOffset * j;
             }
+
+            _timer = 0;
         }
 
         public void AddBuff(BuffInfo info)
@@ -63,7 +69,7 @@ namespace PlayerComponent
             {
                 if (_buffs[i].BuffInfo.Name != info.Name) continue;
 
-                _buffs[i].Length = info.Length;
+                _buffs[i].Timer = info.Length;
                 return;
             }
 
@@ -96,9 +102,8 @@ namespace PlayerComponent
                 }
 
                 Destroy(_buffRectTransforms[i].gameObject);
-
-                _buffs.RemoveAt(i);
                 _buffRectTransforms.RemoveAt(i);
+                _buffs.RemoveAt(i);
 
                 for (int j = i; j < _buffs.Count; j++)
                     _buffRectTransforms[j].anchoredPosition = _buffIconOffset * j;

@@ -2,12 +2,9 @@ using UnityEngine;
 
 namespace Interact
 {
-    [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(TargetActivate))]
-
     public class GetLoot : AbstractInteract
     {
-        [SerializeField] private GameObject Loot;
+        [SerializeField] private GameObject _loot;
         [SerializeField] private Animator _animator;
         [SerializeField] private TargetActivate _targetActivate;
         [SerializeField] private bool _destroyObjectAfter;
@@ -46,7 +43,7 @@ namespace Interact
             _animator.SetTrigger("Collect");
             _targetActivate.SetOffActive();
 
-            Instantiate(Loot, transform.position, Quaternion.identity).GetComponent<Loot>().Slot.Count = Random.Range(1, 4);
+            Instantiate(_loot, transform.position, Quaternion.identity).GetComponent<Loot>().Slot.Count = Random.Range(1, 4);
 
             if (_destroyObjectAfter)
                 Destroy(gameObject, 2f);

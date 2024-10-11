@@ -106,8 +106,7 @@ public class Outline : MonoBehaviour
     {
         foreach (MeshFilter meshFilter in GetComponentsInChildren<MeshFilter>())
         {
-            if (!registeredMeshes.Add(meshFilter.sharedMesh))
-                continue;
+            if (!registeredMeshes.Add(meshFilter.sharedMesh)) continue;
 
             List<Vector3> smoothNormals = SmoothNormals(meshFilter.sharedMesh);
 
@@ -121,8 +120,7 @@ public class Outline : MonoBehaviour
 
         foreach (SkinnedMeshRenderer skinnedMeshRenderer in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            if (!registeredMeshes.Add(skinnedMeshRenderer.sharedMesh))
-                continue;
+            if (!registeredMeshes.Add(skinnedMeshRenderer.sharedMesh)) continue;
 
             skinnedMeshRenderer.sharedMesh.uv4 = new Vector2[skinnedMeshRenderer.sharedMesh.vertexCount];
             CombineSubmeshes(skinnedMeshRenderer.sharedMesh, skinnedMeshRenderer.sharedMaterials.Length);
@@ -136,8 +134,7 @@ public class Outline : MonoBehaviour
 
         foreach (var group in groups)
         {
-            if (group.Count() == 1)
-                continue;
+            if (group.Count() == 1) continue;
 
             _smoothNormal = Vector3.zero;
 
@@ -155,38 +152,32 @@ public class Outline : MonoBehaviour
 
     private void CombineSubmeshes(Mesh mesh, int lenght)
     {
-        if (mesh.subMeshCount == 1 || mesh.subMeshCount > lenght) return;
-
-        mesh.subMeshCount++;
-        mesh.SetTriangles(mesh.triangles, mesh.subMeshCount - 1);
+        if (mesh.subMeshCount != 1 && mesh.subMeshCount <= lenght)
+            mesh.SetTriangles(mesh.triangles, ++mesh.subMeshCount - 1);
     }
 
     private void UpdateMaterialProperties()
     {
-        _outlineFillMaterial.SetFloat("_OutlineWidth", _outlineMode == Mode.SilhouetteOnly ? 0 : _outlineWidth);
         _outlineFillMaterial.SetColor("_OutlineColor", _outlineColor);
+        _outlineFillMaterial.SetFloat("_OutlineWidth", _outlineMode != Mode.SilhouetteOnly ? _outlineWidth : 0);
+        _outlineMaskMaterial.SetFloat("_ZTest", _outlineMode == Mode.OutlineAndSilhouette || _outlineMode == Mode.SilhouetteOnly ? 4f : 8f);
 
         switch (_outlineMode)
         {
             case Mode.OutlineAll:
-                _outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
-                _outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
+                _outlineFillMaterial.SetFloat("_ZTest", 8f);
                 break;
             case Mode.OutlineVisible:
-                _outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
-                _outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.LessEqual);
+                _outlineFillMaterial.SetFloat("_ZTest", 4f);
                 break;
             case Mode.OutlineHidden:
-                _outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
-                _outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Greater);
+                _outlineFillMaterial.SetFloat("_ZTest", 5f);
                 break;
             case Mode.OutlineAndSilhouette:
-                _outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.LessEqual);
-                _outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Always);
+                _outlineFillMaterial.SetFloat("_ZTest", 8f);
                 break;
             case Mode.SilhouetteOnly:
-                _outlineMaskMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.LessEqual);
-                _outlineFillMaterial.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.Greater);
+                _outlineFillMaterial.SetFloat("_ZTest", 5f);
                 break;
         }
     }

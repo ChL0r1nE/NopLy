@@ -40,7 +40,6 @@ public class TargetActivate : MonoBehaviour
         _time += Time.deltaTime;
 
         _outline.OutlineWidth = Mathf.Lerp(_outline.OutlineWidth, _widthTarget, _time);
-
         _billboardColor.a = Mathf.Lerp(_billboardColor.a, _alphaTarget, _time);
 
         foreach (SpriteRenderer billboardRenderer in BillboardRendereres)

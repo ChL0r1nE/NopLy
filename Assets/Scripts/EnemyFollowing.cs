@@ -26,7 +26,7 @@ public class EnemyFollowing : MonoBehaviour
     {
         if (_isAttack) return;
 
-        if (_frameDelay++ >= 5)
+        if (_frameDelay++ >= 10)
         {
             _frameDelay = 0;
             _distance = Vector3.Distance(transform.position, _playerTransform.position);
@@ -53,6 +53,8 @@ public class EnemyFollowing : MonoBehaviour
             _playerTransform.gameObject.GetComponent<PlayerComponent.Health>().HealthValue -= _damage;
 
         yield return _halfAttackTime;
+
+        _distance = Vector3.Distance(transform.position, _playerTransform.position);
         _isAttack = false;
     }
 }

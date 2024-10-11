@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BuffZone : MonoBehaviour
 {
+    [SerializeField] private GameObject _afterLoot;
     [SerializeField] private Material _zoneMaterial;
     [SerializeField] private BuffInfo _buff;
     [SerializeField] private int _workTime;
@@ -18,6 +19,7 @@ public class BuffZone : MonoBehaviour
     private void OnDisable()
     {
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(0f, 100f, 0f, 0f));
+        Instantiate(_afterLoot, transform.position, Quaternion.Euler(new Vector3(0f, 0f, 100f)));
 
         if (_isPlayer)
             _playerBuff.DeleteBuff(_buff);

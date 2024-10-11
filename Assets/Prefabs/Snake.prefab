@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1835166548247305651}
   - component: {fileID: 1835166548247305648}
   - component: {fileID: 1835166548247305649}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: DamageBillboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 1835166548247305649}
   _rectTransform: {fileID: 1835166548247305614}
-  _billboardScript: {fileID: 1835166548247305651}
+  _billboard: {fileID: 1835166548247305651}
 --- !u!114 &1835166548247305651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af3115ab52c6e64bb6133513cb215d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnableFollowing: 0
 --- !u!23 &1835166548247305648
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -353,8 +354,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb268b87bca68f4b98f51420479bd76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _loot: {fileID: 3347451292053938830, guid: f72ce23ff290cf04eb010a326f2a1b74, type: 3}
   _enemy: {fileID: 1835166548782797534}
-  _damageTextScript: {fileID: 1835166548247305615}
+  _damageText: {fileID: 1835166548247305615}
   _health: 10
 --- !u!114 &1835166549063211925
 MonoBehaviour:
