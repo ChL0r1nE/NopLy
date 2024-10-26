@@ -19,7 +19,7 @@ public class BuffZone : MonoBehaviour
     private void OnDisable()
     {
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(0f, 100f, 0f, 0f));
-        Instantiate(_afterLoot, transform.position, Quaternion.Euler(new Vector3(0f, 0f, 100f)));
+        Instantiate(_afterLoot, transform.position + new Vector3(0f, 0.45f, 0f), Quaternion.Euler(new(0f, 0f, -100f)));
 
         if (_isPlayer)
             _playerBuff.DeleteBuff(_buff);

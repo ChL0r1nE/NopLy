@@ -15,6 +15,7 @@ namespace Interact
         [SerializeField] private WeaponType _weaponType;
         [SerializeField] private int _health = 1;
         private PlayerComponent.Weapon _playerWeapon;
+        private float _resetInteract = 0f;
         private bool _isHardLoot = false;
 
         private void Start()
@@ -25,13 +26,21 @@ namespace Interact
             _playerWeapon = FindObjectOfType<PlayerComponent.Weapon>();
         }
 
+        private void Update()
+        {
+            if (_isHardLoot)
+                _resetInteract += Time.deltaTime;
+        }
+
         public override void Interact()
         {
             if (_isHardLoot)
             {
-                if (_health <= 0 || _playerWeapon.WeaponInfo.WeaponType != _weaponType) return;
+                if (_health <= 0 || _resetInteract < 1.5f || _playerWeapon.WeaponInfo?.WeaponType != _weaponType) return;
 
+                _resetInteract = 0;
                 _playerWeapon.RotateToTransforn(transform.position);
+
                 _barScale.x = --_health * 0.09f;
                 _barRenderer.size = _barScale;
             }

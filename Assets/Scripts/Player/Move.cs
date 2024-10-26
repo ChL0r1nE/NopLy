@@ -41,10 +41,14 @@ namespace PlayerComponent
             {
                 _isAttack = Mathf.Abs(transform.rotation.eulerAngles.y - _targetRotationAngle) > 5;
 
-                if (!_isAttack)
+                if (_isAttack)
+                {
+                    transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 12f), 0);
+                    _rigidbody.velocity = transform.forward * (IsRun ? Speed : Speed / 2 * (Left || Right || Forward || Back ? 1 : 0));
+                }
+                else
                     _animator.SetTrigger("Strike");
 
-                transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 12f), 0);
                 return;
             }
 

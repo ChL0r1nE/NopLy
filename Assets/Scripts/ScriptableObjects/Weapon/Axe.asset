@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83fbef89805f8a44a2819ef3ec0f0aa, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
   Sprite: {fileID: 21300000, guid: 2aa3af56dce7bcd419a76c48957800c7, type: 3}
   Type: 3
   Name: Axe
@@ -20,5 +19,5 @@ MonoBehaviour:
   MaxStack: 1
   WeaponPlace: 0
   WeaponType: 2
-  WeaponMesh: {fileID: -2432090755550338912, guid: 1744b37b5b169624e9d41c8872422d4c, type: 3}
+  WeaponMesh: {fileID: -2432090755550338912, guid: 06f624b09827f4a489eb2593c1da6948, type: 3}
   Damage: 3

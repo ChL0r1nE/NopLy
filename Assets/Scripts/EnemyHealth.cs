@@ -9,8 +9,11 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        _health -= damage;
         _damageText.ResetTextDelay(damage);
+
+        if (_health == -1) return;
+
+        _health -= damage;
 
         if (_health > 0) return;
 

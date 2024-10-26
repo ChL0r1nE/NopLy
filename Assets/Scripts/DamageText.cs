@@ -6,8 +6,9 @@ public class DamageText : MonoBehaviour
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private Billboard _billboard;
+    [SerializeField] private float _defaultY;
     private Color _textColor = new(255f, 69f, 69f, 1f);
-    private Vector3 _position = new(0f, 2.5f, 0f);
+    private Vector3 _position;
     private int _damageStack;
     private float _textDelay;
     private bool _isWork = false;
@@ -26,7 +27,7 @@ public class DamageText : MonoBehaviour
         }
         else if (_textDelay > 1f)
         {
-            _position.y = Mathf.Lerp(2.5f, 4f, _textDelay - 1f);
+            _position.y = Mathf.Lerp(_defaultY, _defaultY + 1.5f, _textDelay - 1f);
             _rectTransform.anchoredPosition = _position;
 
             _textColor.a = Mathf.Lerp(_textColor.a, 0f, _textDelay - 1f);
@@ -43,7 +44,7 @@ public class DamageText : MonoBehaviour
         _damageStack += damage;
         _text.text = $"- {_damageStack}";
 
-        _position.y = 2.5f;
+        _position.y = _defaultY;
         _rectTransform.anchoredPosition = _position;
 
         _textColor.a = 1f;

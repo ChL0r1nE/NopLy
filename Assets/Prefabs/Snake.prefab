@@ -55,6 +55,7 @@ MonoBehaviour:
   _text: {fileID: 1835166548247305649}
   _rectTransform: {fileID: 1835166548247305614}
   _billboard: {fileID: 1835166548247305651}
+  _defaultY: 2.5
 --- !u!114 &1835166548247305651
 MonoBehaviour:
   m_ObjectHideFlags: 0

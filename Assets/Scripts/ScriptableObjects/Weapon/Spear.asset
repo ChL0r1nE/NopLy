@@ -19,5 +19,5 @@ MonoBehaviour:
   MaxStack: 1
   WeaponPlace: 0
   WeaponType: 1
-  WeaponMesh: {fileID: -2432090755550338912, guid: e2fc6f72e548be74ca494ebb73fa8b27, type: 3}
+  WeaponMesh: {fileID: -2432090755550338912, guid: 89afcc2581256794a880c476b40d974b, type: 3}
   Damage: 2
