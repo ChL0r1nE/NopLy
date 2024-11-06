@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448a28538afe9084598cb95187b0dff8, type: 3}
   m_Name: KnightRightHand
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
   Sprite: {fileID: 21300000, guid: 5d9a0246a4cbcea44becddd76becf71d, type: 3}
   Type: 4
   Name: Knight Right Hand
   ID: 10
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: c6c0087ed92addc4dba5a9dbe8d6fd15, type: 3}
+  - {fileID: -2432090755550338912, guid: 234d6676c0fac9741a500d521cac41a5, type: 3}
+  - {fileID: -2432090755550338912, guid: cc9b1790db9e40441acd84b62adc2951, type: 3}
   ArmorType: 2
-  ArmorMesh: {fileID: -2432090755550338912, guid: 42fc15b05745f944c9f3524050ea07e8, type: 3}
   ArmorModifier: 0.2

@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63060a168a1e1b74cadcee7ab04373ea, type: 3}
   m_Name: PatissonSeed
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
   Sprite: {fileID: 21300000, guid: e2e10dac45a39bb4a822bea484356277, type: 3}
   Type: 2
   Name: Patisson Seed
   ID: 15
-  MaxStack: 10
+  MaxStack: 15
   PlantMeshes:
-  - {fileID: -2432090755550338912, guid: e49094eb905a47c45b547ebe295299d9, type: 3}
-  - {fileID: -2432090755550338912, guid: 005451fa43e34694d936b96b5bf73dce, type: 3}
-  - {fileID: -2432090755550338912, guid: 8ec757083129b6c4d95928ce89f22513, type: 3}
+  - {fileID: -2432090755550338912, guid: ad5368dfba9e8a543b23a82b9a59c09d, type: 3}
+  - {fileID: -2432090755550338912, guid: 36ea7d4ca52cacb448e3d0f5b5bec706, type: 3}
+  - {fileID: -2432090755550338912, guid: 48319282ba78f1d45b0d9de649b3d979, type: 3}
   Harvest: {fileID: 11400000, guid: 6ec23bc120d812c44bd38f6e5bb4c27a, type: 2}

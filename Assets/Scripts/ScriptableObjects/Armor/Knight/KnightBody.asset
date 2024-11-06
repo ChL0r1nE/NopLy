@@ -17,6 +17,7 @@ MonoBehaviour:
   Name: Knight Body
   ID: 6
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: 311853107c31933479957445cc8a25b3, type: 3}
   ArmorType: 1
-  ArmorMesh: {fileID: -2432090755550338912, guid: 311853107c31933479957445cc8a25b3, type: 3}
   ArmorModifier: 1

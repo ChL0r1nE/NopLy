@@ -14,10 +14,11 @@ namespace PlayerComponent
             }
         }
 
-        public MeshFilter[] ArmorMeshes = new MeshFilter[5];
-        public ArmorInfo[] Armors = new ArmorInfo[5];
+        public ArmorInfo[] Armors;
 
-        public float ArmorModifier;
+        [SerializeField] private MeshFilter[] _armorMeshes;
+
+        public float ArmorValue;
 
         private int _partID;
         private float _armorBuffModifier = 1f;
@@ -27,21 +28,32 @@ namespace PlayerComponent
         public void SetArmor(ArmorInfo armorInfo)
         {
             _partID = (int)armorInfo.ArmorType;
+
             Armors[_partID] = armorInfo;
 
-            ArmorMeshes[_partID].mesh = armorInfo.ArmorMesh;
+            if (_partID > 1)
+            {
+                _partID = 2 + (_partID - 2) * 3;
 
-            if (_partID == 4)
-                ArmorMeshes[5].mesh = armorInfo.ArmorMesh;
+                for (int i = 0; i < 3; i++)
+                    _armorMeshes[_partID + i].mesh = armorInfo.ArmorMeshes[i];
+
+                if(_partID == 8)
+                    for (int i = 0; i < 3; i++)
+                        _armorMeshes[_partID + i + 3].mesh = armorInfo.ArmorMeshes[i];
+            }
+            else
+                _armorMeshes[_partID].mesh = armorInfo.ArmorMeshes[0];
 
             CalculateArmorValue();
         }
 
         private void CalculateArmorValue()
         {
-            ArmorModifier = ArmorBuffModifier;
+            ArmorValue = ArmorBuffModifier;
+
             foreach (ArmorInfo info in Armors)
-                ArmorModifier += info.ArmorModifier;
+                ArmorValue += info.ArmorModifier;
         }
     }
 }

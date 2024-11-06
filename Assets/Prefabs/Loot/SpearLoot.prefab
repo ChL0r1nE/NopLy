@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7079327550683923677}
   - component: {fileID: 3773966754126687919}
   - component: {fileID: 394743251908282939}
-  - component: {fileID: 7079327550683923676}
   - component: {fileID: 7079327550683923679}
+  - component: {fileID: 7079327550683923676}
   - component: {fileID: 7079327550683923674}
   m_Layer: 0
   m_Name: SpearLoot
@@ -102,19 +102,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7079327550683923676
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7079327550683923678}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.4, y: 0.4, z: 0.4}
-  m_Center: {x: -1.2, y: 0, z: 0}
 --- !u!65 &7079327550683923679
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -127,6 +114,19 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 6, y: 1, z: 1}
+  m_Center: {x: -1.2, y: 0, z: 0}
+--- !u!65 &7079327550683923676
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7079327550683923678}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.4, y: 0.4, z: 0.4}
   m_Center: {x: -1.2, y: 0, z: 0}
 --- !u!54 &7079327550683923674
 Rigidbody:

@@ -62,7 +62,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: aafee273c5aa1e542a5061519b8a3f5a, type: 2}
   - {fileID: 2100000, guid: 5e87779413cba0c4989cacd503231341, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -112,7 +111,6 @@ GameObject:
   - component: {fileID: 8917581281442170813}
   - component: {fileID: 8917581281442170815}
   - component: {fileID: 8917581281442170812}
-  - component: {fileID: 8917581281442170784}
   m_Layer: 6
   m_Name: Fir
   m_TagString: Interact
@@ -181,8 +179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loot: {fileID: 3347451292053938830, guid: 72ffb079a4eb6584f9ef6aef519d65f4, type: 3}
-  _animator: {fileID: 8917581281442170784}
+  _meshRenderers:
+  - {fileID: 6290346945123974369}
+  _mainTexture: {fileID: 2800000, guid: b1bf12131d1358c4ca81ae570a757336, type: 3}
+  _loot: {fileID: 438173534772213399, guid: 72ffb079a4eb6584f9ef6aef519d65f4, type: 3}
   _targetActivate: {fileID: 8917581281442170813}
   _destroyObjectAfter: 1
   _barRenderer: {fileID: 8917581282707264267}
@@ -202,26 +202,6 @@ CapsuleCollider:
   m_Height: 10
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}
---- !u!95 &8917581281442170784
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8917581281442170810}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4a2008f2dc4632f42a91504e83eef997, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8917581282407646666
 GameObject:
   m_ObjectHideFlags: 0

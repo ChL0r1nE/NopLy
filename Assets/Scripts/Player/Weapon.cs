@@ -63,9 +63,10 @@ namespace PlayerComponent
         [SerializeField] private Image[] _skillImages;
         [SerializeField] private SkillClass[] _skills;
 
+        [SerializeField] private InventoryUI.Ammunition _inventoryUI;
         [SerializeField] private Image _weaponImage;
         [SerializeField] private Animator _animator;
-        [SerializeField] private MeshFilter _meshFilter;
+        [SerializeField] private MeshFilter _weaponMesh;
         [SerializeField] private Move _playerMove;
         [SerializeField] private Attack _playerAttack;
         [SerializeField] private EnemyTarget _playerEnemyTarget;
@@ -149,7 +150,6 @@ namespace PlayerComponent
                     }
 
                     _activeSkillsID.Add(i);
-
                     _skills[i].SetImage(_skillImages[_nowSkills]);
 
                     _skillImages[_nowSkills].gameObject.SetActive(true);
@@ -163,10 +163,11 @@ namespace PlayerComponent
             }
 
             _weaponInfo = info;
-
-            _meshFilter.mesh = _weaponInfo.WeaponMesh;
+            _weaponMesh.mesh = _weaponInfo.WeaponMesh;
             _weaponImage.sprite = _weaponInfo.Sprite;
             _playerAttack.WeaponDamage = _weaponInfo.Damage;
+
+            _inventoryUI.UpdateMenu(null);
         }
     }
 }

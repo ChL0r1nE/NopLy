@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448a28538afe9084598cb95187b0dff8, type: 3}
   m_Name: DefaultRightHand
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
-  Type: 4
-  ID: 5
   Sprite: {fileID: 0}
-  TestSt: NoB0dy
+  Type: 4
+  Name: 
+  ID: 5
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: 57fbf6679e9d0574a9159d569fbc8567, type: 3}
+  - {fileID: -2432090755550338912, guid: a1a59067eaf413c458c3fd9c57fb7f08, type: 3}
+  - {fileID: -2432090755550338912, guid: 9ef457c149201664a972077d69f0f18f, type: 3}
   ArmorType: 2
-  ArmorMesh: {fileID: -2432090755550338912, guid: 471384a5eac99b146b07ff646f747d48, type: 3}
-  Armor: 0
+  ArmorModifier: 0

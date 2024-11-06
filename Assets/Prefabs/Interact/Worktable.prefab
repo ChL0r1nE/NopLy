@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2086136515742148112}
   - component: {fileID: 2086136515742148119}
   m_Layer: 0
-  m_Name: BillboardCollect & Collider
+  m_Name: BillboardCollect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,8 +206,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 2, z: 5}
-  m_Center: {x: 0.25, y: 1, z: 0}
+  m_Size: {x: 4, y: 1.5, z: 2.5}
+  m_Center: {x: 0, y: 1, z: 0.3}
 --- !u!33 &5315324798169486897
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4399492920765512982}
-  m_Mesh: {fileID: -2432090755550338912, guid: 22c68fcde0e72d94d98ef5ae73b6787a, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 43aa5dda67c554449bab84e6ac5ded44, type: 3}
 --- !u!23 &7432220579149480896
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8469494145858465668, guid: 22c68fcde0e72d94d98ef5ae73b6787a, type: 3}
+  - {fileID: 2100000, guid: d9203dfb7eb7a8d4ea48d734dceb87c6, type: 2}
   - {fileID: 2100000, guid: 5e87779413cba0c4989cacd503231341, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -302,5 +302,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 1.6, z: 4.1}
-  m_Center: {x: -0.2, y: 1, z: 0}
+  m_Size: {x: 3, y: 1.5, z: 1.5}
+  m_Center: {x: 0, y: 1, z: -0.2}

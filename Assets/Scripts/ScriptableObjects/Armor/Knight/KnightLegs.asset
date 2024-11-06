@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448a28538afe9084598cb95187b0dff8, type: 3}
   m_Name: KnightLegs
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
   Sprite: {fileID: 21300000, guid: eb37699b41b5f3b4ca027f8226d0bda1, type: 3}
   Type: 4
   Name: Knight Legs
   ID: 9
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: d31ab5152312eee459e63a5e79c5889c, type: 3}
+  - {fileID: -2432090755550338912, guid: 23221348bd942954fb56e555581ef87e, type: 3}
+  - {fileID: -2432090755550338912, guid: 455a022ac8fba0f4fa412c032a770085, type: 3}
   ArmorType: 4
-  ArmorMesh: {fileID: -2432090755550338912, guid: ce4159cadcc39f742bc60c98bd65393f, type: 3}
   ArmorModifier: 0.3

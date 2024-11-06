@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448a28538afe9084598cb95187b0dff8, type: 3}
   m_Name: DefaultBody
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
-  Type: 4
-  ID: 1
   Sprite: {fileID: 0}
-  TestSt: NoB0dy
+  Type: 4
+  Name: 
+  ID: 1
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: 38936cac165fddc418b67fc79b8d53f9, type: 3}
   ArmorType: 1
-  ArmorMesh: {fileID: -2432090755550338912, guid: 5edf73b178403894da711d785ec68ff8, type: 3}
-  Armor: 0
+  ArmorModifier: 0

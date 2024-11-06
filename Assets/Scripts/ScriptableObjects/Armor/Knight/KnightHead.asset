@@ -17,6 +17,7 @@ MonoBehaviour:
   Name: Knight Head
   ID: 7
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: 924dffbb5da9e824a8dcf7e5fdef2c0d, type: 3}
   ArmorType: 0
-  ArmorMesh: {fileID: -2432090755550338912, guid: 924dffbb5da9e824a8dcf7e5fdef2c0d, type: 3}
   ArmorModifier: 0.3

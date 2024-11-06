@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448a28538afe9084598cb95187b0dff8, type: 3}
   m_Name: DefaultLegs
   m_EditorClassIdentifier: 
-  Object: {fileID: 0}
-  Type: 4
-  ID: 4
   Sprite: {fileID: 0}
-  TestSt: NoB0dy
+  Type: 4
+  Name: 
+  ID: 4
   MaxStack: 1
+  ArmorMeshes:
+  - {fileID: -2432090755550338912, guid: 9d261b00569c359499960a722e31ab42, type: 3}
+  - {fileID: -2432090755550338912, guid: cee0211ca64d87b43be1f9874cfeea37, type: 3}
+  - {fileID: -2432090755550338912, guid: c3312869a2626fe4db96c01c1227dab6, type: 3}
   ArmorType: 4
-  ArmorMesh: {fileID: -2432090755550338912, guid: 8d87d059bff5daa4b8a7dd8074fc17bf, type: 3}
-  Armor: 0
+  ArmorModifier: 0

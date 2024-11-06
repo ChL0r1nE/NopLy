@@ -13,7 +13,8 @@ public enum ArmorType : int
 public class ArmorInfo : ItemInfo
 {
     [Header("Armor")]
+    public Mesh[] ArmorMeshes;
+
     public ArmorType ArmorType;
-    public Mesh ArmorMesh;
     public float ArmorModifier;
 }

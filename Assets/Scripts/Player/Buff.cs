@@ -23,7 +23,7 @@ namespace PlayerComponent
         private List<RectTransform> _buffRectTransforms = new();
         private List<BuffClass> _buffs = new();
 
-        [SerializeField] private GameObject _iconPrefab;
+        [SerializeField] private RectTransform _iconPrefab;
         [SerializeField] private Transform _buffIconParentTransform;
         [SerializeField] private Armor PlayerArmor;
         [SerializeField] private Health _playerHealth;
@@ -76,7 +76,7 @@ namespace PlayerComponent
             int buffNumder = _buffs.Count;
             _buffs.Add(new BuffClass(info));
 
-            _buffRectTransforms.Add(Instantiate(_iconPrefab, _buffIconParentTransform).GetComponent<RectTransform>());
+            _buffRectTransforms.Add(Instantiate(_iconPrefab, _buffIconParentTransform));
             _buffRectTransforms[buffNumder].GetComponent<Image>().sprite = _buffs[buffNumder].BuffInfo.Sprite;
             _buffRectTransforms[buffNumder].anchoredPosition = _buffIconOffset * buffNumder;
 

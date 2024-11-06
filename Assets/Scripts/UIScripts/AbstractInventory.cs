@@ -12,7 +12,6 @@ namespace InventoryUI
         protected Player _inventoryPlayer;
         protected Vector2 _inventoryTargetPosition = new(400, -1000);
         protected int _maxSlotCount;
-        protected int _nowSlotCount;
         protected bool _isOpen = false;
 
         private RectTransform _rectTransform;
@@ -44,15 +43,12 @@ namespace InventoryUI
 
         public virtual void UpdateMenu(Slot[] slots)
         {
-            _nowSlotCount = 0;
-
             for (int i = 0; i < _maxSlotCount; i++)
             {
                 _images[i].gameObject.SetActive(slots[i].Info);
 
                 if (!slots[i].Info) continue;
 
-                _nowSlotCount++;
                 _images[i].sprite = slots[i].Info.Sprite;
                 _textes[i].text = slots[i].Count != 1 ? $"{slots[i].Count}" : "";
             }

@@ -8,7 +8,7 @@ namespace PlayerComponent
         public float HealthValue
         {
             get => _health;
-            set => _health = Mathf.Clamp(value >= _health ? value : _health + ((value - _health) / PlayerArmor.ArmorModifier), 0, _maxHealth);
+            set => _health = Mathf.Clamp(value >= _health ? value : _health + ((value - _health) / PlayerArmor.ArmorValue), 0, _maxHealth);
         }
 
         [SerializeField] private Image _hpStripe;

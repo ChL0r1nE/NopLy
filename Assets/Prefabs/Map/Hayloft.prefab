@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 7101675060761534027}
   - component: {fileID: 8024974707145898752}
   - component: {fileID: 4776444055662319547}
-  - component: {fileID: 3555104586074075710}
   m_Layer: 0
   m_Name: Hayloft
   m_TagString: Untagged
@@ -65,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42702d9b23859dc488ecabe399d7e55e, type: 2}
+  - {fileID: 2100000, guid: 16c9291d149e1da4aa2312111cfa1d3d, type: 2}
   - {fileID: 2100000, guid: 5e87779413cba0c4989cacd503231341, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -99,8 +98,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 5, z: 8.29}
-  m_Center: {x: 3, y: 2.5, z: 0.3}
+  m_Size: {x: 0.5, y: 3, z: 8}
+  m_Center: {x: 4.22, y: 2, z: 0}
 --- !u!65 &8024974707145898752
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -112,8 +111,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 3.2, z: 0.4}
-  m_Center: {x: 1.2, y: 1.8, z: -3.9}
+  m_Size: {x: 7.75, y: 3, z: 0.75}
+  m_Center: {x: 0.75, y: 2, z: -4.25}
 --- !u!65 &4776444055662319547
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -125,18 +124,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 3.2, z: 0.4}
-  m_Center: {x: 1.6, y: 1.8, z: 4.2}
---- !u!65 &3555104586074075710
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2288272222017249316}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 3.7, z: 3.4}
-  m_Center: {x: -1.2, y: 2, z: 2.7}
+  m_Size: {x: 7, y: 3, z: 5.75}
+  m_Center: {x: 0.75, y: 2, z: 1.75}

@@ -19,6 +19,7 @@ namespace PlayerComponent
         [SerializeField] private Animator _animator;
         private Rigidbody _rigidbody;
         private float _targetRotationAngle = -1;
+        private float _targetBlend = 0;
         private float _lungeTimer = 0;
         private bool _isAttack = false;
         private bool _isLunge = false;
@@ -52,9 +53,11 @@ namespace PlayerComponent
                 return;
             }
 
+            _animator.SetFloat("BlendRun", Mathf.MoveTowards(_animator.GetFloat("BlendRun"), _targetBlend, 0.05f));
+
             if (_targetRotationAngle == -1f)
             {
-                _animator.SetInteger("MoveModifier", 0);
+                _targetBlend = 0f;
 
                 if (!_isLunge)
                     _rigidbody.velocity = Vector3.zero;
@@ -62,10 +65,10 @@ namespace PlayerComponent
                 return;
             }
 
-            _animator.SetInteger("MoveModifier", IsRun ? 2 : 1);
+            _targetBlend = IsRun ? 1f : 0.5f;
 
             transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 7f), 0);
-            _rigidbody.velocity = transform.forward * (IsRun ? Speed : Speed / 2);
+            _rigidbody.velocity = transform.forward * (IsRun ? Speed * 2f : Speed);
         }
 
         private void Update()

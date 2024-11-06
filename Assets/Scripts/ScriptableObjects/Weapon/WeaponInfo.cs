@@ -1,11 +1,5 @@
 using UnityEngine;
 
-public enum WeaponPlace
-{
-    Main,
-    Sub
-}
-
 public enum WeaponType
 {
     Default,
@@ -17,7 +11,6 @@ public enum WeaponType
 public class WeaponInfo : ItemInfo
 {
     [Header("Weapon")]
-    public WeaponPlace WeaponPlace;
     public WeaponType WeaponType;
     public Mesh WeaponMesh;
     public int Damage;

@@ -68,25 +68,18 @@ namespace Interact
 
             for (int i = 0; i < 4; i++)
             {
-                if (!Slots[i].Info)
-                {
-                    _plantMeshes[i].mesh = null;
-                    continue;
-                }
-
-                if (_plantProgress[i] > 2) continue;
+                if (!Slots[i].Info || _plantProgress[i] > 2) continue;
 
                 SeedInfo seedInfo = Slots[i].Info as SeedInfo;
                 _plantMeshes[i].mesh = seedInfo.PlantMeshes[_plantProgress[i]];
 
-                if (_plantProgress[i] == 2)
-                {
-                    _plantProgress[i]++;
-                    Slots[i].Info = seedInfo.Harvest;
-                    Slots[i].Count = Random.Range(2, 5);
+                if (_plantProgress[i] != 2) continue;
 
-                    _inventoryGarden.UpdateMenu(Slots);
-                }
+                _plantProgress[i] = 3;
+                Slots[i].Info = seedInfo.Harvest;
+                Slots[i].Count = Random.Range(2, 5);
+
+                _inventoryGarden.UpdateMenu(Slots);
             }
         }
 

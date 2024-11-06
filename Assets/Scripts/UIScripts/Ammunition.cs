@@ -4,20 +4,19 @@ namespace InventoryUI
 {
     public class Ammunition : AbstractInventory
     {
-
-        [SerializeField] private ArmorInfo[] _defaultArmors;
+        [SerializeField] private ArmorInfo[] _defaultArmors; //MoveTo Player.Armor
 
         public PlayerComponent.Armor PlayerArmor;
 
-        [SerializeField] private CameraFollowing _cameraFollowing;
         [SerializeField] private PlayerComponent.Buff _playerBuff;
-        private PlayerComponent.Weapon _playerMainWeapon;
+        [SerializeField] private CameraFollowing _cameraFollowing;
+        private PlayerComponent.Weapon _playerWeapon;
 
         private void Start()
         {
             _inventoryTargetPosition.x = -310;
             PlayerArmor = FindObjectOfType<PlayerComponent.Armor>();
-            _playerMainWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerComponent.Weapon>();
+            _playerWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerComponent.Weapon>();
         }
 
         private void Update()
@@ -45,51 +44,43 @@ namespace InventoryUI
                 case ItemType.Weapon:
                     WeaponInfo weaponInfo = slot.Info as WeaponInfo;
 
-                    if (_playerMainWeapon.WeaponInfo)
-                        _inventoryPlayer.AddItem(new(_playerMainWeapon.WeaponInfo, 1), out int remain);
+                    if (_playerWeapon.WeaponInfo)
+                        _inventoryPlayer.AddItem(new(_playerWeapon.WeaponInfo, 1), out int remain);
 
-                    if (weaponInfo.WeaponPlace == WeaponPlace.Main)
-                        _playerMainWeapon.WeaponInfo = weaponInfo;
-
+                    _playerWeapon.WeaponInfo = weaponInfo;
+                    UpdateMenu(null);
                     break;
                 case ItemType.Armor:
                     ArmorInfo armorInfo = slot.Info as ArmorInfo;
                     PlayerArmor.SetArmor(armorInfo);
+                    UpdateMenu(null);
                     break;
                 default:
                     countRemain = slot.Count;
                     break;
             }
-
-            UpdateMenu(null);
         }
 
         public override void DeleteItem(int id)
         {
+            _inventoryPlayer.AddItem(new(id == 0 ? _playerWeapon.WeaponInfo : PlayerArmor.Armors[id - 2], 1), out int remain);
+
+            if (remain != 0) return;
+
             if (id == 0)
-            {
-                _inventoryPlayer.AddItem(new(_playerMainWeapon.WeaponInfo, 1), out int remain);
-
-                if (remain == 0)
-                    _playerMainWeapon.WeaponInfo = null;
-            }
+                _playerWeapon.WeaponInfo = null;
             else
-            {
-                _inventoryPlayer.AddItem(new(PlayerArmor.Armors[id - 2], 1), out int remain);
+                PlayerArmor.SetArmor(_defaultArmors[id - 2]);
 
-                if (remain == 0)
-                    PlayerArmor.SetArmor(_defaultArmors[id - 2]);
-            }
-
-            UpdateMenu(null); //TargetlyOnOff, not all
+            _images[id].gameObject.SetActive(false);
         }
 
         public override void UpdateMenu(Slot[] slots)
         {
-            _images[0].gameObject.SetActive(_playerMainWeapon.WeaponInfo);
+            _images[0].gameObject.SetActive(_playerWeapon.WeaponInfo);
 
-            if (_playerMainWeapon.WeaponInfo)
-                _images[0].sprite = _playerMainWeapon.WeaponInfo.Sprite;
+            if (_playerWeapon.WeaponInfo)
+                _images[0].sprite = _playerWeapon.WeaponInfo.Sprite;
 
             for (int i = 0; i < 5; i++)
             {

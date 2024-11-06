@@ -18,7 +18,7 @@ public class CameraFollowing : MonoBehaviour
         {
             _time = 0f;
 
-            _toPlayerPosition = PlayerTransform.position + PlayerTransform.right * -0.3f + PlayerTransform.forward * 2.2f + PlayerTransform.up * 2.75f;
+            _toPlayerPosition = PlayerTransform.position + PlayerTransform.forward * 3f + PlayerTransform.up * 1.5f;
 
             _toPlayerRotation.x = 28f;
             _toPlayerRotation.y = Mathf.Repeat(PlayerTransform.eulerAngles.y - 221f, 359f);

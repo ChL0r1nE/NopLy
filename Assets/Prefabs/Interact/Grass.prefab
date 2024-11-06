@@ -60,8 +60,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2afdefae4c8e4124680bcd1502c76c87, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -193,7 +192,6 @@ GameObject:
   - component: {fileID: 3535163779419656162}
   - component: {fileID: 3535163779419656163}
   - component: {fileID: 3535163779419656160}
-  - component: {fileID: 7420542892416586033}
   - component: {fileID: 8636285856069094881}
   m_Layer: 6
   m_Name: Grass
@@ -262,33 +260,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43ccbc5822626f429fad4b1a10c211c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loot: {fileID: 3347451292053938830, guid: 9982a7e6b6996dd4c9f8c2ee2fd93c0d, type: 3}
-  _animator: {fileID: 7420542892416586033}
+  _meshRenderers:
+  - {fileID: 400195763046944467}
+  _mainTexture: {fileID: 2800000, guid: 1a73c9cc2f9197c4e9a6fc7f4c5e2a0f, type: 3}
+  _loot: {fileID: 438173534772213399, guid: 9982a7e6b6996dd4c9f8c2ee2fd93c0d, type: 3}
   _targetActivate: {fileID: 3535163779419656163}
   _destroyObjectAfter: 1
   _barRenderer: {fileID: 0}
   _weaponType: 0
   _health: 1
---- !u!95 &7420542892416586033
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7453013833735398807}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fba2eed68afd1b1429fcfeb16038cf4a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!135 &8636285856069094881
 SphereCollider:
   m_ObjectHideFlags: 0
