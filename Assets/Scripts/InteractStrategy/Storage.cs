@@ -14,10 +14,10 @@ namespace Interact
         }
 
         [SerializeField] private Animator _animator;
-        private InventoryUI.Storage _inventoryStorage;
+        private UI.Storage _inventoryStorage;
         private bool _isOpen = false;
 
-        private void Start() => _inventoryStorage = FindObjectOfType<InventoryUI.Storage>();
+        private void Start() => _inventoryStorage = FindObjectOfType<UI.Storage>();
 
         private void OnTriggerExit()
         {
@@ -40,7 +40,7 @@ namespace Interact
 
             foreach (Slot foreachSlot in Slots)
             {
-                if (foreachSlot.Info && foreachSlot.Info.ID == slot.Info.ID)
+                if (foreachSlot.Item && foreachSlot.Item.ID == slot.Item.ID)
                 {
                     foreachSlot.AddCount(slot.Count, out int remain);
 
@@ -58,7 +58,7 @@ namespace Interact
 
             for (int i = 0; i < Slots.Length; i++)
             {
-                if (Slots[i].Info) continue;
+                if (Slots[i].Item) continue;
 
                 Slots[i] = slot;
                 countRemain = 0;

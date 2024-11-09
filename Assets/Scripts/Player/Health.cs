@@ -1,15 +1,11 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Health : MonoBehaviour
     {
-        public float HealthValue
-        {
-            get => _health;
-            set => _health = Mathf.Clamp(value >= _health ? value : _health + ((value - _health) / PlayerArmor.ArmorValue), 0, _maxHealth);
-        }
+        public void HealthChange(float change) => _health += change >= 0 ? change : change / PlayerArmor.ArmorValue;
 
         [SerializeField] private Image _hpStripe;
         [SerializeField] private Armor PlayerArmor;

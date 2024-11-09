@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fd63514737d2fe345801cbf38484b7f1, type: 2}
+  - {fileID: 2100000, guid: 16c9291d149e1da4aa2312111cfa1d3d, type: 2}
   - {fileID: 2100000, guid: 5e87779413cba0c4989cacd503231341, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -101,8 +101,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 6, z: 14}
-  m_Center: {x: 6.7, y: 3, z: 5}
+  m_Size: {x: 1, y: 6, z: 14.5}
+  m_Center: {x: 11.75, y: 2.5, z: 0}
 --- !u!65 &1358734678774702587
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -114,8 +114,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 6, z: 4.5}
-  m_Center: {x: 6.7, y: 3, z: -9.5}
+  m_Size: {x: 1, y: 5, z: 7.75}
+  m_Center: {x: -11.75, y: 2.5, z: 3.4}
 --- !u!65 &5969741757145010184
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -127,8 +127,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 6, z: 24}
-  m_Center: {x: -6.9, y: 3, z: 0}
+  m_Size: {x: 24.3, y: 5, z: 1}
+  m_Center: {x: 0, y: 2.5, z: -6.75}
 --- !u!65 &5925276184821025233
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -140,8 +140,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 6, z: 12}
-  m_Center: {x: 1.6, y: 3, z: -6.3}
+  m_Size: {x: 12.5, y: 5, z: 1}
+  m_Center: {x: 5.7, y: 2.5, z: 0}
 --- !u!65 &3589853270190427961
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -153,8 +153,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 14, y: 6, z: 0.75}
-  m_Center: {x: 0, y: 3, z: -12}
+  m_Size: {x: 5, y: 5, z: 1}
+  m_Center: {x: 9.5, y: 2.5, z: 6.7}
 --- !u!65 &5759548671097083155
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -166,5 +166,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9, y: 6, z: 0.75}
-  m_Center: {x: -2.63, y: 3, z: 11.9}
+  m_Size: {x: 14.7, y: 5, z: 1}
+  m_Center: {x: -4.6, y: 2.5, z: 6.8}

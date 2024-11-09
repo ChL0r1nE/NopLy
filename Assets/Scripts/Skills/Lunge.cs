@@ -4,7 +4,7 @@ namespace Skill
 {
     public class Lunge : AbstractSkill
     {
-        [SerializeField] private PlayerComponent.Move _playerMove;
+        [SerializeField] private Player.Move _playerMove;
 
         public override void Execute() => _playerMove.AddImpulse();
     }

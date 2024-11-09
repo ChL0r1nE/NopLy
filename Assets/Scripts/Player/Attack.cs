@@ -1,11 +1,17 @@
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Attack : MonoBehaviour
     {
-        public int WeaponDamage;
+        public int WeaponDamage { private get; set; }
 
-        private void OnTriggerEnter(Collider col) => col.GetComponent<EnemyHealth>().TakeDamage(WeaponDamage);
+        [SerializeField] private Weapon _playerWeapon;
+
+        private void OnTriggerEnter(Collider col)
+        {
+            col.GetComponent<Enemy.Health>().TakeDamage(WeaponDamage);
+            _playerWeapon.WeaponUse(1);
+        }
     }
 }

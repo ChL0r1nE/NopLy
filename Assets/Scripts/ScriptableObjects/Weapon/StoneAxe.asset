@@ -17,7 +17,7 @@ MonoBehaviour:
   Name: Stone axe
   ID: 16
   MaxStack: 1
-  WeaponPlace: 0
   WeaponType: 2
   WeaponMesh: {fileID: -2432090755550338912, guid: 06f624b09827f4a489eb2593c1da6948, type: 3}
   Damage: 3
+  MaxEndurance: 25

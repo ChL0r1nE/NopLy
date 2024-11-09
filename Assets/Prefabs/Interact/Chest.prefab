@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8320464273490429505}
   - component: {fileID: 6606522749434986251}
   - component: {fileID: 7677141277338033055}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 7151686382800809086}
   - component: {fileID: 7151686382800809084}
   - component: {fileID: 7151686382800809087}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BillboardOpen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,25 +364,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slots:
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
   _animator: {fileID: 1724691828770215044}
 --- !u!65 &7151686383577284012

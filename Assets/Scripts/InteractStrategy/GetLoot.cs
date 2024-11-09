@@ -17,9 +17,9 @@ namespace Interact
 
         [Header("HardLoot")]
         [SerializeField] private SpriteRenderer _barRenderer;
-        [SerializeField] private WeaponType _weaponType;
+        [SerializeField] private Info.WeaponType _weaponType;
         [SerializeField] private int _health = 1;
-        private PlayerComponent.Weapon _playerWeapon;
+        private Player.Weapon _playerWeapon;
         private float _resetInteract = 0f;
         private float _timer = 0f;
         private bool _isHardLoot = false;
@@ -39,7 +39,7 @@ namespace Interact
             if (_health == 1) return;
 
             _isHardLoot = true;
-            _playerWeapon = FindObjectOfType<PlayerComponent.Weapon>();
+            _playerWeapon = FindObjectOfType<Player.Weapon>();
         }
 
         private void Update()
@@ -52,7 +52,7 @@ namespace Interact
         {
             if (_isHardLoot)
             {
-                if (_health <= 0 || _resetInteract < 1.5f || _playerWeapon.WeaponInfo?.WeaponType != _weaponType) return;
+                if (_health <= 0 || _resetInteract < 1.5f || _playerWeapon.GetInfoWeapon()?.WeaponType != _weaponType) return;
 
                 _resetInteract = 0;
                 _playerWeapon.RotateToTransforn(transform.position);
@@ -69,7 +69,7 @@ namespace Interact
             Instantiate(_loot, transform.position, Quaternion.identity).Slot.Count = Random.Range(1, 4);
 
             if (_destroyObjectAfter)
-                StartCoroutine("Destroy");
+                StartCoroutine(nameof(Destroy));
         }
 
         IEnumerator Destroy()

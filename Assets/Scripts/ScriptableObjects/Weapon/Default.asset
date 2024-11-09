@@ -20,3 +20,4 @@ MonoBehaviour:
   WeaponType: 0
   WeaponMesh: {fileID: 0}
   Damage: 1
+  MaxEndurance: 2147483647

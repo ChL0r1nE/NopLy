@@ -4,15 +4,15 @@ public class BuffZone : MonoBehaviour
 {
     [SerializeField] private GameObject _afterLoot;
     [SerializeField] private Material _zoneMaterial;
-    [SerializeField] private BuffInfo _buff;
+    [SerializeField] private Info.Buff _buff;
     [SerializeField] private int _workTime;
-    private PlayerComponent.Buff _playerBuff;
+    private Player.Buff _playerBuff;
     private float _timer = 0f;
     private bool _isPlayer;
 
     private void OnEnable()
     {
-        _playerBuff = PlayerComponent.Buff.StaticBuff;
+        _playerBuff = Player.Buff.StaticBuff;
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(transform.position.x, 0f, transform.position.z, 0f));
     }
 

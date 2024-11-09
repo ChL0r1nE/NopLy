@@ -29,8 +29,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125974777250953865}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -40, y: 0.5, z: -35}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38,7 +38,7 @@ Transform:
   - {fileID: 2099880672763794578}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8148818662775171507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,10 +53,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Recipes:
   - Materials:
-    - Info: {fileID: 11400000, guid: 7f3eecfb6de8c1f449f9f3ca27d8a7ea, type: 2}
+    - Item: {fileID: 11400000, guid: 7f3eecfb6de8c1f449f9f3ca27d8a7ea, type: 2}
       _count: 1
     Result:
-      Info: {fileID: 11400000, guid: ccd5015a96decb349a7c6d61c40008d7, type: 2}
+      Item: {fileID: 11400000, guid: ccd5015a96decb349a7c6d61c40008d7, type: 2}
       _count: 1
 --- !u!114 &6467525556298289404
 MonoBehaviour:

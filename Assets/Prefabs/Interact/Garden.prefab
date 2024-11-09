@@ -568,13 +568,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slots:
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
-  - Info: {fileID: 0}
+  - Item: {fileID: 0}
     _count: 0
   _plantMeshes:
   - {fileID: 5925100848874361995}

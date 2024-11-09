@@ -151,18 +151,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Recipes:
   - Materials:
-    - Info: {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
+    - Item: {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
       _count: 2
     Result:
-      Info: {fileID: 11400000, guid: 4160b8cba78a43b4bb7285ffa42d996c, type: 2}
+      Item: {fileID: 11400000, guid: 4160b8cba78a43b4bb7285ffa42d996c, type: 2}
       _count: 1
   - Materials:
-    - Info: {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
+    - Item: {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
       _count: 2
-    - Info: {fileID: 11400000, guid: 3c1deac3072d67740bf0bd5741ee11aa, type: 2}
+    - Item: {fileID: 11400000, guid: 3c1deac3072d67740bf0bd5741ee11aa, type: 2}
       _count: 1
     Result:
-      Info: {fileID: 11400000, guid: 550a707490beb1441ab36b60441088ee, type: 2}
+      Item: {fileID: 11400000, guid: 550a707490beb1441ab36b60441088ee, type: 2}
       _count: 1
 --- !u!114 &7741445464254240611
 MonoBehaviour:

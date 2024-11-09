@@ -63,7 +63,7 @@ Material:
     - _NewInt: -22
     m_Floats:
     - _Amount: 0.46
-    - _Angle: 18.2578
+    - _Angle: 23
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -91,7 +91,7 @@ Material:
     m_Colors:
     - _CircleColor: {r: 0.15473151, g: 0.6509434, b: 0.15045391, a: 0.49803922}
     - _CircleInsideColor: {r: 0.66215736, g: 0.9056604, b: 0.67677975, a: 1}
-    - _CirclePosition: {r: 10.27492, g: 0, b: 100, a: 0}
+    - _CirclePosition: {r: 0, g: 100, b: 0, a: 0}
     - _Color: {r: 0.7924528, g: 0.21306513, b: 0.21306513, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

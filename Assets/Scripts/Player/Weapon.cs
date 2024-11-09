@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Weapon : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace PlayerComponent
 
             public void SetImage(Image image)
             {
-                _skillImage = image ? image.transform.GetChild(0).GetComponent<Image>() : null;
+                _skillImage = image;
 
                 if (!_skillImage)
                     _resetTimer = 0;
@@ -26,7 +26,8 @@ namespace PlayerComponent
             public string[] AnimTriggers;
 
             public Sprite Sprite;
-            public WeaponType WeaponType;
+            public Info.WeaponType WeaponType;
+            public int WeaponEndurance;
 
             [SerializeField] private int _reloadTime;
             [SerializeField] public string _name;
@@ -43,43 +44,44 @@ namespace PlayerComponent
 
             public void Execute()
             {
-                foreach (Skill.AbstractSkill skillInfo in SkillComponents)
-                    skillInfo.Execute();
+                foreach (Skill.AbstractSkill skill in SkillComponents)
+                    skill.Execute();
 
                 _resetTimer = 0;
             }
         }
-
-        public WeaponInfo WeaponInfo
-        {
-            get => _weaponInfo != _defaultMainWeapon ? _weaponInfo : null;
-            set => SetWeapon(value ? value : _defaultMainWeapon);
-        }
-
-        private WeaponInfo _weaponInfo;
 
         private List<int> _activeSkillsID = new();
 
         [SerializeField] private Image[] _skillImages;
         [SerializeField] private SkillClass[] _skills;
 
-        [SerializeField] private InventoryUI.Ammunition _inventoryUI;
+        public int WeaponEndurance { get; private set; }
+
+        [SerializeField] private UI.Ammunition _ammunitionUI;
         [SerializeField] private Image _weaponImage;
+        [SerializeField] private Image _weaponEnduranceImage;
         [SerializeField] private Animator _animator;
         [SerializeField] private MeshFilter _weaponMesh;
         [SerializeField] private Move _playerMove;
         [SerializeField] private Attack _playerAttack;
         [SerializeField] private EnemyTarget _playerEnemyTarget;
-        [SerializeField] private WeaponInfo _defaultMainWeapon;
+        [SerializeField] private Info.Weapon _defaultMainWeapon;
+        private Image _skillImage;
+        private Info.Weapon _weapon;
         private Vector2 _targetImagePos;
+        private float _imageMoveTime = 0;
         private int _nowSkills;
         private int _skillNumber;
-        private float _imageMoveTime = 0;
+
+        public Info.Weapon GetInfoWeapon() => _weapon == _defaultMainWeapon ? null : _weapon;
+
+        public void SetWeaponSlot(WeaponSlot weaponSlot) => SetWeapon(weaponSlot != null ? weaponSlot.Item as Info.Weapon : _defaultMainWeapon, weaponSlot != null ? weaponSlot.Endurance : int.MaxValue);
 
         private void Start()
         {
-            _weaponInfo = _defaultMainWeapon;
-            SetWeapon(_weaponInfo);
+            _weapon = _defaultMainWeapon;
+            SetWeapon(_defaultMainWeapon, int.MaxValue);
         }
 
         private void Update()
@@ -106,6 +108,7 @@ namespace PlayerComponent
                     _animator.SetTrigger(name);
 
                 _skills[_activeSkillsID[_skillNumber]].Execute();
+                WeaponUse(_skills[_activeSkillsID[_skillNumber]].WeaponEndurance);
 
                 return;
             }
@@ -118,10 +121,19 @@ namespace PlayerComponent
                 _animator.SetTrigger("Strike");
         }
 
+        public void WeaponUse(int use)
+        {
+            WeaponEndurance -= use;
+            _weaponEnduranceImage.fillAmount = (float)WeaponEndurance / _weapon.MaxEndurance;
+            _weaponEnduranceImage.color = Color.green * ((float)WeaponEndurance / _weapon.MaxEndurance) + Color.red * (1 - (float)WeaponEndurance / _weapon.MaxEndurance);
+
+            if (WeaponEndurance < 0)
+                SetWeapon(_defaultMainWeapon, int.MaxValue);
+        }
+
         public void RotateToTransforn(Vector3 position)
         {
             position = transform.position - position;
-
             float angle = Mathf.Atan(position.x / position.z) * 57;
 
             if (position.z > 0)
@@ -131,19 +143,19 @@ namespace PlayerComponent
             _playerMove.SetTargetRotation(angle);
         }
 
-        private void SetWeapon(WeaponInfo info)
+        private void SetWeapon(Info.Weapon weapon, int endurance)
         {
-            if (_weaponInfo.WeaponType != info.WeaponType)
+            if (_weapon.WeaponType != weapon.WeaponType)
             {
                 _nowSkills = 0;
                 _imageMoveTime = 0;
-                _animator.SetTrigger($"{info.WeaponType}");
+                _animator.SetTrigger($"{weapon.WeaponType}");
 
                 _activeSkillsID.Clear();
 
                 for (int i = 0; i < _skills.Length; i++)
                 {
-                    if (_skills[i].WeaponType != info.WeaponType)
+                    if (_skills[i].WeaponType != weapon.WeaponType)
                     {
                         _skills[i].SetImage(null);
                         continue;
@@ -152,22 +164,28 @@ namespace PlayerComponent
                     _activeSkillsID.Add(i);
                     _skills[i].SetImage(_skillImages[_nowSkills]);
 
-                    _skillImages[_nowSkills].gameObject.SetActive(true);
-                    _skillImages[_nowSkills].GetComponent<Image>().sprite = _skills[i].Sprite;
-                    _skillImages[_nowSkills].GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                    _skillImages[_nowSkills++].transform.GetChild(0).GetComponent<Image>().sprite = _skills[i].Sprite;
+                    _skillImage = _skillImages[_nowSkills];
+                    _skillImage.gameObject.SetActive(true);
+                    _skillImage.GetComponent<Image>().sprite = _skills[i].Sprite;
+                    _skillImage.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+                    _skillImage = _skillImages[_nowSkills++].transform.GetChild(0).GetComponent<Image>();
+                    _skillImage.sprite = _skills[i].Sprite;
+                    _skills[i].SetImage(_skillImage);
                 }
 
                 for (int i = _nowSkills; i < _skillImages.Length; i++)
                     _skillImages[i].gameObject.SetActive(false);
             }
 
-            _weaponInfo = info;
-            _weaponMesh.mesh = _weaponInfo.WeaponMesh;
-            _weaponImage.sprite = _weaponInfo.Sprite;
-            _playerAttack.WeaponDamage = _weaponInfo.Damage;
+            _weapon = weapon;
+            WeaponEndurance = endurance;
+            _weaponMesh.mesh = _weapon.WeaponMesh;
+            _weaponImage.sprite = _weapon.Sprite;
+            _playerAttack.WeaponDamage = _weapon.Damage;
 
-            _inventoryUI.UpdateMenu(null);
+            WeaponUse(0);
+            _ammunitionUI.UpdateWeaponImage();
         }
     }
 }

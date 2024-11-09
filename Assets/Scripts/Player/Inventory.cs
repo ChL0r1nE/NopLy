@@ -1,19 +1,19 @@
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Inventory : MonoBehaviour
     {
         public Slot[] Slots;
 
-        private InventoryUI.Player _inventoryPlayer;
-        private LootList _lootList;
+        private UI.Player _inventoryPlayer;
+        private UI.LootList _lootList;
         private int _slotCount;
 
         private void Start()
         {
-            _lootList = FindObjectOfType<LootList>();
-            _inventoryPlayer = FindObjectOfType<InventoryUI.Player>();
+            _lootList = FindObjectOfType<UI.LootList>();
+            _inventoryPlayer = FindObjectOfType<UI.Player>();
             _inventoryPlayer.UpdateMenu(Slots);
         }
 
@@ -30,7 +30,7 @@ namespace PlayerComponent
 
             foreach (Slot foreachSlot in Slots)
             {
-                if (!foreachSlot.Info || foreachSlot.Info.ID != slot.Info.ID) continue;
+                if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
                 foreachSlot.AddCount(slot.Count, out int remain);
                 countRemain = remain;
@@ -44,7 +44,7 @@ namespace PlayerComponent
             if (countRemain != 0)
                 for (int i = 0; i < Slots.Length; i++)
                 {
-                    if (Slots[i].Info) continue;
+                    if (Slots[i].Item) continue;
 
                     Slots[i] = slot;
                     countRemain = 0;
@@ -54,7 +54,7 @@ namespace PlayerComponent
             _inventoryPlayer.UpdateMenu(Slots);
 
             if (showLoot && countRemain != _slotCount)
-                _lootList.AddLootLabel(slot.Info, _slotCount - countRemain);
+                _lootList.AddLootLabel(slot.Item, _slotCount - countRemain);
         }
 
         public bool DeleteRecipe(Slot[] recipe)
@@ -69,7 +69,7 @@ namespace PlayerComponent
 
                 foreach (Slot slot in Slots)
                 {
-                    if (slot.Info != recipeSlot.Info) continue;
+                    if (slot.Item != recipeSlot.Item) continue;
 
                     canDeleteSlot |= slot.CanDeleteCount(_slotCount, out int remain);
                     _slotCount = remain;
@@ -88,7 +88,7 @@ namespace PlayerComponent
 
                 foreach (Slot slot in Slots)
                 {
-                    if (slot.Info != recipeSlot.Info) continue;
+                    if (slot.Item != recipeSlot.Item) continue;
 
                     slot.DeleteCount(_slotCount, out int remain);
                     _slotCount = remain;

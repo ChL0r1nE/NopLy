@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Buff : MonoBehaviour
     {
@@ -10,13 +10,13 @@ namespace PlayerComponent
 
         public record BuffClass
         {
-            public BuffClass(BuffInfo info)
+            public BuffClass(Info.Buff buff)
             {
-                BuffInfo = info;
-                Timer = info.Length;
+                Buff = buff;
+                Timer = buff.Length;
             }
 
-            public BuffInfo BuffInfo;
+            public Info.Buff Buff;
             public float Timer;
         }
 
@@ -57,47 +57,47 @@ namespace PlayerComponent
             _timer = 0;
         }
 
-        public void AddBuff(BuffInfo info)
+        public void AddBuff(Info.Buff buff)
         {
-            if (info.Type == BuffType.Heal)
+            if (buff.Type == Info.BuffType.Heal)
             {
-                _playerHealth.HealthValue += info.Modifier;
+                _playerHealth.HealthChange(buff.Modifier);
                 return;
             }
 
             for (int i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i].BuffInfo.Name != info.Name) continue;
+                if (_buffs[i].Buff.Name != buff.Name) continue;
 
-                _buffs[i].Timer = info.Length;
+                _buffs[i].Timer = buff.Length;
                 return;
             }
 
             int buffNumder = _buffs.Count;
-            _buffs.Add(new BuffClass(info));
+            _buffs.Add(new BuffClass(buff));
 
             _buffRectTransforms.Add(Instantiate(_iconPrefab, _buffIconParentTransform));
-            _buffRectTransforms[buffNumder].GetComponent<Image>().sprite = _buffs[buffNumder].BuffInfo.Sprite;
+            _buffRectTransforms[buffNumder].GetComponent<Image>().sprite = _buffs[buffNumder].Buff.Sprite;
             _buffRectTransforms[buffNumder].anchoredPosition = _buffIconOffset * buffNumder;
 
-            switch (_buffs[buffNumder].BuffInfo.Type)
+            switch (_buffs[buffNumder].Buff.Type)
             {
-                case BuffType.Armor:
-                    PlayerArmor.ArmorBuffModifier += _buffs[buffNumder].BuffInfo.Modifier;
+                case Info.BuffType.Armor:
+                    PlayerArmor.ArmorBuffModifier += _buffs[buffNumder].Buff.Modifier;
                     break;
             }
         }
 
-        public void DeleteBuff(BuffInfo info)
+        public void DeleteBuff(Info.Buff buff)
         {
             for (int i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i].BuffInfo.Name != info.Name) continue;
+                if (_buffs[i].Buff.Name != buff.Name) continue;
 
-                switch (_buffs[i].BuffInfo.Type)
+                switch (_buffs[i].Buff.Type)
                 {
-                    case BuffType.Armor:
-                        PlayerArmor.ArmorBuffModifier -= _buffs[i].BuffInfo.Modifier;
+                    case Info.BuffType.Armor:
+                        PlayerArmor.ArmorBuffModifier -= _buffs[i].Buff.Modifier;
                         break;
                 }
 

@@ -6,7 +6,7 @@ public class TickMachine : MonoBehaviour
 {
     public static Action OnTick;
 
-    private WaitForSecondsRealtime _waitFiveSecond = new(5f);
+    private readonly WaitForSecondsRealtime _waitFiveSecond = new(5f);
 
     private void OnEnable() => StartCoroutine(TickCoroutine());
 

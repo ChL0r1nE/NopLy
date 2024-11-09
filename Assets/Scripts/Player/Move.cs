@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class Move : MonoBehaviour
     {
@@ -20,23 +20,16 @@ namespace PlayerComponent
         private Rigidbody _rigidbody;
         private float _targetRotationAngle = -1;
         private float _targetBlend = 0;
-        private float _lungeTimer = 0;
         private bool _isAttack = false;
         private bool _isLunge = false;
+
+        private bool LungeOff() => _isLunge = false;
 
         private void Start() => _rigidbody = GetComponent<Rigidbody>();
 
         private void FixedUpdate()
         {
-            if (_isLunge)
-            {
-                _lungeTimer += Time.fixedDeltaTime;
-
-                if (_lungeTimer < 0.33f) return;
-
-                _lungeTimer = 0;
-                _isLunge = false;
-            }
+            if (_isLunge) return;
 
             if (_isAttack)
             {
@@ -45,7 +38,7 @@ namespace PlayerComponent
                 if (_isAttack)
                 {
                     transform.rotation = Quaternion.Euler(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, _targetRotationAngle, 12f), 0);
-                    _rigidbody.velocity = transform.forward * (IsRun ? Speed : Speed / 2 * (Left || Right || Forward || Back ? 1 : 0));
+                    _rigidbody.velocity = transform.forward * (IsRun ? Speed : Left || Right || Forward || Back ? Speed / 2 : 0);
                 }
                 else
                     _animator.SetTrigger("Strike");

@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3347451292053938830}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.39, y: 4.89, z: 3.77}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50,8 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slot:
-    Info: {fileID: 11400000, guid: 0f4a32f2ded0da94bba3a76a2202c9b2, type: 2}
+    Item: {fileID: 11400000, guid: 0f4a32f2ded0da94bba3a76a2202c9b2, type: 2}
     _count: 1
+  WeaponSlot:
+    Item: {fileID: 0}
+    _count: 0
+    Endurance: 0
 --- !u!33 &8652972981597767935
 MeshFilter:
   m_ObjectHideFlags: 0

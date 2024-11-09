@@ -1,11 +1,17 @@
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Player
 {
     public class InteractTarget : MonoBehaviour
     {
-        private TargetActivate _target;
         private Interact.AbstractInteract _targetStrategy;
+        private TargetActivate _target;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+                _targetStrategy?.Interact();
+        }
 
         private void OnTriggerEnter(Collider col)
         {
@@ -19,12 +25,6 @@ namespace PlayerComponent
         {
             _targetStrategy = null;
             _target.SetTragetValues(0f, 0f);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-                _targetStrategy?.Interact();
         }
     }
 }

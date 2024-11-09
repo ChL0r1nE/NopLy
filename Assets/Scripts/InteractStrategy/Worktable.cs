@@ -15,10 +15,10 @@ namespace Interact
 
         public Recipe[] Recipes;
 
-        private InventoryUI.Craft _inventoryCraft;
+        private UI.Craft _inventoryCraft;
         private bool _isOpen = false;
 
-        private void Start() => _inventoryCraft = FindObjectOfType<InventoryUI.Craft>();
+        private void Start() => _inventoryCraft = FindObjectOfType<UI.Craft>();
 
         public override void Interact()
         {
