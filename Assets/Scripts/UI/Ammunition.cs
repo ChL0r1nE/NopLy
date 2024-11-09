@@ -6,17 +6,17 @@ namespace UI
     {
         [SerializeField] private Info.Armor[] _defaultArmors;
 
-        public global::Player.Armor PlayerArmor;
+        public global::PlayerComponent.Armor PlayerArmor;
 
-        [SerializeField] private global::Player.Buff _playerBuff;
+        [SerializeField] private global::PlayerComponent.Buff _playerBuff;
         [SerializeField] private CameraFollowing _cameraFollowing;
-        private global::Player.Weapon _playerWeapon;
+        private global::PlayerComponent.Weapon _playerWeapon;
 
         private void Start()
         {
             _inventoryTargetPosition.x = -310;
-            PlayerArmor = FindObjectOfType<global::Player.Armor>();
-            _playerWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<global::Player.Weapon>();
+            PlayerArmor = FindObjectOfType<global::PlayerComponent.Armor>();
+            _playerWeapon = GameObject.FindGameObjectWithTag("Player").GetComponent<global::PlayerComponent.Weapon>();
         }
 
         private void Update()

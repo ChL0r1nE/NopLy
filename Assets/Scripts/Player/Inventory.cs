@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player
+namespace PlayerComponent
 {
     public class Inventory : MonoBehaviour
     {

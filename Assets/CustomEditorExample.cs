@@ -84,7 +84,7 @@ public class CustomEditorExample : MonoBehaviour
 {
     public bool Show;
 
-    public Player.Move Player;
+    public PlayerComponent.Move Player;
     public int A;
     public float C;
     public float MoveSpeed;

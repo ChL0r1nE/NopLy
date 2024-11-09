@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace Player
+namespace PlayerComponent
 {
     public class Health : MonoBehaviour
     {

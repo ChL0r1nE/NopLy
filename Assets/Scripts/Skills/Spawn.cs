@@ -5,7 +5,7 @@ namespace Skill
     public class Spawn : AbstractSkill
     {
         [SerializeField] private GameObject _gameObject;
-        [SerializeField] private Player.Weapon _playerWeapon;
+        [SerializeField] private PlayerComponent.Weapon _playerWeapon;
 
         public override void Execute()
         {

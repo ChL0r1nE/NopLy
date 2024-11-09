@@ -1,3 +1,4 @@
+using UnityEngine.UI;
 using UnityEngine;
 
 namespace UI
@@ -7,7 +8,9 @@ namespace UI
         public static QuestMenu StaticUIQuest;
 
         [SerializeField] private RectTransform _rectTransform;
+        [SerializeField] private Text _text;
         private Interact.QuestGive _questGive;
+        private Quest _quest;
         private Vector2 _position = new(0, -1000);
         private bool _isOpen;
 
@@ -21,20 +24,30 @@ namespace UI
             _rectTransform.anchoredPosition = _position;
         }
 
-        public void SwitchMenu(Interact.QuestGive questQive)
+        public void SwitchMenu(Interact.QuestGive questQive, bool isGive)
         {
             _isOpen = !_isOpen;
 
             if (_isOpen)
+            {
                 _questGive = questQive;
+                _quest = _questGive.Quest;
+                _text.text = isGive ? _quest.AfterGive : _quest.QuestTask;
+            }
         }
 
         public void Choice(int choice)
         {
-            if (choice != 0)
-                StaticQuestList.Quests.Add(_questGive.GetQuestToGive());
-
             _isOpen = false;
+            if (choice == 0) return;
+
+            if (_questGive.IsGive && FindObjectOfType<PlayerComponent.Inventory>().DeleteRecipe(_quest.QuestItems))
+                FindObjectOfType<PlayerComponent.Inventory>().AddItem(_quest.QuestRevard, out _);
+            else if(!_questGive.IsGive)
+            {
+                StaticQuestList.Quests.Add(_quest);
+                _questGive.IsGive = true;
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-namespace Player
+namespace PlayerComponent
 {
     public class Weapon : MonoBehaviour
     {
@@ -107,8 +107,8 @@ namespace Player
                 foreach (string name in _skills[_activeSkillsID[_skillNumber]].AnimTriggers)
                     _animator.SetTrigger(name);
 
-                _skills[_activeSkillsID[_skillNumber]].Execute();
                 WeaponUse(_skills[_activeSkillsID[_skillNumber]].WeaponEndurance);
+                _skills[_activeSkillsID[_skillNumber]].Execute();
 
                 return;
             }

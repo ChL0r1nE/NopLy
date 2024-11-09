@@ -1,37 +1,28 @@
-using UnityEngine;
 using System;
 
 [Serializable]
 public class Quest
 {
-    public Slot QuestItem;
+    public Slot[] QuestItems;
+    public Slot QuestRevard;
 
     public string QuestName;
     public string QuestTask;
-    public int TargetValue;
+    public string AfterGive;
 }
 
 namespace Interact
 {
     public class QuestGive : AbstractInteract
     {
-        [SerializeField] private Quest _quest;
+        public bool IsGive;
+
+        public Quest Quest;
 
         private UI.QuestMenu _questUI;
-        private bool _isGive;
 
         private void Start() => _questUI = UI.QuestMenu.StaticUIQuest;
 
-        public Quest GetQuestToGive()
-        {
-            _isGive = true;
-            return _quest;
-        }
-
-        public override void Interact()
-        {
-            if (!_isGive)
-                _questUI.SwitchMenu(this);
-        }
+        public override void Interact() => _questUI.SwitchMenu(this, IsGive);
     }
 }

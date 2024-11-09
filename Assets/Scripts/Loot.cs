@@ -9,7 +9,7 @@ public class Loot : MonoBehaviour
     {
         if (!col.CompareTag("Player")) return;
 
-        col.GetComponent<Player.Inventory>().AddItem(WeaponSlot.IsWhole(0) ? WeaponSlot : Slot, out int remain, true);
+        col.GetComponent<PlayerComponent.Inventory>().AddItem(WeaponSlot.IsWhole(0) ? WeaponSlot : Slot, out int remain, true);
 
         if (remain == 0)
             Destroy(gameObject);

@@ -14,10 +14,33 @@ namespace Interact
         }
 
         [SerializeField] private Animator _animator;
+        [SerializeField] private SlotsSerialize _slotsSerialize;
+        [SerializeField] private string _saveID;
         private UI.Storage _inventoryStorage;
         private bool _isOpen = false;
 
-        private void Start() => _inventoryStorage = FindObjectOfType<UI.Storage>();
+        private void Awake()
+        {
+            _inventoryStorage = FindObjectOfType<UI.Storage>();
+            SlotsData data = _slotsSerialize.DeserializeData(_saveID);
+
+            if (data.ItemRecords == null) return;
+
+            for (int i = 0; i < Slots.Length; i++)
+            {
+                if (data.ItemRecords[i] == null) continue;
+
+                for (int j = 0; j < ItemDictionary.Instance.Items.Length; j++)
+                {
+                    if (ItemDictionary.Instance.Items[j].ID != data.ItemRecords[i].ID) continue;
+
+                    if (data.ItemRecords[i].GetType() == typeof(WeaponRecord))
+                        Slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count, (data.ItemRecords[i] as WeaponRecord).Endurance);
+                    else
+                        Slots[i] = new(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count);
+                }
+            }
+        }
 
         private void OnTriggerExit()
         {
@@ -40,7 +63,7 @@ namespace Interact
 
             foreach (Slot foreachSlot in Slots)
             {
-                if (foreachSlot.Item && foreachSlot.Item.ID == slot.Item.ID)
+                if (foreachSlot.Item?.ID == slot.Item.ID)
                 {
                     foreachSlot.AddCount(slot.Count, out int remain);
 
@@ -49,6 +72,7 @@ namespace Interact
                     else
                     {
                         _inventoryStorage.UpdateMenu(Slots);
+                        Save();
                         return;
                     }
                 }
@@ -66,12 +90,20 @@ namespace Interact
             }
 
             _inventoryStorage.UpdateMenu(Slots);
+            Save();
         }
 
         public void DeleteItem(int id)
         {
             Slots[id] = new(null, 0);
             _inventoryStorage.UpdateMenu(Slots);
+            Save();
+        }
+
+        public void Save()
+        {
+            SlotsData data = new(Slots);
+            _slotsSerialize.SerializeData(data, _saveID);
         }
     }
 }

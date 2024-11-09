@@ -19,7 +19,7 @@ namespace Interact
         [SerializeField] private SpriteRenderer _barRenderer;
         [SerializeField] private Info.WeaponType _weaponType;
         [SerializeField] private int _health = 1;
-        private Player.Weapon _playerWeapon;
+        private PlayerComponent.Weapon _playerWeapon;
         private float _resetInteract = 0f;
         private float _timer = 0f;
         private bool _isHardLoot = false;
@@ -39,7 +39,7 @@ namespace Interact
             if (_health == 1) return;
 
             _isHardLoot = true;
-            _playerWeapon = FindObjectOfType<Player.Weapon>();
+            _playerWeapon = FindObjectOfType<PlayerComponent.Weapon>();
         }
 
         private void Update()

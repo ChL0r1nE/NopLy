@@ -8,7 +8,7 @@ namespace UI
         [SerializeField] private Image[] _quickPanelImages = new Image[10];
         private int[] _quickPanelLink = new int[10];
 
-        public global::Player.Inventory PlayerInventory;
+        public PlayerComponent.Inventory PlayerInventory;
 
         [SerializeField] private Ammunition _inventoryAmmunition;
         private AbstractInventory _secondInventory;

@@ -13,7 +13,7 @@ namespace Enemy
         [SerializeField] private float _attackDistance;
         [SerializeField] private int _damage;
         private Transform _playerTransform;
-        private Player.Health _playerHealth;
+        private PlayerComponent.Health _playerHealth;
         private Vector3 _targetDelta;
         private int _frameDelay;
         private float _distance;
@@ -23,7 +23,7 @@ namespace Enemy
         private void Start()
         {
             _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-            _playerHealth = _playerTransform.GetComponent<Player.Health>();
+            _playerHealth = _playerTransform.GetComponent<PlayerComponent.Health>();
         }
 
         private void FixedUpdate()
