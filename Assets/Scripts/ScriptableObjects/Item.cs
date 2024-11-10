@@ -6,7 +6,7 @@ public record Slot
     public Slot(Info.Item item, int count)
     {
         Item = item;
-        _count = count;
+        Count = count;
     }
 
     public int Count
@@ -36,14 +36,6 @@ public record Slot
         remain = _count - count < 0 ? count - _count : 0;
         Count = _count - count + remain;
     }
-
-    public bool CanDeleteCount(int count, out int remain)
-    {
-        int mayCount = _count - count;
-        remain = mayCount < 0 ? -mayCount : 0;
-
-        return mayCount >= 0;
-    }
 }
 
 [System.Serializable]
@@ -53,16 +45,10 @@ public record WeaponSlot : Slot
     {
         Item = item;
         Endurance = endurance;
-        _count = count;
+        Count = count;
     }
 
     public int Endurance;
-
-    public bool IsWhole(int wear)
-    {
-        Endurance -= wear;
-        return Endurance > 0;
-    }
 }
 
 namespace Info

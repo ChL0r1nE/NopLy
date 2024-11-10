@@ -1,5 +1,6 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
@@ -32,12 +33,16 @@ namespace UI
                 questRecord = (QuestRecord)_formatter.Deserialize(_file);
                 _file.Close();
 
-                AddQuestLabel(questRecord.Name, questRecord.Task);
+                AddQuestLabel(questRecord.Name, questRecord.Task, questRecord.ID);
             }
         }
 
-        public void AddQuestLabel(string name, string task)
+        public void AddQuestLabel(string name, string task, int id)
         {
+            List<int> listIDs = _questIDs != null ? _questIDs.ToList() : new();
+            listIDs.Add(id);
+            _questIDs = listIDs.ToArray();
+
             _labelRects.Add(Instantiate(_questLabel, transform));
             _labelRects[^1].GetChild(0).GetComponent<Text>().text = name;
             _labelRects[^1].GetChild(1).GetComponent<Text>().text = task;

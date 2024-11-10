@@ -51,7 +51,7 @@ namespace UI
             else if (!_questGive.IsGive)
             {
                 _questGive.GiveQuest();
-                _questList.AddQuestLabel(_quest.Name, _quest.Task);
+                _questList.AddQuestLabel(_quest.Name, _quest.Task, _quest.ID);
             }
         }
     }

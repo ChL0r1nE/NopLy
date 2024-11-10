@@ -52,6 +52,7 @@ namespace PlayerComponent
             _playerInventory = GetComponent<Inventory>();
             _playerWeapon = GetComponent<Weapon>();
             _playerArmor = GetComponent<Armor>();
+            _playerInventory.Inizilize();
             _playerWeapon.Inizilize();
             _playerArmor.Inizilize();
 
@@ -107,6 +108,8 @@ namespace PlayerComponent
                     _playerArmor.SetArmor(armors.ToArray());
                 }
             }
+
+            _playerInventory.SetSlotCount(-1, 0);
         }
 
         private void OnDisable()

@@ -5,48 +5,38 @@ namespace UI
 {
     public class Player : AbstractInventory
     {
-        [SerializeField] private Image[] _quickPanelImages = new Image[10];
-        private int[] _quickPanelLink = new int[10];
+        public void SetEnterID(int id) => _enterID = id;
+
+        [SerializeField] private Image[] _quickPanelImages;
+        private int[] _quickPanelLinks = new int[10];
 
         public PlayerComponent.Inventory PlayerInventory;
 
         [SerializeField] private Ammunition _inventoryAmmunition;
         private AbstractInventory _secondInventory;
+        private Slot _reserveSlot;
+        private Slot _slot;
         private int _enterID;
+        private bool _isStart = false;
+        private bool _isAmmunition = false;
 
         private void Start()
         {
             for (int i = 0; i < 10; i++)
-                _quickPanelLink[i] = -1;
+                _quickPanelLinks[i] = -1;
 
             _inventoryTargetPosition.x = -400;
+            _isStart = true;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                InteractQuickPanel(0);
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-                InteractQuickPanel(1);
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-                InteractQuickPanel(2);
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-                InteractQuickPanel(3);
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-                InteractQuickPanel(4);
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
-                InteractQuickPanel(5);
-            else if (Input.GetKeyDown(KeyCode.Alpha7))
-                InteractQuickPanel(6);
-            else if (Input.GetKeyDown(KeyCode.Alpha8))
-                InteractQuickPanel(7);
-            else if (Input.GetKeyDown(KeyCode.Alpha9))
-                InteractQuickPanel(8);
-            else if (Input.GetKeyDown(KeyCode.Alpha0))
-                InteractQuickPanel(9);
+            for (int i = 48; i < 58; i++)
+            {
+                if (Input.GetKeyDown((KeyCode)i))
+                    InteractQuickPanel(i == 48 ? 9 : i - 49);
+            }
         }
-
-        public void SetEnterID(int id) => _enterID = id;
 
         public override void AddItem(Slot slot, out int _slotCount)
         {
@@ -56,59 +46,76 @@ namespace UI
 
         public override void DeleteItem(int id)
         {
+            int remain;
+
             if (PlayerInventory.Slots[id].GetType() == typeof(WeaponSlot))
             {
-                WeaponSlot nowWeapon = PlayerInventory.Slots[id] as WeaponSlot;
-                WeaponSlot slot = new(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count, nowWeapon.Endurance);
-                _secondInventory.AddItem(slot, out int remain);
-                PlayerInventory.SetSlotCount(id, remain);
+                _slot = new WeaponSlot(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count, (PlayerInventory.Slots[id] as WeaponSlot).Endurance);
+                _reserveSlot = new WeaponSlot(_slot.Item, _slot.Count, (_slot as WeaponSlot).Endurance);
             }
             else
             {
-                Slot slot = new(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count);
-                _secondInventory.AddItem(slot, out int remain);
-                PlayerInventory.SetSlotCount(id, remain);
+                _slot = new(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count);
+                _reserveSlot = new(_slot.Item, _slot.Count);
+            }
+
+            PlayerInventory.SetSlotCount(id, 0);
+
+            if (_isAmmunition)
+            {
+                _inventoryAmmunition.AddItem(_slot, out remain);
+                _isAmmunition = false;
+            }
+            else
+                _secondInventory.AddItem(_slot, out remain);
+
+            if (remain != 0)
+                PlayerInventory.AddItem(_reserveSlot, out _);
+        }
+
+        public override void UpdateMenu(Slot[] slots)
+        {
+            base.UpdateMenu(slots);
+
+            for (int i = 0; i < 10; i++)
+            {
+                _quickPanelImages[i].enabled = _isStart && _quickPanelLinks[i] != -1 && slots[_quickPanelLinks[i]].Count != 0;
+
+                if (_quickPanelImages[i].enabled)
+                    _quickPanelImages[i].sprite = slots[_quickPanelLinks[i]].Item.Sprite;
             }
         }
 
         public void SetSecondInventory(AbstractInventory inventory)
         {
             _secondInventory = inventory;
-            _isOpen = inventory;
-
-            _inventoryTargetPosition.y = _isOpen ? 0 : -1000;
+            _inventoryTargetPosition.y = inventory ? 0 : -1000;
         }
 
         private void InteractQuickPanel(int selectID)
         {
-            if (_enterID == -1)
+            if (_enterID != -1)
             {
-                if (_quickPanelLink[selectID] == -1) return;
+                for (int i = 0; i < 10; i++)
+                    if (_quickPanelLinks[i] == _enterID)
+                    {
+                        _quickPanelLinks[i] = -1;
+                        _quickPanelImages[i].enabled = false;
 
-                Slot slot = PlayerInventory.Slots[_quickPanelLink[selectID]];
+                        break;
+                    }
 
-                _inventoryAmmunition.AddItem(slot, out int remain);
-                PlayerInventory.SetSlotCount(_quickPanelLink[selectID], remain);
-
-                if (remain != 0) return;
-
-                _quickPanelImages[selectID].enabled = false;
-                _quickPanelLink[selectID] = -1;
+                _quickPanelLinks[selectID] = _enterID;
+                _quickPanelImages[selectID].enabled = true;
+                _quickPanelImages[selectID].sprite = PlayerInventory.Slots[_enterID].Item.Sprite;
 
                 return;
             }
 
-            for (int i = 0; i < 10; i++)
-            {
-                if (_quickPanelLink[i] != _enterID) continue;
+            if (!_quickPanelImages[selectID].enabled) return;
 
-                _quickPanelImages[i].enabled = false;
-                _quickPanelLink[i] = -1;
-            }
-
-            _quickPanelLink[selectID] = _enterID;
-            _quickPanelImages[selectID].sprite = PlayerInventory.Slots[_enterID].Item.Sprite;
-            _quickPanelImages[selectID].enabled = true;
+            _isAmmunition = true;
+            DeleteItem(_quickPanelLinks[selectID]);
         }
     }
 }

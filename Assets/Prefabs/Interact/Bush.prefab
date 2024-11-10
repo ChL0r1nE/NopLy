@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8364356375749039050}
   - component: {fileID: 6684193500049287808}
   - component: {fileID: 7919224475970342420}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: default2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 7064962501960116633}
   - component: {fileID: 5394440075325706451}
   - component: {fileID: 8933273092051481671}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: default3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3039788466405235279}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Meshes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 3039788467043093375}
   - component: {fileID: 3039788467043093369}
   - component: {fileID: 3039788467043093374}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BillboardCollect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 3764817281196847923}
   - component: {fileID: 2083053377043778169}
   - component: {fileID: 3300509759160741613}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: default1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

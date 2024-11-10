@@ -2,7 +2,7 @@ namespace UI
 {
     public class Storage : AbstractInventory
     {
-        public Interact.Storage StorageStrategy;
+        public Interact.Storage StorageStrategy { private get; set; }
 
         public override void SwitchOpen(bool baseOpen)
         {
@@ -12,8 +12,8 @@ namespace UI
 
         public override void DeleteItem(int id)
         {
-            _inventoryPlayer.AddItem(StorageStrategy.Slots[id], out _);
-            StorageStrategy.DeleteItem(id);
+            _inventoryPlayer.AddItem(StorageStrategy.Slots[id], out int remain);
+            StorageStrategy.SetSlotCount(id, remain);
         }
 
         public override void AddItem(Slot slot, out int countRemain)

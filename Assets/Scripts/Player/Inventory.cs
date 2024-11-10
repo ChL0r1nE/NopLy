@@ -10,18 +10,18 @@ namespace PlayerComponent
         private UI.LootList _lootList;
         private int _slotCount;
 
-        private void Start()
+        public void Inizilize()
         {
             _lootList = FindObjectOfType<UI.LootList>();
             _inventoryPlayer = FindObjectOfType<UI.Player>();
             _inventoryPlayer.PlayerInventory = this;
-
-            _inventoryPlayer.UpdateMenu(Slots);
         }
 
         public void SetSlotCount(int i, int count)
         {
-            Slots[i].Count = count;
+            if (i != -1)
+                Slots[i].Count = count;
+
             _inventoryPlayer.UpdateMenu(Slots);
         }
 
@@ -61,27 +61,35 @@ namespace PlayerComponent
 
         public bool DeleteRecipe(Slot[] recipe)
         {
-            bool canDeleteRecipe = true;
             bool canDeleteSlot;
+            bool isFreeSlot = false;
 
             foreach (Slot recipeSlot in recipe)
             {
-                _slotCount = recipeSlot.Count;
                 canDeleteSlot = false;
+                _slotCount = recipeSlot.Count;
 
                 foreach (Slot slot in Slots)
                 {
                     if (slot.Item != recipeSlot.Item) continue;
 
-                    canDeleteSlot |= slot.CanDeleteCount(_slotCount, out int remain);
-                    _slotCount = remain;
+                    canDeleteSlot = slot.Count - _slotCount >= 0;
+                    isFreeSlot |= slot.Count - _slotCount == 0;
+                    _slotCount = slot.Count - _slotCount;
 
-                    if (remain == 0) break;
+                    if (canDeleteSlot) break;
                 }
 
-                canDeleteRecipe &= canDeleteSlot;
+                if (!canDeleteSlot) return false;
+            }
 
-                if (!canDeleteRecipe) return false;
+            if (!isFreeSlot)
+            {
+                foreach (Slot slot in Slots)
+                    isFreeSlot |= !slot.Item;
+
+                if (!isFreeSlot)
+                    return false;
             }
 
             foreach (Slot recipeSlot in recipe)

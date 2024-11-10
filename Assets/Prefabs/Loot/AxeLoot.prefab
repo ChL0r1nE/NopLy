@@ -50,12 +50,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slot:
-    Item: {fileID: 0}
-    _count: 0
-  WeaponSlot:
     Item: {fileID: 11400000, guid: 550a707490beb1441ab36b60441088ee, type: 2}
     _count: 1
-    Endurance: 25
+  WeaponEndurance: 20
 --- !u!33 &3773966754126687919
 MeshFilter:
   m_ObjectHideFlags: 0

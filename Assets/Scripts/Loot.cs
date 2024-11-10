@@ -3,13 +3,16 @@ using UnityEngine;
 public class Loot : MonoBehaviour
 {
     public Slot Slot;
-    public WeaponSlot WeaponSlot;
+    public int WeaponEndurance;
 
     private void OnTriggerEnter(Collider col)
     {
-        if (!col.CompareTag("Player")) return;
+        if (!col.TryGetComponent(out PlayerComponent.Inventory inventory)) return;
 
-        col.GetComponent<PlayerComponent.Inventory>().AddItem(WeaponSlot.IsWhole(0) ? WeaponSlot : Slot, out int remain, true);
+        if (WeaponEndurance != 0)
+            Slot = new WeaponSlot(Slot.Item, Slot.Count, WeaponEndurance);
+
+        inventory.AddItem(Slot, out int remain, true);
 
         if (remain == 0)
             Destroy(gameObject);

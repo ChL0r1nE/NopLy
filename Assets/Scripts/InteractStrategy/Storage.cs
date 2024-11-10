@@ -7,12 +7,6 @@ namespace Interact
     {
         public Slot[] Slots;
 
-        public void SetOpen(bool isOpen)
-        {
-            _isOpen = isOpen;
-            _animator.SetBool("IsOpen", _isOpen);
-        }
-
         [SerializeField] private Animator _animator;
         [SerializeField] private SlotsSerialize _slotsSerialize;
         [SerializeField] private string _saveID;
@@ -42,24 +36,26 @@ namespace Interact
                 _inventoryStorage.UpdateMenu(Slots);
         }
 
+        public void SetOpen(bool isOpen)
+        {
+            _isOpen = isOpen;
+            _animator.SetBool("IsOpen", _isOpen);
+        }
+
         public void AddItem(Slot slot, out int countRemain)
         {
-            countRemain = 0;
-
             foreach (Slot foreachSlot in Slots)
             {
-                if (foreachSlot.Item?.ID == slot.Item.ID)
-                {
-                    foreachSlot.AddCount(slot.Count, out int remain);
+                if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                    if (remain != 0)
-                        slot.Count = remain;
-                    else
-                    {
-                        _inventoryStorage.UpdateMenu(Slots);
-                        return;
-                    }
-                }
+                foreachSlot.AddCount(slot.Count, out int remain);
+                slot.Count = remain;
+
+                if (remain != 0) continue;
+
+                countRemain = 0;
+                _inventoryStorage.UpdateMenu(Slots);
+                return;
             }
 
             countRemain = slot.Count;
@@ -70,15 +66,14 @@ namespace Interact
 
                 Slots[i] = slot;
                 countRemain = 0;
-                break;
+                _inventoryStorage.UpdateMenu(Slots);
+                return;
             }
-
-            _inventoryStorage.UpdateMenu(Slots);
         }
 
-        public void DeleteItem(int id)
+        public void SetSlotCount(int id, int count)
         {
-            Slots[id] = new(null, 0);
+            Slots[id].Count = count;
             _inventoryStorage.UpdateMenu(Slots);
         }
     }

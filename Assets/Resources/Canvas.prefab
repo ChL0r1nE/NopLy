@@ -7800,7 +7800,6 @@ MonoBehaviour:
   - {fileID: 9026742603045357068}
   - {fileID: 9026742603570558484}
   _switchMenu: {fileID: 7082019935785553121}
-  StorageStrategy: {fileID: 0}
 --- !u!222 &9026742603396868939
 CanvasRenderer:
   m_ObjectHideFlags: 0

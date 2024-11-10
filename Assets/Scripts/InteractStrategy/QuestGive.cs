@@ -80,7 +80,7 @@ namespace Interact
                 else
                     ids.Add(Quest.ID);
             }
-            else
+            else if (!IsComplete)
                 ids.Add(Quest.ID);
 
             _file = File.Create($"{Application.persistentDataPath}/ActiveQuests.dat");
