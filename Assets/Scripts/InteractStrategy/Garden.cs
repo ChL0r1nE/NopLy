@@ -21,13 +21,13 @@ namespace Interact
         private void OnDisable()
         {
             TickMachine.OnTick -= OnTick;
-            _slotsSerialize.SerializeData(Slots, _saveID);
+            _slotsSerialize.SerializeData(Slots, $"Garden{_saveID}");
         }
 
         private void Start()
         {
             _inventoryGarden = FindObjectOfType<UI.Garden>();
-            _slotsSerialize.DeserializeData(Slots, _saveID);
+            _slotsSerialize.DeserializeData(Slots, $"Garden{_saveID}");
 
             for (int i = 0; i < 4; i++)
                 _plantMeshes[i].mesh = Slots[i].Item ? (Slots[_plantNumber].Item as Info.Seed).PlantMeshes[0] : null;

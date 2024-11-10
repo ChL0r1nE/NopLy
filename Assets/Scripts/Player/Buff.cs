@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
 
 namespace PlayerComponent
@@ -20,19 +19,17 @@ namespace PlayerComponent
             public float Timer;
         }
 
-        private List<RectTransform> _buffRectTransforms = new();
         private List<BuffClass> _buffs = new();
 
-        [SerializeField] private RectTransform _iconPrefab;
-        [SerializeField] private Transform _buffIconParentTransform;
         [SerializeField] private Armor PlayerArmor;
         [SerializeField] private Health _playerHealth;
-        private Vector2 _buffIconOffset = new(45, 0);
+        private UI.BuffList _buffsList;
         private float _timer = 0;
 
         private void Start()
         {
             StaticBuff = this;
+            _buffsList = FindObjectOfType<UI.BuffList>();
             FindObjectOfType<UI.Ammunition>().SetPlayerBuff(this);
         }
 
@@ -50,12 +47,8 @@ namespace PlayerComponent
 
                 if (_buffs[i].Timer > 0) continue;
 
-                Destroy(_buffRectTransforms[i].gameObject);
-                _buffRectTransforms.RemoveAt(i);
                 _buffs.RemoveAt(i);
-
-                for (int j = i; j < _buffs.Count; j++)
-                    _buffRectTransforms[j].anchoredPosition = _buffIconOffset * j;
+                _buffsList.RemoveBuff(i);
             }
 
             _timer = 0;
@@ -69,25 +62,21 @@ namespace PlayerComponent
                 return;
             }
 
-            for (int i = 0; i < _buffs.Count; i++)
+            foreach (BuffClass buffClass in _buffs)
             {
-                if (_buffs[i].Buff.Name != buff.Name) continue;
+                if (buffClass.Buff.Name != buff.Name) continue;
 
-                _buffs[i].Timer = buff.Length;
+                buffClass.Timer = buff.Length;
                 return;
             }
 
-            int buffNumder = _buffs.Count;
             _buffs.Add(new BuffClass(buff));
+            _buffsList.AddBuff(_buffs[^1].Buff.Sprite);
 
-            _buffRectTransforms.Add(Instantiate(_iconPrefab, _buffIconParentTransform));
-            _buffRectTransforms[buffNumder].GetComponent<Image>().sprite = _buffs[buffNumder].Buff.Sprite;
-            _buffRectTransforms[buffNumder].anchoredPosition = _buffIconOffset * buffNumder;
-
-            switch (_buffs[buffNumder].Buff.Type)
+            switch (_buffs[^1].Buff.Type)
             {
                 case Info.BuffType.Armor:
-                    PlayerArmor.ArmorBuffModifier += _buffs[buffNumder].Buff.Modifier;
+                    PlayerArmor.ArmorBuffModifier += _buffs[^1].Buff.Modifier;
                     break;
             }
         }
@@ -105,13 +94,8 @@ namespace PlayerComponent
                         break;
                 }
 
-                Destroy(_buffRectTransforms[i].gameObject);
-                _buffRectTransforms.RemoveAt(i);
                 _buffs.RemoveAt(i);
-
-                for (int j = i; j < _buffs.Count; j++)
-                    _buffRectTransforms[j].anchoredPosition = _buffIconOffset * j;
-
+                _buffsList.RemoveBuff(i);
                 return;
             }
         }

@@ -16,6 +16,8 @@ public class BuffZone : MonoBehaviour
         _zoneMaterial.SetVector("_CirclePosition", new Vector4(transform.position.x, 0f, transform.position.z, 0f));
     }
 
+    private void OnDisable() => _zoneMaterial.SetFloat("_Angle", 23f);
+
     private void OnTriggerEnter(Collider col)
     {
         if (!col.CompareTag("Player")) return;

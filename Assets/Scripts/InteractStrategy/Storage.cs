@@ -19,12 +19,12 @@ namespace Interact
         private UI.Storage _inventoryStorage;
         private bool _isOpen = false;
 
-        private void OnDisable() => _slotsSerialize.SerializeData(Slots, _saveID);
+        private void OnDisable() => _slotsSerialize.SerializeData(Slots, $"Storage{_saveID}");
 
         private void Start()
         {
             _inventoryStorage = FindObjectOfType<UI.Storage>();
-            _slotsSerialize.DeserializeData(Slots, _saveID);
+            _slotsSerialize.DeserializeData(Slots, $"Storage{_saveID}");
         }
 
         private void OnTriggerExit()

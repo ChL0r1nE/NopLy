@@ -56,7 +56,8 @@ namespace PlayerComponent
             if (_activeSkillsID.Count > 0)
             {
                 for (int i = 0; i < _activeSkillsID.Count; i++)
-                    _skillReset[i] += Time.deltaTime / _skills[_activeSkillsID[i]].ReloadTime;
+                    if (_skillReset[i] < 1)
+                        _skillReset[i] += Time.deltaTime / _skills[_activeSkillsID[i]].ReloadTime;
 
                 _skillList.UpdateReload(_skillReset);
             }

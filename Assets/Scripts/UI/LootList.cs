@@ -8,10 +8,10 @@ namespace UI
     {
         record LootLabel
         {
-            public LootLabel(GameObject gameObject)
+            public LootLabel(RectTransform rectTransform)
             {
-                GameObject = gameObject;
-                RectTransform = GameObject.GetComponent<RectTransform>();
+                RectTransform = rectTransform;
+                GameObject = RectTransform.gameObject;
             }
 
             public GameObject GameObject;
@@ -21,7 +21,7 @@ namespace UI
 
         private List<LootLabel> _lootLabels = new();
 
-        [SerializeField] private GameObject _lootLabel;
+        [SerializeField] private RectTransform _lootLabel;
         private Vector2 _labelPosition;
 
         private void Update()
@@ -43,7 +43,7 @@ namespace UI
 
         public void AddLootLabel(Info.Item info, int count)
         {
-            _lootLabels.Add(new LootLabel(Instantiate(_lootLabel, transform.position, Quaternion.identity, transform)));
+            _lootLabels.Add(new(Instantiate(_lootLabel, transform.position, Quaternion.identity, transform)));
 
             _lootLabels[_lootLabels.Count - 1].GameObject.transform.GetChild(1).GetComponent<Image>().sprite = info.Sprite;
             _lootLabels[_lootLabels.Count - 1].GameObject.GetComponentInChildren<Text>().text = info.Name + (count != 1 ? $" ({count})" : "");

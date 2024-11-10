@@ -254,8 +254,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loot: {fileID: 0}
   _enemy: {fileID: 4897064461117397014}
+  _maxHealth: -1
   _damageText: {fileID: 3085944716459974722}
-  _health: -1
 --- !u!114 &4897064461117397008
 MonoBehaviour:
   m_ObjectHideFlags: 0

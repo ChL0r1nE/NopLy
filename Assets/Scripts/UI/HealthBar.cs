@@ -34,8 +34,12 @@ namespace UI
         {
             _isEnemy = health;
             _enemyHealth = health;
-            _maxEnemyHealth = _enemyHealth.GetMaxHealth();
-            _enemyHealthBack.gameObject.SetActive(_enemyHealth);
+            _enemyHealthBack.gameObject.SetActive(_isEnemy);
+
+            if (!_isEnemy)
+                _enemyHealthBack.gameObject.SetActive(false);
+            else
+                _maxEnemyHealth = _enemyHealth.GetMaxHealth();
         }
     }
 }

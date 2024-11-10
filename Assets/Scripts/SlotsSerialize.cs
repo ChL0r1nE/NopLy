@@ -44,11 +44,11 @@ public class SlotsSerialize : MonoBehaviour
 
     private FileStream _file;
 
-    public void DeserializeData(Slot[] slots, string name)
+    public void DeserializeData(Slot[] slots, string ID)
     {
-        if (!File.Exists($"{Application.persistentDataPath}/{name}.dat")) return;
+        if (!File.Exists($"{Application.persistentDataPath}/{ID}.dat")) return;
 
-        _file = File.Open($"{Application.persistentDataPath}/{name}.dat", FileMode.Open);
+        _file = File.Open($"{Application.persistentDataPath}/{ID}.dat", FileMode.Open);
         SlotsData data = (SlotsData)_formatter.Deserialize(_file);
         _file.Close();
 

@@ -11202,19 +11202,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc01b1a9cf1aebd42ad288cdf747780f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsGive: 0
   Quest:
-    QuestItems:
+    Items:
     - Item: {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
       _count: 3
-    QuestRevard:
-      Item: {fileID: 11400000, guid: 9d219969b5f0c9d4ab46030882923e64, type: 2}
-      _count: 2
-    QuestName: "\u0421\u043E\u0431\u0440\u0430\u0442\u044C 3 \u043F\u0430\u043B\u043A\u0438"
-    QuestTask: "\u041A\u0443, \u0441\u043E\u0431\u0435\u0440\u0438-\u043A \u043C\u043D\u0435
-      \u0442\u0440\u0438 \u043F\u0430\u043B\u043E\u0447\u043A\u0438"
+    Revard:
+      Item: {fileID: 11400000, guid: b901a81da400c6942b60c168bd3235ca, type: 2}
+      _count: 1
+    Name: "\u041F\u0430\u043B\u043A\u0438 \u0436\u0438\u0442\u0435\u043B\u044E"
+    Task: "\u041F\u0440\u0438\u043D\u0435\u0441\u0442\u0438 3 \u043F\u0430\u043B\u043A\u0438"
     AfterGive: "\u041E, \u0442\u044B \u0432\u0435\u0440\u043D\u0443\u043B\u0441\u044F!
       \u0414\u043E\u0441\u0442\u0430\u043B \u043F\u0430\u043B\u043A\u0438?"
+    ID: 0
+  IsGive: 0
+  IsComplete: 0
 --- !u!1001 &518065006
 PrefabInstance:
   m_ObjectHideFlags: 0
