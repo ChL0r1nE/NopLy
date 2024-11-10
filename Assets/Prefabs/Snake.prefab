@@ -607,8 +607,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loot: {fileID: 3347451292053938830, guid: f72ce23ff290cf04eb010a326f2a1b74, type: 3}
   _enemy: {fileID: 8631670235668817180}
+  _maxHealth: 10
   _damageText: {fileID: 8631670235131226701}
-  _health: 10
 --- !u!114 &8631670235816881239
 MonoBehaviour:
   m_ObjectHideFlags: 0

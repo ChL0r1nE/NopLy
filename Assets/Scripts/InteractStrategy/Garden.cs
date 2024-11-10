@@ -11,14 +11,27 @@ namespace Interact
 
         public bool IsOpen = false;
 
+        [SerializeField] private SlotsSerialize _slotsSerialize;
+        [SerializeField] private string _saveID;
         private UI.Garden _inventoryGarden;
         private int _plantNumber;
 
         private void OnEnable() => TickMachine.OnTick += OnTick;
 
-        private void OnDisable() => TickMachine.OnTick -= OnTick;
+        private void OnDisable()
+        {
+            TickMachine.OnTick -= OnTick;
+            _slotsSerialize.SerializeData(Slots, _saveID);
+        }
 
-        private void Start() => _inventoryGarden = FindObjectOfType<UI.Garden>();
+        private void Start()
+        {
+            _inventoryGarden = FindObjectOfType<UI.Garden>();
+            _slotsSerialize.DeserializeData(Slots, _saveID);
+
+            for (int i = 0; i < 4; i++)
+                _plantMeshes[i].mesh = Slots[i].Item ? (Slots[_plantNumber].Item as Info.Seed).PlantMeshes[0] : null;
+        }
 
         private void OnTriggerExit()
         {
@@ -62,10 +75,8 @@ namespace Interact
                 break;
             }
 
-            Info.Seed seed = Slots[_plantNumber].Item as Info.Seed;
-
             _plantProgress[_plantNumber] = 0;
-            _plantMeshes[_plantNumber].mesh = seed.PlantMeshes[0];
+            _plantMeshes[_plantNumber].mesh = (Slots[_plantNumber].Item as Info.Seed).PlantMeshes[0];
 
             _inventoryGarden.UpdateMenu(Slots);
         }

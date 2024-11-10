@@ -14,6 +14,8 @@ namespace PlayerComponent
         {
             _lootList = FindObjectOfType<UI.LootList>();
             _inventoryPlayer = FindObjectOfType<UI.Player>();
+            _inventoryPlayer.PlayerInventory = this;
+
             _inventoryPlayer.UpdateMenu(Slots);
         }
 

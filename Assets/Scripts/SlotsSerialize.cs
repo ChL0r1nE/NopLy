@@ -38,29 +38,40 @@ public record SlotsData
     public ItemRecord[] ItemRecords;
 }
 
-
 public class SlotsSerialize : MonoBehaviour
 {
-    private FileStream _file;
-
     private static readonly BinaryFormatter _formatter = new();
 
-    public SlotsData DeserializeData(string name)
+    private FileStream _file;
+
+    public void DeserializeData(Slot[] slots, string name)
     {
-        if (!File.Exists($"{Application.persistentDataPath}/{name}.dat"))
-            return new(null);
+        if (!File.Exists($"{Application.persistentDataPath}/{name}.dat")) return;
 
         _file = File.Open($"{Application.persistentDataPath}/{name}.dat", FileMode.Open);
         SlotsData data = (SlotsData)_formatter.Deserialize(_file);
         _file.Close();
 
-        return data;
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (data.ItemRecords[i] == null) continue;
+
+            for (int j = 0; j < ItemDictionary.Instance.Items.Length; j++)
+            {
+                if (ItemDictionary.Instance.Items[j].ID != data.ItemRecords[i].ID) continue;
+
+                if (data.ItemRecords[i].GetType() == typeof(WeaponRecord))
+                    slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count, (data.ItemRecords[i] as WeaponRecord).Endurance);
+                else
+                    slots[i] = new(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count);
+            }
+        }
     }
 
-    public void SerializeData(SlotsData inData, string name)
+    public void SerializeData(Slot[] data, string name)
     {
         _file = File.Create($"{Application.persistentDataPath}/{name}.dat");
-        _formatter.Serialize(_file, inData);
+        _formatter.Serialize(_file, new SlotsData(data));
         _file.Close();
     }
 }

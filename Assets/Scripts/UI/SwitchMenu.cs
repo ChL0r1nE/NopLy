@@ -5,23 +5,21 @@ namespace UI
     public class SwitchMenu : MonoBehaviour
     {
         [SerializeField] private Player _inventoryPlayer;
-        private AbstractInventory _nowInventory;
-
-        private void Start() => _inventoryPlayer = FindObjectOfType<Player>();
+        private AbstractInventory _secondInventory;
 
         public void SetMenu(AbstractInventory inventory, bool isOpenInventory)
         {
             if (!isOpenInventory)
             {
-                _nowInventory = null;
+                _secondInventory = null;
                 _inventoryPlayer.SetSecondInventory(null);
                 return;
             }
 
-            _nowInventory?.SwitchOpen(false);
+            _secondInventory?.SwitchOpen(false);
 
-            _nowInventory = inventory;
-            _inventoryPlayer.SetSecondInventory(_nowInventory);
+            _secondInventory = inventory;
+            _inventoryPlayer.SetSecondInventory(_secondInventory);
         }
     }
 }

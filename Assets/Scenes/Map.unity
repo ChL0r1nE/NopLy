@@ -163,11 +163,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 46f1b8099eea58d428a9eae31746fb82, type: 2}
   - {fileID: 11400000, guid: 3c1deac3072d67740bf0bd5741ee11aa, type: 2}
   - {fileID: 11400000, guid: 9d219969b5f0c9d4ab46030882923e64, type: 2}
-  - {fileID: 11400000, guid: b901a81da400c6942b60c168bd3235ca, type: 2}
   - {fileID: 11400000, guid: 3e81dbf62734e1541aee59d6a6c17c5f, type: 2}
+  - {fileID: 11400000, guid: b901a81da400c6942b60c168bd3235ca, type: 2}
+  - {fileID: 11400000, guid: 5fa453b9670ce144e9ea489c391ccbf7, type: 2}
   - {fileID: 11400000, guid: e6d68d40dc7897143a535930fb045bbb, type: 2}
   - {fileID: 11400000, guid: 2bb60b493af19dc42863f92d6e7653c2, type: 2}
-  - {fileID: 11400000, guid: 5fa453b9670ce144e9ea489c391ccbf7, type: 2}
 --- !u!4 &524814812
 Transform:
   m_ObjectHideFlags: 0
@@ -346,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 1339355695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.35, y: 0.05, z: 0.7}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.075, y: 0.075, z: 0.075}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1589641092}
@@ -377,6 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c3c74458de5694a8edac96a53dc3c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _move: {fileID: 2112565683}
   _position: {x: -3.5, y: 0, z: 7}
   _locationName: RuinVillage
 --- !u!1 &1379729585
@@ -458,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 1379729585}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.030000001, y: 0.05, z: 0.6}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.075, y: 0.075, z: 0.075}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1589641092}
@@ -489,6 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c3c74458de5694a8edac96a53dc3c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _move: {fileID: 2112565683}
   _position: {x: 0.3, y: 0, z: 6}
   _locationName: Village
 --- !u!1 &1589641089

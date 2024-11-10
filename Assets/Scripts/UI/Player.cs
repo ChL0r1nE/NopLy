@@ -14,8 +14,6 @@ namespace UI
         private AbstractInventory _secondInventory;
         private int _enterID;
 
-        public void SetEnterID(int id) => _enterID = id;
-
         private void Start()
         {
             for (int i = 0; i < 10; i++)
@@ -24,7 +22,7 @@ namespace UI
             _inventoryTargetPosition.x = -400;
         }
 
-        public void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 InteractQuickPanel(0);
@@ -47,6 +45,8 @@ namespace UI
             else if (Input.GetKeyDown(KeyCode.Alpha0))
                 InteractQuickPanel(9);
         }
+
+        public void SetEnterID(int id) => _enterID = id;
 
         public override void AddItem(Slot slot, out int _slotCount)
         {

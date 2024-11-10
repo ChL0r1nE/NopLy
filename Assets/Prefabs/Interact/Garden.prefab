@@ -474,9 +474,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7709439205577058205}
+  - component: {fileID: 3799169539645803210}
+  - component: {fileID: 7709439205577058201}
   - component: {fileID: 7709439205577058194}
   - component: {fileID: 7709439205577058195}
-  - component: {fileID: 7709439205577058201}
   - component: {fileID: 7709439205577058207}
   - component: {fileID: 7709439205577058204}
   - component: {fileID: 7709439205577058206}
@@ -504,6 +505,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3799169539645803210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709439205577058192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 366deb7f0db0c4548b25a69a45af20e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7709439205577058201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709439205577058192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a85c2013aea99c48b111eaf5b7815b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Slots:
+  - Item: {fileID: 0}
+    _count: 0
+  - Item: {fileID: 0}
+    _count: 0
+  - Item: {fileID: 0}
+    _count: 0
+  - Item: {fileID: 0}
+    _count: 0
+  _plantMeshes:
+  - {fileID: 5925100848874361995}
+  - {fileID: 7709439203705850701}
+  - {fileID: 7709439204500931951}
+  - {fileID: 7709439204886231811}
+  IsOpen: 0
+  _slotsSerialize: {fileID: 3799169539645803210}
+  _saveID: 
 --- !u!33 &7709439205577058194
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -555,33 +597,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7709439205577058201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7709439205577058192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a85c2013aea99c48b111eaf5b7815b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Slots:
-  - Item: {fileID: 0}
-    _count: 0
-  - Item: {fileID: 0}
-    _count: 0
-  - Item: {fileID: 0}
-    _count: 0
-  - Item: {fileID: 0}
-    _count: 0
-  _plantMeshes:
-  - {fileID: 5925100848874361995}
-  - {fileID: 7709439203705850701}
-  - {fileID: 7709439204500931951}
-  - {fileID: 7709439204886231811}
-  IsOpen: 0
 --- !u!114 &7709439205577058207
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,20 +4,26 @@ namespace Enemy
 {
     public class Health : MonoBehaviour
     {
+        public float HealthValue { get; private set; }
+
         [SerializeField] private GameObject _loot;
         [SerializeField] private GameObject _enemy;
+        [SerializeField] private int _maxHealth;
         [SerializeField] private DamageText _damageText;
-        [SerializeField] private int _health;
+
+        private void Start() => HealthValue = _maxHealth;
+
+        public int GetMaxHealth() => _maxHealth;
 
         public void TakeDamage(int damage)
         {
             _damageText.ResetTextDelay(damage);
 
-            if (_health == -1) return;
+            if (HealthValue == -1) return;
 
-            _health -= damage;
+            HealthValue -= damage;
 
-            if (_health > 0) return;
+            if (HealthValue > 0) return;
 
             Instantiate(_loot, transform.position, Quaternion.identity);
             Destroy(_enemy);

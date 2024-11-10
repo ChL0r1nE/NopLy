@@ -30,7 +30,11 @@ namespace PlayerComponent
         private Vector2 _buffIconOffset = new(45, 0);
         private float _timer = 0;
 
-        private void Start() => StaticBuff = this;
+        private void Start()
+        {
+            StaticBuff = this;
+            FindObjectOfType<UI.Ammunition>().SetPlayerBuff(this);
+        }
 
         private void FixedUpdate()
         {

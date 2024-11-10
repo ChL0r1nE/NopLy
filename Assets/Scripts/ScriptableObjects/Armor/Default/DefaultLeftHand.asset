@@ -15,7 +15,7 @@ MonoBehaviour:
   Sprite: {fileID: 0}
   Type: 4
   Name: 
-  ID: 3
+  ID: -3
   MaxStack: 1
   ArmorMeshes:
   - {fileID: -2432090755550338912, guid: 57fbf6679e9d0574a9159d569fbc8567, type: 3}
