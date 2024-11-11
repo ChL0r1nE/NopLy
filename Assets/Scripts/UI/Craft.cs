@@ -6,9 +6,9 @@ namespace UI
 {
     public class Craft : AbstractInventory
     {
-        [SerializeField] private List<GameObject> _icons = new();
-
         public Interact.Worktable WorktableStrategy;
+
+        [SerializeField] private List<GameObject> _icons = new();
 
         private Vector3 _slotPosition = new(-160, 40);
         private int _iconCount = 0;
@@ -23,16 +23,19 @@ namespace UI
 
         public void CraftItem(int id)
         {
-            if (_inventoryPlayer.PlayerInventory.DeleteRecipe(WorktableStrategy.Recipes[id].Materials))
+            if (_inventoryPlayer.PlayerInventory.DeleteSlots(WorktableStrategy.Recipes[id].Materials))
             {
-                if (WorktableStrategy.Recipes[id].Result.Item.Type == Info.ItemType.Weapon)
+                if (WorktableStrategy.Recipes[id].Result.Item is Info.Weapon weaponInfo)
                 {
-                    Info.Weapon infoWeapon = WorktableStrategy.Recipes[id].Result.Item as Info.Weapon;
-                    WeaponSlot weaponSlot = new(infoWeapon, WorktableStrategy.Recipes[id].Result.Count, infoWeapon.MaxEndurance);
-                    _inventoryPlayer.AddItem(weaponSlot, out _);
+                    Info.Weapon infoWeapon = weaponInfo;
+                    Slot slot = new WeaponSlot(infoWeapon, WorktableStrategy.Recipes[id].Result.Count, infoWeapon.MaxEndurance);
+                    _inventoryPlayer.AddItem(ref slot);
                 }
                 else
-                    _inventoryPlayer.AddItem(new(WorktableStrategy.Recipes[id].Result.Item, WorktableStrategy.Recipes[id].Result.Count), out _);
+                {
+                    Slot slot = new(WorktableStrategy.Recipes[id].Result.Item, WorktableStrategy.Recipes[id].Result.Count);
+                    _inventoryPlayer.AddItem(ref slot);
+                }
             }
         }
 

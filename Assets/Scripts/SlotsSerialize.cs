@@ -28,8 +28,8 @@ public record SlotsData
         {
             if (!slots[i].Item) continue;
 
-            if (slots[i].Item.GetType() == typeof(Info.Weapon))
-                ItemRecords[i] = new WeaponRecord { ID = slots[i].Item.ID, Count = slots[i].Count, Endurance = (slots[i] as WeaponSlot).Endurance };
+            if (slots[i] is WeaponSlot weaponSlot)
+                ItemRecords[i] = new WeaponRecord { ID = weaponSlot.Item.ID, Count = weaponSlot.Count, Endurance = weaponSlot.Endurance };
             else
                 ItemRecords[i] = new ItemRecord { ID = slots[i].Item.ID, Count = slots[i].Count };
         }
@@ -60,8 +60,8 @@ public class SlotsSerialize : MonoBehaviour
             {
                 if (ItemDictionary.Instance.Items[j].ID != data.ItemRecords[i].ID) continue;
 
-                if (data.ItemRecords[i].GetType() == typeof(WeaponRecord))
-                    slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count, (data.ItemRecords[i] as WeaponRecord).Endurance);
+                if (data.ItemRecords[i] is WeaponRecord weaponRecord)
+                    slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], weaponRecord.Count, weaponRecord.Endurance);
                 else
                     slots[i] = new(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count);
             }

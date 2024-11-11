@@ -19,8 +19,8 @@ namespace PlayerComponent
             {
                 if (!slots[i].Item) continue;
 
-                if (slots[i].Item.GetType() == typeof(Info.Weapon))
-                    ItemRecords[i] = new WeaponRecord { ID = slots[i].Item.ID, Count = slots[i].Count, Endurance = (slots[i] as WeaponSlot).Endurance };
+                if (slots[i] is WeaponSlot weaponSlot)
+                    ItemRecords[i] = new WeaponRecord { ID = slots[i].Item.ID, Count = slots[i].Count, Endurance = weaponSlot.Endurance };
                 else
                     ItemRecords[i] = new ItemRecord { ID = slots[i].Item.ID, Count = slots[i].Count };
             }
@@ -39,20 +39,30 @@ namespace PlayerComponent
 
     public class PlayerSerialize : MonoBehaviour
     {
-        private static readonly BinaryFormatter _formatter = new();
-
+        private BinaryFormatter _formatter = new();
         private FileStream _file;
+        private Inventory _playerInventory;
         private Weapon _playerWeapon;
         private Armor _playerArmor;
-        private Inventory _playerInventory;
         private bool _isWeapon;
+
+        private void OnDisable()
+        {
+            List<Slot> slots = GetComponent<Inventory>().Slots.ToList();
+
+            foreach (Info.Armor armor in GetComponent<Armor>().Armors)
+                slots.Add(new(armor, 1));
+
+            _file = File.Create($"{Application.persistentDataPath}/Player.dat");
+            _formatter.Serialize(_file, new PlayerData(slots.ToArray(), new(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.Endurance), GetComponent<Health>().HealthValue));
+            _file.Close();
+        }
 
         private void Start()
         {
             _playerInventory = GetComponent<Inventory>();
             _playerWeapon = GetComponent<Weapon>();
             _playerArmor = GetComponent<Armor>();
-            _playerInventory.Inizilize();
             _playerWeapon.Inizilize();
             _playerArmor.Inizilize();
 
@@ -64,6 +74,7 @@ namespace PlayerComponent
                 for (int i = 0; i < 5; i++)
                     _playerArmor.SetDefaultArmor(i);
 
+                _playerInventory.Inizilize();
                 return;
             }
 
@@ -92,8 +103,8 @@ namespace PlayerComponent
                 {
                     if (data.ItemRecords[i] == null || item.ID != data.ItemRecords[i].ID) continue;
 
-                    if (data.ItemRecords[i].GetType() == typeof(WeaponRecord))
-                        _playerInventory.Slots[i] = new WeaponSlot(item, data.ItemRecords[i].Count, (data.ItemRecords[i] as WeaponRecord).Endurance);
+                    if (data.ItemRecords[i] is WeaponRecord weaponRecord)
+                        _playerInventory.Slots[i] = new WeaponSlot(item, weaponRecord.Count, weaponRecord.Endurance);
                     else
                         _playerInventory.Slots[i] = new(item, data.ItemRecords[i].Count);
                 }
@@ -109,21 +120,7 @@ namespace PlayerComponent
                 }
             }
 
-            _playerInventory.SetSlotCount(-1, 0);
-        }
-
-        private void OnDisable()
-        {
-            List<Slot> slots = new();
-
-            slots = GetComponent<Inventory>().Slots.ToList();
-
-            foreach (Info.Armor armor in GetComponent<Armor>().Armors)
-                slots.Add(new(armor, 1));
-
-            _file = File.Create($"{Application.persistentDataPath}/Player.dat");
-            _formatter.Serialize(_file, new PlayerData(slots.ToArray(), new(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.WeaponEndurance), GetComponent<Health>().HealthValue));
-            _file.Close();
+            _playerInventory.Inizilize();
         }
     }
 }

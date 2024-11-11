@@ -4,6 +4,8 @@ namespace PlayerComponent
 {
     public class Inventory : MonoBehaviour
     {
+        public void UpdateMenu() => _inventoryPlayer.UpdateMenu(Slots);
+
         public Slot[] Slots;
 
         private UI.Player _inventoryPlayer;
@@ -15,56 +17,60 @@ namespace PlayerComponent
             _lootList = FindObjectOfType<UI.LootList>();
             _inventoryPlayer = FindObjectOfType<UI.Player>();
             _inventoryPlayer.PlayerInventory = this;
-        }
-
-        public void SetSlotCount(int i, int count)
-        {
-            if (i != -1)
-                Slots[i].Count = count;
-
             _inventoryPlayer.UpdateMenu(Slots);
         }
 
-        public void AddItem(Slot slot, out int countRemain, bool showLoot = false)
+        public void AddItem(ref Slot slot, bool showLoot = false)
         {
-            countRemain = slot.Count;
+            int remain = slot.Count;
             _slotCount = slot.Count;
 
             foreach (Slot foreachSlot in Slots)
             {
                 if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                foreachSlot.AddCount(slot.Count, out int remain);
-                countRemain = remain;
+                foreachSlot.AddCount(slot.Count, out remain);
+                slot.Count = remain;
 
-                if (countRemain != 0)
-                    slot.Count = countRemain;
-                else
-                    break;
+                if (remain != 0) continue;
+
+                _inventoryPlayer.UpdateMenu(Slots);
+
+                if (showLoot)
+                    _lootList.AddLootLabel(foreachSlot.Item.Sprite, foreachSlot.Item.Name, _slotCount);
+
+                return;
             }
 
-            if (countRemain != 0)
-                for (int i = 0; i < Slots.Length; i++)
-                {
-                    if (Slots[i].Item) continue;
+            for (int i = 0; i < Slots.Length; i++)
+            {
+                if (Slots[i].Item) continue;
 
-                    Slots[i] = slot;
-                    countRemain = 0;
-                    break;
-                }
+                if (slot is WeaponSlot weaponSlot)
+                    Slots[i] = new WeaponSlot(slot.Item, remain, weaponSlot.Endurance);
+                else
+                    Slots[i] = new(slot.Item, remain);
 
-            _inventoryPlayer.UpdateMenu(Slots);
+                slot.Count = 0;
 
-            if (showLoot && countRemain != _slotCount)
-                _lootList.AddLootLabel(slot.Item, _slotCount - countRemain);
+                _inventoryPlayer.UpdateMenu(Slots);
+
+                if (showLoot)
+                    _lootList.AddLootLabel(Slots[i].Item.Sprite, Slots[i].Item.Name, _slotCount);
+
+                return;
+            }
+
+            if (showLoot && _slotCount - remain != 0)
+                _lootList.AddLootLabel(slot.Item.Sprite, slot.Item.Name, _slotCount - remain);
         }
 
-        public bool DeleteRecipe(Slot[] recipe)
+        public bool DeleteSlots(Slot[] slots)
         {
             bool canDeleteSlot;
             bool isFreeSlot = false;
 
-            foreach (Slot recipeSlot in recipe)
+            foreach (Slot recipeSlot in slots)
             {
                 canDeleteSlot = false;
                 _slotCount = recipeSlot.Count;
@@ -92,7 +98,7 @@ namespace PlayerComponent
                     return false;
             }
 
-            foreach (Slot recipeSlot in recipe)
+            foreach (Slot recipeSlot in slots)
             {
                 _slotCount = recipeSlot.Count;
 

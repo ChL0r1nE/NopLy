@@ -40,11 +40,12 @@ namespace UI
         public void Choice(int choice)
         {
             _isOpen = false;
+
             if (choice == 0) return;
 
-            if (_questGive.IsGive && FindObjectOfType<PlayerComponent.Inventory>().DeleteRecipe(_quest.Items))
+            if (_questGive.IsGive && FindObjectOfType<PlayerComponent.Inventory>().DeleteSlots(_quest.Items))
             {
-                FindObjectOfType<PlayerComponent.Inventory>().AddItem(_quest.Revard, out _);
+                FindObjectOfType<PlayerComponent.Inventory>().AddItem(ref _quest.Revard);
                 _questList.RemoveQuestLabel(_quest.ID);
                 _questGive.CompleteQuest();
             }

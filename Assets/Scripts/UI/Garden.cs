@@ -4,24 +4,19 @@ namespace UI
     {
         public Interact.Garden GardenStrategy;
 
+        public override void AddItem(ref Slot slot) => GardenStrategy.AddSeed(ref slot);
+
+        public override void DeleteItem(int id)
+        {
+            _inventoryPlayer.AddItem(ref GardenStrategy.Slots[id]);
+            GardenStrategy.UpdateNullMeshes();
+            GardenStrategy.UpdateMenu();
+        }
+
         public override void SwitchOpen(bool baseOpen)
         {
             base.SwitchOpen(baseOpen);
             GardenStrategy.IsOpen = _isOpen;
-        }
-
-        public override void AddItem(Slot slot, out int countRemain)
-        {
-            GardenStrategy.AddSeed(slot, out int remain);
-            countRemain = remain;
-        }
-
-        public override void DeleteItem(int id)
-        {
-            Slot slot = new(GardenStrategy.Slots[id].Item, GardenStrategy.Slots[id].Count);
-
-            _inventoryPlayer.AddItem(slot, out int remain);
-            GardenStrategy.SetSlotCount(id, remain);
         }
     }
 }

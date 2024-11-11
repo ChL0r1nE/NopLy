@@ -5,6 +5,10 @@ namespace PlayerComponent
 {
     public class Weapon : MonoBehaviour
     {
+        public Info.Weapon GetInfoWeapon() => _weapon == _defaultMainWeapon ? null : _weapon;
+
+        public void SetWeaponSlot(WeaponSlot weaponSlot) => SetWeapon(weaponSlot != null ? weaponSlot.Item as Info.Weapon : _defaultMainWeapon, weaponSlot != null ? weaponSlot.Endurance : int.MaxValue);
+
         [System.Serializable]
         public class SkillClass
         {
@@ -29,12 +33,12 @@ namespace PlayerComponent
             }
         }
 
+        public int Endurance { get; private set; }
+
         private List<int> _activeSkillsID = new();
 
         [SerializeField] private SkillClass[] _skills;
         private float[] _skillReset;
-
-        public int WeaponEndurance { get; private set; }
 
         [SerializeField] private Animator _animator;
         [SerializeField] private MeshFilter _weaponMesh;
@@ -46,10 +50,6 @@ namespace PlayerComponent
         private UI.SkillList _skillList;
         private Info.Weapon _weapon;
         private int _skillNumber;
-
-        public Info.Weapon GetInfoWeapon() => _weapon == _defaultMainWeapon ? null : _weapon;
-
-        public void SetWeaponSlot(WeaponSlot weaponSlot) => SetWeapon(weaponSlot != null ? weaponSlot.Item as Info.Weapon : _defaultMainWeapon, weaponSlot != null ? weaponSlot.Endurance : int.MaxValue);
 
         private void Update()
         {
@@ -95,10 +95,10 @@ namespace PlayerComponent
 
         public void WeaponUse(int use)
         {
-            WeaponEndurance -= use;
-            _ammunitionUI.UpdateEndurance(WeaponEndurance, _weapon.MaxEndurance);
+            Endurance -= use;
+            _ammunitionUI.UpdateEndurance((float)Endurance / _weapon.MaxEndurance);
 
-            if (WeaponEndurance < 0)
+            if (Endurance < 0f)
                 SetWeapon(_defaultMainWeapon, int.MaxValue);
         }
 
@@ -123,11 +123,8 @@ namespace PlayerComponent
                 _activeSkillsID.Clear();
 
                 for (int i = 0; i < _skills.Length; i++)
-                {
-                    if (_skills[i].WeaponType != weapon.WeaponType) continue;
-
-                    _activeSkillsID.Add(i);
-                }
+                    if (_skills[i].WeaponType == weapon.WeaponType)
+                        _activeSkillsID.Add(i);
 
                 _skillReset = new float[_activeSkillsID.Count];
                 Sprite[] skillSprites = new Sprite[_activeSkillsID.Count];
@@ -139,12 +136,12 @@ namespace PlayerComponent
             }
 
             _weapon = weapon;
-            WeaponEndurance = endurance;
+            Endurance = endurance;
             _weaponMesh.mesh = _weapon.WeaponMesh;
             _playerAttack.WeaponDamage = _weapon.Damage;
 
-            WeaponUse(0);
             _ammunitionUI.UpdateWeaponImage(_weapon);
+            _ammunitionUI.UpdateEndurance((float)Endurance / _weapon.MaxEndurance);
         }
     }
 }

@@ -30,23 +30,24 @@ namespace UI
             {
                 _lootLabels[i].Timer += Time.deltaTime;
 
-                _labelPosition.y = Mathf.SmoothStep(_lootLabels[i].RectTransform.anchoredPosition.y, 80f * i, Time.deltaTime * 25f);
-                _lootLabels[i].RectTransform.anchoredPosition = _labelPosition;
-
                 if (_lootLabels[i].Timer > 2f)
                 {
                     Destroy(_lootLabels[i].GameObject);
                     _lootLabels.RemoveAt(i);
+                    continue;
                 }
+
+                _labelPosition.y = Mathf.SmoothStep(_lootLabels[i].RectTransform.anchoredPosition.y, 80f * i, Time.deltaTime * 25f);
+                _lootLabels[i].RectTransform.anchoredPosition = _labelPosition;
             }
         }
 
-        public void AddLootLabel(Info.Item info, int count)
+        public void AddLootLabel(Sprite sprite, string name, int count)
         {
             _lootLabels.Add(new(Instantiate(_lootLabel, transform.position, Quaternion.identity, transform)));
 
-            _lootLabels[_lootLabels.Count - 1].GameObject.transform.GetChild(1).GetComponent<Image>().sprite = info.Sprite;
-            _lootLabels[_lootLabels.Count - 1].GameObject.GetComponentInChildren<Text>().text = info.Name + (count != 1 ? $" ({count})" : "");
+            _lootLabels[^1].GameObject.transform.GetChild(1).GetComponent<Image>().sprite = sprite;
+            _lootLabels[^1].GameObject.GetComponentInChildren<Text>().text = name + (count != 1 ? $" ({count})" : "");
         }
     }
 }

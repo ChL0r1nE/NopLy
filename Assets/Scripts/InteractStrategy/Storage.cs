@@ -42,39 +42,41 @@ namespace Interact
             _animator.SetBool("IsOpen", _isOpen);
         }
 
-        public void AddItem(Slot slot, out int countRemain)
+        public void UpdateMenu() => _inventoryStorage.UpdateMenu(Slots);
+
+        public void AddItem(ref Slot slot)
         {
+            int remain = slot.Count;
+
             foreach (Slot foreachSlot in Slots)
             {
                 if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                foreachSlot.AddCount(slot.Count, out int remain);
+                foreachSlot.AddCount(slot.Count, out remain);
                 slot.Count = remain;
 
                 if (remain != 0) continue;
 
-                countRemain = 0;
                 _inventoryStorage.UpdateMenu(Slots);
+
                 return;
             }
-
-            countRemain = slot.Count;
 
             for (int i = 0; i < Slots.Length; i++)
             {
                 if (Slots[i].Item) continue;
 
-                Slots[i] = slot;
-                countRemain = 0;
+                if (slot is WeaponSlot weaponSlot)
+                    Slots[i] = new WeaponSlot(slot.Item, remain, weaponSlot.Endurance);
+                else
+                    Slots[i] = new(slot.Item, remain);
+
+                slot.Count = 0;
+
                 _inventoryStorage.UpdateMenu(Slots);
+
                 return;
             }
-        }
-
-        public void SetSlotCount(int id, int count)
-        {
-            Slots[id].Count = count;
-            _inventoryStorage.UpdateMenu(Slots);
         }
     }
 }

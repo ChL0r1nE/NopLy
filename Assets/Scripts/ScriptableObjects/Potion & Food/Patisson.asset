@@ -16,5 +16,5 @@ MonoBehaviour:
   Type: 1
   Name: Patisson
   ID: 11
-  MaxStack: 10
+  MaxStack: 25
   Buff: {fileID: 11400000, guid: ca79431e1b48e564db35333a9883d9d0, type: 2}

@@ -5,6 +5,12 @@ namespace UI
 {
     public class Ammunition : AbstractInventory
     {
+        public void SetPlayerWeapon(PlayerComponent.Weapon weapon) => _playerWeapon = weapon;
+
+        public void SetPlayerArmor(PlayerComponent.Armor armor) => _playerArmor = armor;
+
+        public void SetPlayerBuff(PlayerComponent.Buff buff) => _playerBuff = buff;
+
         [SerializeField] private Image _weaponEnduranceImage;
         [SerializeField] private Image _weaponImage;
         private PlayerComponent.Weapon _playerWeapon;
@@ -14,8 +20,9 @@ namespace UI
 
         private void Start()
         {
-            _inventoryTargetPosition.x = -310;
             _cameraFollowing = FindObjectOfType<CameraFollowing>();
+            _inventoryTargetPosition.x = -310;
+            _inventoryPosition.x = -310;
         }
 
         private void Update()
@@ -24,16 +31,61 @@ namespace UI
                 SwitchOpen(true);
         }
 
-        public void SetPlayerArmor(PlayerComponent.Armor armor) => _playerArmor = armor;
-
-        public void SetPlayerWeapon(PlayerComponent.Weapon weapon) => _playerWeapon = weapon;
-
-        public void SetPlayerBuff(PlayerComponent.Buff buff) => _playerBuff = buff;
-
-        public override void SwitchOpen(bool baseOpen)
+        public override void AddItem(ref Slot slot)
         {
-            base.SwitchOpen(baseOpen);
-            _cameraFollowing.SwitchToPlayer();
+            switch (slot.Item.Type)
+            {
+                case Info.ItemType.Potion:
+                    _playerBuff.AddBuff((slot.Item as Info.Potion).Buff);
+                    slot.Count--;
+                    break;
+                case Info.ItemType.Weapon:
+                    if (_playerWeapon.GetInfoWeapon())
+                    {
+                        WeaponSlot weaponSlot = new(slot.Item, 1, (slot as WeaponSlot).Endurance);
+                        slot = new WeaponSlot(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.Endurance);
+                        _playerWeapon.SetWeaponSlot(weaponSlot);
+
+                        break;
+                    }
+
+                    _playerWeapon.SetWeaponSlot(new(slot.Item, slot.Count, (slot as WeaponSlot).Endurance));
+                    slot.Count = 0;
+                    break;
+                case Info.ItemType.Armor:
+                    if(_playerArmor.GetArmor((int)(slot.Item as Info.Armor).ArmorType))
+                    {
+                        Info.Armor armorInfo = _playerArmor.GetArmor((int)(slot.Item as Info.Armor).ArmorType);
+                        _playerArmor.SetArmor(slot.Item as Info.Armor);
+                        slot = new(armorInfo, 1);
+
+                        break;
+                    }
+
+                    _playerArmor.SetArmor(slot.Item as Info.Armor);
+                    slot.Count = 0;
+                    break;
+            }
+        }
+
+        public override void DeleteItem(int id)
+        {
+            Slot slot;
+
+            if (id == 0)
+                slot = new WeaponSlot(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.Endurance);
+            else
+                slot = new(_playerArmor.Armors[id - 1], 1);
+
+            _inventoryPlayer.AddItem(ref slot);
+
+            if (id == 0)
+                _playerWeapon.SetWeaponSlot(null);
+            else
+            {
+                _playerArmor.SetDefaultArmor(id - 1);
+                _images[id - 1].gameObject.SetActive(false);
+            }
         }
 
         public override void UpdateMenu(Slot[] slots)
@@ -47,48 +99,10 @@ namespace UI
             }
         }
 
-        public override void DeleteItem(int id)
+        public override void SwitchOpen(bool baseOpen)
         {
-            int remain;
-
-            if (id == 0)
-                _inventoryPlayer.AddItem(new WeaponSlot(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.WeaponEndurance), out remain);
-            else
-                _inventoryPlayer.AddItem(new(_playerArmor.Armors[id - 1], 1), out remain);
-
-            if (remain != 0) return;
-
-            if (id == 0)
-                _playerWeapon.SetWeaponSlot(null);
-            else
-            {
-                _playerArmor.SetDefaultArmor(id - 1);
-                _images[id - 1].gameObject.SetActive(false);
-            }
-        }
-
-        public override void AddItem(Slot slot, out int countRemain)
-        {
-            countRemain = slot.Count - 1;
-
-            switch (slot.Item.Type)
-            {
-                case Info.ItemType.Potion:
-                    _playerBuff.AddBuff((slot.Item as Info.Potion).Buff);
-                    break;
-                case Info.ItemType.Weapon:
-                    if (_playerWeapon.GetInfoWeapon())
-                        _inventoryPlayer.AddItem(new WeaponSlot(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.WeaponEndurance), out _);
-
-                    _playerWeapon.SetWeaponSlot(slot as WeaponSlot);
-                    break;
-                case Info.ItemType.Armor:
-                    _playerArmor.SetArmor(slot.Item as Info.Armor);
-                    break;
-                default:
-                    countRemain++;
-                    break;
-            }
+            base.SwitchOpen(baseOpen);
+            _cameraFollowing.SwitchToPlayer();
         }
 
         public void UpdateWeaponImage(Info.Weapon weapon)
@@ -98,10 +112,10 @@ namespace UI
             _weaponImage.sprite = weapon.Sprite;
         }
 
-        public void UpdateEndurance(int endurance, int maxEndurance)
+        public void UpdateEndurance(float endurance)
         {
-            _weaponEnduranceImage.fillAmount = (float)endurance / maxEndurance;
-            _weaponEnduranceImage.color = Color.green * ((float)endurance / maxEndurance) + Color.red * (1 - (float)endurance / maxEndurance);
+            _weaponEnduranceImage.fillAmount = endurance;
+            _weaponEnduranceImage.color = Color.green * endurance + Color.red * (1 - endurance);
         }
     }
 }

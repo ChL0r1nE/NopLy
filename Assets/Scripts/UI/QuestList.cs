@@ -1,6 +1,5 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace UI
     public class QuestList : MonoBehaviour
     {
         private List<RectTransform> _labelRects = new();
-        private int[] _questIDs;
+        private int[] _questIDs = new int[0];
 
         [SerializeField] private RectTransform _questLabel;
         private BinaryFormatter _formatter = new();
@@ -39,9 +38,13 @@ namespace UI
 
         public void AddQuestLabel(string name, string task, int id)
         {
-            List<int> listIDs = _questIDs != null ? _questIDs.ToList() : new();
-            listIDs.Add(id);
-            _questIDs = listIDs.ToArray();
+            int[] questIDs = new int[_questIDs.Length + 1];
+
+            for(int i=0; i < _questIDs.Length; i++)
+                questIDs[i] = _questIDs[i];
+
+            questIDs[^1] = id;
+            _questIDs = questIDs;
 
             _labelRects.Add(Instantiate(_questLabel, transform));
             _labelRects[^1].GetChild(0).GetComponent<Text>().text = name;

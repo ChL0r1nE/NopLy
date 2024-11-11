@@ -5,6 +5,12 @@ namespace UI
 {
     public class HealthBar : MonoBehaviour
     {
+        public float PlayerAmount
+        {
+            get => _playerHealthStripe.fillAmount;
+            set => _playerHealthStripe.fillAmount = value;
+        }
+
         [SerializeField] private Image _playerHealthStripe;
         [SerializeField] private Image _enemyHealthStripe;
         [SerializeField] private Image _enemyHealthBack;
@@ -12,12 +18,6 @@ namespace UI
         private Enemy.Health _enemyHealth;
         private int _maxEnemyHealth;
         private bool _isEnemy;
-
-        public float PlayerAmount
-        {
-            get => _playerHealthStripe.fillAmount;
-            set => _playerHealthStripe.fillAmount = value;
-        }
 
         private void Update()
         {

@@ -25,6 +25,12 @@ namespace UI
             }
         }
 
+        public void UpdateReload(float[] timers)
+        {
+            for (int i = 0; i < _skillCount; i++)
+                _imagesForward[i].fillAmount = timers[i];
+        }
+
         public void SetSkills(int count, Sprite[] sprites)
         {
             _moveTimer = 0f;
@@ -39,12 +45,6 @@ namespace UI
                 _imagesForward[i].sprite = sprites[i];
                 _imagesBack[i].sprite = sprites[i];
             }
-        }
-
-        public void UpdateReload(float[] timers)
-        {
-            for (int i = 0; i < _skillCount; i++)
-                _imagesForward[i].fillAmount = timers[i];
         }
     }
 }

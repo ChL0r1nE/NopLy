@@ -4,6 +4,10 @@ namespace PlayerComponent
 {
     public class Armor : MonoBehaviour
     {
+        public void SetDefaultArmor(int id) => SetArmor(_defaultArmors[id]);
+
+        public Info.Armor GetArmor(int id) => Armors[id] != _defaultArmors[id] ? Armors[id] : null;
+
         public float ArmorBuffModifier
         {
             get => _armorBuffModifier;
@@ -24,8 +28,6 @@ namespace PlayerComponent
         private UI.Ammunition _ammunitionUI;
         private float _armorBuffModifier = 0f;
         private int _partID;
-
-        public void SetDefaultArmor(int id) => SetArmor(_defaultArmors[id]);
 
         public void Inizilize()
         {

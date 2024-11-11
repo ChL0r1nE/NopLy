@@ -4,6 +4,8 @@ namespace UI
     {
         public Interact.Storage StorageStrategy { private get; set; }
 
+        public override void AddItem(ref Slot slot) => StorageStrategy.AddItem(ref slot);
+
         public override void SwitchOpen(bool baseOpen)
         {
             base.SwitchOpen(baseOpen);
@@ -12,14 +14,8 @@ namespace UI
 
         public override void DeleteItem(int id)
         {
-            _inventoryPlayer.AddItem(StorageStrategy.Slots[id], out int remain);
-            StorageStrategy.SetSlotCount(id, remain);
-        }
-
-        public override void AddItem(Slot slot, out int countRemain)
-        {
-            StorageStrategy.AddItem(slot, out int remain);
-            countRemain = remain;
+            _inventoryPlayer.AddItem(ref StorageStrategy.Slots[id]);
+            StorageStrategy.UpdateMenu();
         }
     }
 }

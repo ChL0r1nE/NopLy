@@ -4,12 +4,21 @@ namespace Interact
 {
     public class Garden : AbstractInteract
     {
+        public void UpdateNullMeshes()
+        {
+            for (int i = 0; i < 4; i++)
+                if (!Slots[i].Item)
+                    _plantMeshes[i].mesh = null;
+        }
+
+        public void UpdateMenu() => _inventoryGarden.UpdateMenu(Slots);
+
         public Slot[] Slots;
+
+        public bool IsOpen = false;
 
         [SerializeField] private MeshFilter[] _plantMeshes = new MeshFilter[4];
         private int[] _plantProgress = new int[4];
-
-        public bool IsOpen = false;
 
         [SerializeField] private SlotsSerialize _slotsSerialize;
         [SerializeField] private string _saveID;
@@ -48,35 +57,21 @@ namespace Interact
                 _inventoryGarden.UpdateMenu(Slots);
         }
 
-        public void SetSlotCount(int id, int count)
+        public void AddSeed(ref Slot slot)
         {
-            Slots[id].Count = count;
-            _inventoryGarden.UpdateMenu(Slots);
-
-            if (count == 0)
-                _plantMeshes[id].mesh = null;
-        }
-
-        public void AddSeed(Slot slot, out int countRemain)
-        {
-            countRemain = slot.Count;
-
             if (slot.Item.Type != Info.ItemType.Seed) return;
 
             for (int i = 0; i < 4; i++)
             {
                 if (Slots[i].Item) continue;
 
-                Slots[i] = slot;
-                Slots[i].Count = 1;
-                _plantNumber = i;
-                countRemain--;
+                Slots[i] = new(slot.Item, 1);
+                _plantProgress[i] = 0;
+                _plantMeshes[i].mesh = (Slots[i].Item as Info.Seed).PlantMeshes[0];
+                slot.Count--;
 
                 break;
             }
-
-            _plantProgress[_plantNumber] = 0;
-            _plantMeshes[_plantNumber].mesh = (Slots[_plantNumber].Item as Info.Seed).PlantMeshes[0];
 
             _inventoryGarden.UpdateMenu(Slots);
         }
@@ -99,7 +94,8 @@ namespace Interact
                 Slots[i].Item = seed.Harvest;
                 Slots[i].Count = Random.Range(2, 5);
 
-                _inventoryGarden.UpdateMenu(Slots);
+                if (IsOpen)
+                    _inventoryGarden.UpdateMenu(Slots);
             }
         }
     }

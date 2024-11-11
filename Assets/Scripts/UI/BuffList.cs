@@ -6,8 +6,9 @@ namespace UI
 {
     public class BuffList : MonoBehaviour
     {
-        [SerializeField] private RectTransform _buffImagePrefab;
         private List<RectTransform> _buffImages = new();
+
+        [SerializeField] private RectTransform _buffImagePrefab;
         private Vector2 _offset = new(45, 0);
         private int _buffCount = 0;
 
@@ -24,7 +25,7 @@ namespace UI
             _buffImages.RemoveAt(number);
             _buffCount--;
 
-            for(int i = Mathf.Clamp(--number, 0, int.MaxValue); i < _buffImages.Count; i++)
+            for(int i = number == 0 ? 0 : --number ; i < _buffImages.Count; i++)
                 _buffImages[i].anchoredPosition = _offset * i;
         }
     }

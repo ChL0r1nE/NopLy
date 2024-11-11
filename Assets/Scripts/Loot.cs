@@ -12,9 +12,9 @@ public class Loot : MonoBehaviour
         if (WeaponEndurance != 0)
             Slot = new WeaponSlot(Slot.Item, Slot.Count, WeaponEndurance);
 
-        inventory.AddItem(Slot, out int remain, true);
+        inventory.AddItem(ref Slot, true);
 
-        if (remain == 0)
+        if (!Slot.Item)
             Destroy(gameObject);
     }
 }

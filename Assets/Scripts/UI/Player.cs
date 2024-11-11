@@ -5,72 +5,57 @@ namespace UI
 {
     public class Player : AbstractInventory
     {
+        [ContextMenu("RemoveQickLinks")]
+        private void RemoveLinks()
+        {
+            for (int i = 0; i < 10; i++)
+                PlayerPrefs.SetInt($"QuickPanel{i}", -1);
+        }
+
         public void SetEnterID(int id) => _enterID = id;
+
+        public PlayerComponent.Inventory PlayerInventory;
 
         [SerializeField] private Image[] _quickPanelImages;
         private int[] _quickPanelLinks = new int[10];
 
-        public PlayerComponent.Inventory PlayerInventory;
-
         [SerializeField] private Ammunition _inventoryAmmunition;
         private AbstractInventory _secondInventory;
-        private Slot _reserveSlot;
-        private Slot _slot;
-        private int _enterID;
-        private bool _isStart = false;
-        private bool _isAmmunition = false;
+        private int _enterID = -1;
+
+        private void OnEnable()
+        {
+            bool _isLinks = PlayerPrefs.HasKey($"QuickPanel0");
+
+            for (int i = 0; i < 10; i++)
+                _quickPanelLinks[i] = _isLinks ? PlayerPrefs.GetInt($"QuickPanel{i}") : -1;
+        }
+
+        private void OnDisable()
+        {
+            for (int i = 0; i < 10; i++)
+                PlayerPrefs.SetInt($"QuickPanel{i}", _quickPanelLinks[i]);
+        }
 
         private void Start()
         {
-            for (int i = 0; i < 10; i++)
-                _quickPanelLinks[i] = -1;
-
             _inventoryTargetPosition.x = -400;
-            _isStart = true;
+            _inventoryPosition.x = -400;
         }
 
         private void Update()
         {
             for (int i = 48; i < 58; i++)
-            {
                 if (Input.GetKeyDown((KeyCode)i))
                     InteractQuickPanel(i == 48 ? 9 : i - 49);
-            }
         }
 
-        public override void AddItem(Slot slot, out int _slotCount)
-        {
-            PlayerInventory.AddItem(slot, out int remain);
-            _slotCount = remain;
-        }
+        public override void AddItem(ref Slot slot) => PlayerInventory.AddItem(ref slot);
 
         public override void DeleteItem(int id)
         {
-            int remain;
-
-            if (PlayerInventory.Slots[id].GetType() == typeof(WeaponSlot))
-            {
-                _slot = new WeaponSlot(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count, (PlayerInventory.Slots[id] as WeaponSlot).Endurance);
-                _reserveSlot = new WeaponSlot(_slot.Item, _slot.Count, (_slot as WeaponSlot).Endurance);
-            }
-            else
-            {
-                _slot = new(PlayerInventory.Slots[id].Item, PlayerInventory.Slots[id].Count);
-                _reserveSlot = new(_slot.Item, _slot.Count);
-            }
-
-            PlayerInventory.SetSlotCount(id, 0);
-
-            if (_isAmmunition)
-            {
-                _inventoryAmmunition.AddItem(_slot, out remain);
-                _isAmmunition = false;
-            }
-            else
-                _secondInventory.AddItem(_slot, out remain);
-
-            if (remain != 0)
-                PlayerInventory.AddItem(_reserveSlot, out _);
+            _secondInventory.AddItem(ref PlayerInventory.Slots[id]);
+            PlayerInventory.UpdateMenu();
         }
 
         public override void UpdateMenu(Slot[] slots)
@@ -79,10 +64,12 @@ namespace UI
 
             for (int i = 0; i < 10; i++)
             {
-                _quickPanelImages[i].enabled = _isStart && _quickPanelLinks[i] != -1 && slots[_quickPanelLinks[i]].Count != 0;
+                _quickPanelImages[i].enabled = _quickPanelLinks[i] != -1 && slots[_quickPanelLinks[i]].Count != 0;
 
                 if (_quickPanelImages[i].enabled)
                     _quickPanelImages[i].sprite = slots[_quickPanelLinks[i]].Item.Sprite;
+                else
+                    _quickPanelLinks[i] = -1;
             }
         }
 
@@ -114,8 +101,8 @@ namespace UI
 
             if (!_quickPanelImages[selectID].enabled) return;
 
-            _isAmmunition = true;
-            DeleteItem(_quickPanelLinks[selectID]);
+            _inventoryAmmunition.AddItem(ref PlayerInventory.Slots[_quickPanelLinks[selectID]]);
+            PlayerInventory.UpdateMenu();
         }
     }
 }
