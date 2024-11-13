@@ -521,8 +521,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2fcb3db38ade9240a1662e5744e1d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iconPrefab: {fileID: 7000896344198472500, guid: f0168430ae84c0540a3ef92c37cc1996, type: 3}
-  _buffIconParentTransform: {fileID: 0}
   PlayerArmor: {fileID: 5221283551278133286}
   _playerHealth: {fileID: 5221283551278133287}
 --- !u!114 &5221283549603838392
@@ -1531,7 +1529,7 @@ MonoBehaviour:
     AnimTriggers:
     - Strike
     - Lunge
-    Sprite: {fileID: 21300000, guid: 283047db80b19ee4fa4ca5722788d6e7, type: 3}
+    Sprite: {fileID: 21300000, guid: 6a3cad3603f1ee244879c78159937855, type: 3}
     WeaponType: 1
     WeaponEndurance: 2
     ReloadTime: 2
@@ -1541,7 +1539,7 @@ MonoBehaviour:
     - {fileID: 5221283549603838393}
     AnimTriggers:
     - Strike
-    Sprite: {fileID: 21300000, guid: 4fcd08a87ac7f694495702a1ce7e857a, type: 3}
+    Sprite: {fileID: 21300000, guid: 3c6d438be3752c54ab5252d9676ffdf0, type: 3}
     WeaponType: 1
     WeaponEndurance: 4
     ReloadTime: 5
@@ -1551,7 +1549,7 @@ MonoBehaviour:
     AnimTriggers:
     - Rotation
     - Strike
-    Sprite: {fileID: 21300000, guid: e137a4a02d6b297468b9a62579f691ba, type: 3}
+    Sprite: {fileID: 21300000, guid: 0c0f9c348c70b644486fc86bf703c116, type: 3}
     WeaponType: 2
     WeaponEndurance: 2
     ReloadTime: 3

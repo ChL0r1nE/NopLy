@@ -4,8 +4,7 @@ namespace Enemy
 {
     public class Following : MonoBehaviour
     {
-        private bool IsMoveDistance => _distance < 20f;
-        private bool IsAttackDistance => _distance < _attackDistance;
+        private void EndAttack() => _animator.SetBool("IsAttack", Vector3.Distance(transform.position, _playerTransform.position) < _attackDistance);
 
         [SerializeField] private Animator _animator;
         [SerializeField] private float _speed;
@@ -18,7 +17,6 @@ namespace Enemy
         private int _frameDelay;
         private float _distance;
         private float _angle;
-        private bool _isAttack;
 
         private void Start()
         {
@@ -28,22 +26,19 @@ namespace Enemy
 
         private void FixedUpdate()
         {
-            if (_isAttack) return;
+            if (_animator.GetBool("IsAttack")) return;
 
-            if (_frameDelay++ >= 10)
+            if (_frameDelay++ >= 15)
             {
                 _frameDelay = 0;
                 _distance = Vector3.Distance(transform.position, _playerTransform.position);
-                _animator.SetBool("IsMove", IsMoveDistance && !IsAttackDistance);
+                _animator.SetFloat("MoveBlend", _distance < 20f ? 1f : 0f);
 
-                if (IsAttackDistance)
-                {
-                    _isAttack = true;
+                if (_distance < _attackDistance)
                     _animator.SetBool("IsAttack", true);
-                }
             }
 
-            if (IsMoveDistance)
+            if (_distance < 20f)
             {
                 _targetDelta = transform.position - _playerTransform.position;
                 _angle = Mathf.Atan(_targetDelta.x / _targetDelta.z) * 57;
@@ -53,7 +48,7 @@ namespace Enemy
 
                 transform.rotation = Quaternion.Euler(Vector3.up * Mathf.Repeat(_angle, 359));
 
-                if (!IsAttackDistance)
+                if (_distance >= _attackDistance)
                     transform.Translate(Vector3.forward * _speed);
             }
         }
@@ -62,14 +57,6 @@ namespace Enemy
         {
             if (Vector3.Distance(transform.position, _playerTransform.position) < _attackDistance)
                 _playerHealth.HealthChange(-_damage);
-        }
-
-        private void EndAttack()
-        {
-            _distance = Vector3.Distance(transform.position, _playerTransform.position);
-            _isAttack = IsAttackDistance;
-
-            _animator.SetBool("IsAttack", _isAttack);
         }
     }
 }

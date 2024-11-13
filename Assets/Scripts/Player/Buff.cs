@@ -7,9 +7,9 @@ namespace PlayerComponent
     {
         public static Buff StaticBuff;
 
-        public record BuffClass
+        public record BuffRecord
         {
-            public BuffClass(Info.Buff buff)
+            public BuffRecord(Info.Buff buff)
             {
                 Buff = buff;
                 Timer = buff.Length;
@@ -19,7 +19,7 @@ namespace PlayerComponent
             public float Timer;
         }
 
-        private List<BuffClass> _buffs = new();
+        private List<BuffRecord> _buffs = new();
 
         [SerializeField] private Armor PlayerArmor;
         [SerializeField] private Health _playerHealth;
@@ -62,7 +62,7 @@ namespace PlayerComponent
                 return;
             }
 
-            foreach (BuffClass buffClass in _buffs)
+            foreach (BuffRecord buffClass in _buffs)
             {
                 if (buffClass.Buff.Name != buff.Name) continue;
 
@@ -70,7 +70,7 @@ namespace PlayerComponent
                 return;
             }
 
-            _buffs.Add(new BuffClass(buff));
+            _buffs.Add(new BuffRecord(buff));
             _buffsList.AddBuff(_buffs[^1].Buff.Sprite);
 
             switch (_buffs[^1].Buff.Type)

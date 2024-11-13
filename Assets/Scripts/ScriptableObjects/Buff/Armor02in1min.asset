@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa2a4395af36cb429f12ae803e89bba, type: 3}
   m_Name: Armor02in1min
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: e4e53ed208e7e2546b80be107752c671, type: 3}
+  Sprite: {fileID: 21300000, guid: ec25f2a47e409c941acaafded4b7277c, type: 3}
   Type: 1
   Modifier: 0.2
-  Length: 15
+  Length: 60
   Name: ArmorPotion

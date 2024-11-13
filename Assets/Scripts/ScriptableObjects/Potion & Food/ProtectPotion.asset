@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60c6a9e3972fe54fb99177783b4cf1e, type: 3}
   m_Name: ProtectPotion
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 791603f0a8573294db6c4bfd7a09d593, type: 3}
+  Sprite: {fileID: 21300000, guid: 15311a1585efac54c811667781af9aa6, type: 3}
   Type: 1
   Name: Potion of Stone Skin
   ID: 123

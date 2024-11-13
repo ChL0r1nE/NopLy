@@ -1,20 +1,14 @@
 using UnityEngine.UI;
 using UnityEngine;
+using System.IO;
 
 namespace UI
 {
     public class Player : AbstractInventory
     {
-        [ContextMenu("RemoveQickLinks")]
-        private void RemoveLinks()
-        {
-            for (int i = 0; i < 10; i++)
-                PlayerPrefs.SetInt($"QuickPanel{i}", -1);
-        }
-
         public void SetEnterID(int id) => _enterID = id;
 
-        public PlayerComponent.Inventory PlayerInventory;
+        [HideInInspector] public PlayerComponent.Inventory PlayerInventory;
 
         [SerializeField] private Image[] _quickPanelImages;
         private int[] _quickPanelLinks = new int[10];
@@ -25,7 +19,7 @@ namespace UI
 
         private void OnEnable()
         {
-            bool _isLinks = PlayerPrefs.HasKey($"QuickPanel0");
+            bool _isLinks = PlayerPrefs.HasKey($"QuickPanel0") && File.Exists($"{Application.persistentDataPath}/Player.dat");
 
             for (int i = 0; i < 10; i++)
                 _quickPanelLinks[i] = _isLinks ? PlayerPrefs.GetInt($"QuickPanel{i}") : -1;

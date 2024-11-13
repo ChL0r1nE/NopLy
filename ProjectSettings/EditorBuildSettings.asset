@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RuinVillage.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Arena.unity
+    guid: 0a5604ae41505174ea0b39c873050b2d
+  - enabled: 1
+    path: Assets/Scenes/Mill.unity
+    guid: 6fbac9c90c751d24aa10df4e2c6762c2
   m_configObjects: {}

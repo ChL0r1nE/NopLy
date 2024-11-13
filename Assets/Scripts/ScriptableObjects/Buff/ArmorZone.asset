@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa2a4395af36cb429f12ae803e89bba, type: 3}
   m_Name: ArmorZone
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 4fcd08a87ac7f694495702a1ce7e857a, type: 3}
+  Sprite: {fileID: 21300000, guid: 3c6d438be3752c54ab5252d9676ffdf0, type: 3}
   Type: 1
   Modifier: 0.5
   Length: -1

@@ -6,10 +6,13 @@ public class ItemDictionary : MonoBehaviour
 
     public Info.Item[] Items;
 
-    private void Awake()
+    private void Start()
     {
         if (Instance)
+        {
             Destroy(gameObject);
+            return;
+        }
 
         DontDestroyOnLoad(gameObject);
         Instance = this;

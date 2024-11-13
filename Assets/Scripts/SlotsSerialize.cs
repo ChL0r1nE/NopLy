@@ -3,14 +3,14 @@ using System.IO;
 using UnityEngine;
 
 [System.Serializable]
-public record ItemRecord
+public record ItemData
 {
     public int ID;
     public int Count;
 }
 
 [System.Serializable]
-public record WeaponRecord : ItemRecord
+public record WeaponData : ItemData
 {
     public int Endurance;
 }
@@ -22,20 +22,20 @@ public record SlotsData
     {
         if (slots == null) return;
 
-        ItemRecords = new ItemRecord[slots.Length];
+        ItemRecords = new ItemData[slots.Length];
 
         for (int i = 0; i < slots.Length; i++)
         {
             if (!slots[i].Item) continue;
 
             if (slots[i] is WeaponSlot weaponSlot)
-                ItemRecords[i] = new WeaponRecord { ID = weaponSlot.Item.ID, Count = weaponSlot.Count, Endurance = weaponSlot.Endurance };
+                ItemRecords[i] = new WeaponData { ID = weaponSlot.Item.ID, Count = weaponSlot.Count, Endurance = weaponSlot.Endurance };
             else
-                ItemRecords[i] = new ItemRecord { ID = slots[i].Item.ID, Count = slots[i].Count };
+                ItemRecords[i] = new ItemData { ID = slots[i].Item.ID, Count = slots[i].Count };
         }
     }
 
-    public ItemRecord[] ItemRecords;
+    public ItemData[] ItemRecords;
 }
 
 public class SlotsSerialize : MonoBehaviour
@@ -60,7 +60,7 @@ public class SlotsSerialize : MonoBehaviour
             {
                 if (ItemDictionary.Instance.Items[j].ID != data.ItemRecords[i].ID) continue;
 
-                if (data.ItemRecords[i] is WeaponRecord weaponRecord)
+                if (data.ItemRecords[i] is WeaponData weaponRecord)
                     slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], weaponRecord.Count, weaponRecord.Endurance);
                 else
                     slots[i] = new(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count);

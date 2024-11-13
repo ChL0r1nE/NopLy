@@ -21,8 +21,8 @@ namespace UI
         private void Start()
         {
             _cameraFollowing = FindObjectOfType<CameraFollowing>();
-            _inventoryTargetPosition.x = -310;
-            _inventoryPosition.x = -310;
+            _inventoryTargetPosition.x = 0;
+            _inventoryPosition.x = 0;
         }
 
         private void Update()
