@@ -6320,6 +6320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d8497ed51647c046a4784fb37e606ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _repairMaterials:
+  - Item: {fileID: 11400000, guid: 9d219969b5f0c9d4ab46030882923e64, type: 2}
+    _count: 5
   _enemys:
   - EnemyPrefab: {fileID: 5514822378961867992, guid: 36dd150c618f59e49afbf4c707b84a94, type: 3}
     Position: {x: -50, y: 4, z: -60}

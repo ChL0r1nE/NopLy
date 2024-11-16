@@ -4,13 +4,12 @@ using Interact;
 
 namespace UI
 {
-    public class TalkMenu : MonoBehaviour
+    public class Talk : MonoBehaviour
     {
-        public static TalkMenu StaticTalk;
+        public static Talk StaticTalk;
 
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private Text _text;
-        [SerializeField] private QuestList _questList;
         private ITalk _iTalk;
         private Vector2 _position = new(0, -1000);
         private bool _isOpen;

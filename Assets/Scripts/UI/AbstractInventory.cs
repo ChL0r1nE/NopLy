@@ -28,7 +28,7 @@ namespace UI
         {
             if (_rectTransform.anchoredPosition.y == _inventoryTargetPosition.y) return;
 
-            _inventoryPosition.y = Mathf.MoveTowards(_rectTransform.anchoredPosition.y, _inventoryTargetPosition.y, Time.deltaTime * 5000f);
+            _inventoryPosition.y = Mathf.MoveTowards(_rectTransform.anchoredPosition.y, _inventoryTargetPosition.y, Time.deltaTime * 5000);
             _rectTransform.anchoredPosition = _inventoryPosition;
         }
 

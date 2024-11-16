@@ -4,39 +4,30 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace PlayerComponent
+namespace Data
 {
     [System.Serializable]
-    public record PlayerData : SlotsData
+    public record PlayerInventory : Slots
     {
-        public PlayerData(Slot[] slots, WeaponSlot weapon, float health) : base(slots)
+        public PlayerInventory(Slot[] slots, WeaponSlot weapon, float health) : base(slots)
         {
-            if (slots == null) return;
-
-            ItemRecords = new ItemData[slots.Length];
-
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (!slots[i].Item) continue;
-
-                if (slots[i] is WeaponSlot weaponSlot)
-                    ItemRecords[i] = new WeaponData { ID = slots[i].Item.ID, Count = slots[i].Count, Endurance = weaponSlot.Endurance };
-                else
-                    ItemRecords[i] = new ItemData { ID = slots[i].Item.ID, Count = slots[i].Count };
-            }
+            SlotsSerialize(slots);
 
             if (weapon.Item != null)
-                WeaponRecord = new WeaponData { ID = weapon.Item.ID, Count = weapon.Count, Endurance = weapon.Endurance };
+                WeaponRecord = new Weapon { ID = weapon.Item.ID, Count = weapon.Count, Endurance = weapon.Endurance };
             else
                 WeaponRecord = null;
 
             Health = health;
         }
 
-        public WeaponData WeaponRecord;
+        public Weapon WeaponRecord;
         public float Health;
     }
+}
 
+namespace PlayerComponent
+{
     public class Serialize : MonoBehaviour
     {
         private BinaryFormatter _formatter = new();
@@ -54,7 +45,7 @@ namespace PlayerComponent
                 slots.Add(new(armor, 1));
 
             _file = File.Create($"{Application.persistentDataPath}/Player.dat");
-            _formatter.Serialize(_file, new PlayerData(slots.ToArray(), new(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.Endurance), GetComponent<Health>().HealthValue));
+            _formatter.Serialize(_file, new Data.PlayerInventory(slots.ToArray(), new(_playerWeapon.GetInfoWeapon(), 1, _playerWeapon.Endurance), GetComponent<Health>().HealthValue));
             _file.Close();
         }
 
@@ -79,7 +70,7 @@ namespace PlayerComponent
             }
 
             _file = File.Open($"{Application.persistentDataPath}/Player.dat", FileMode.Open);
-            PlayerData data = (PlayerData)_formatter.Deserialize(_file);
+            Data.PlayerInventory data = (Data.PlayerInventory)_formatter.Deserialize(_file);
             _file.Close();
 
             _isWeapon = data.WeaponRecord != null;
@@ -103,7 +94,7 @@ namespace PlayerComponent
                 {
                     if (data.ItemRecords[i] == null || item.ID != data.ItemRecords[i].ID) continue;
 
-                    if (data.ItemRecords[i] is WeaponData weaponRecord)
+                    if (data.ItemRecords[i] is Data.Weapon weaponRecord)
                         _playerInventory.Slots[i] = new WeaponSlot(item, weaponRecord.Count, weaponRecord.Endurance);
                     else
                         _playerInventory.Slots[i] = new(item, data.ItemRecords[i].Count);

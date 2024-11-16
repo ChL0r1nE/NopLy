@@ -8,7 +8,6 @@ namespace Enemy
 
         [SerializeField] private Animator _animator;
         [SerializeField] private float _speed;
-        [SerializeField] private float _attackTime;
         [SerializeField] private float _attackDistance;
         [SerializeField] private int _damage;
         private Transform _playerTransform;

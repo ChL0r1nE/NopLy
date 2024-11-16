@@ -20,16 +20,16 @@ namespace UI
             if (!File.Exists($"{Application.persistentDataPath}/ActiveQuests.dat")) return;
 
             _file = File.Open($"{Application.persistentDataPath}/ActiveQuests.dat", FileMode.Open);
-            ActiveQuestsIDData activeQuestsRecord = (ActiveQuestsIDData)_formatter.Deserialize(_file);
+            Data.QuestsList activeQuestsRecord = (Data.QuestsList)_formatter.Deserialize(_file);
             _file.Close();
 
             _questIDs = activeQuestsRecord.IDs;
-            QuestData questRecord;
+            Data.Quest questRecord;
 
             foreach (int id in _questIDs)
             {
                 _file = File.Open($"{Application.persistentDataPath}/Quest{id}.dat", FileMode.Open);
-                questRecord = (QuestData)_formatter.Deserialize(_file);
+                questRecord = (Data.Quest)_formatter.Deserialize(_file);
                 _file.Close();
 
                 AddQuestLabel(questRecord.Name, questRecord.Task, questRecord.ID);
@@ -40,7 +40,7 @@ namespace UI
         {
             int[] questIDs = new int[_questIDs.Length + 1];
 
-            for(int i=0; i < _questIDs.Length; i++)
+            for (int i = 0; i < _questIDs.Length; i++)
                 questIDs[i] = _questIDs[i];
 
             questIDs[^1] = id;

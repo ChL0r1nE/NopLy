@@ -23,19 +23,18 @@ namespace UI
 
         public void CraftItem(int id)
         {
-            if (_inventoryPlayer.PlayerInventory.DeleteSlots(WorktableStrategy.Recipes[id].Materials))
+            if (!_inventoryPlayer.PlayerInventory.DeleteSlots(WorktableStrategy.Recipes[id].Materials)) return;
+
+            if (WorktableStrategy.Recipes[id].Result.Item is Info.Weapon weaponInfo)
             {
-                if (WorktableStrategy.Recipes[id].Result.Item is Info.Weapon weaponInfo)
-                {
-                    Info.Weapon infoWeapon = weaponInfo;
-                    Slot slot = new WeaponSlot(infoWeapon, WorktableStrategy.Recipes[id].Result.Count, infoWeapon.MaxEndurance);
-                    _inventoryPlayer.AddItem(ref slot);
-                }
-                else
-                {
-                    Slot slot = new(WorktableStrategy.Recipes[id].Result.Item, WorktableStrategy.Recipes[id].Result.Count);
-                    _inventoryPlayer.AddItem(ref slot);
-                }
+                Info.Weapon infoWeapon = weaponInfo;
+                Slot slot = new WeaponSlot(infoWeapon, WorktableStrategy.Recipes[id].Result.Count, infoWeapon.MaxEndurance);
+                _inventoryPlayer.AddItem(ref slot);
+            }
+            else
+            {
+                Slot slot = new(WorktableStrategy.Recipes[id].Result.Item, WorktableStrategy.Recipes[id].Result.Count);
+                _inventoryPlayer.AddItem(ref slot);
             }
         }
 

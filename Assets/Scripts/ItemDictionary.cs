@@ -6,7 +6,7 @@ public class ItemDictionary : MonoBehaviour
 
     public Info.Item[] Items;
 
-    private void Start()
+    private void OnEnable()
     {
         if (Instance)
         {

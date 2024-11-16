@@ -4,43 +4,46 @@ using System.Linq;
 using System.IO;
 using UnityEngine;
 
-[System.Serializable]
-public class QuestClass
+namespace Data
 {
-    public Slot[] Items;
-
-    public Slot Revard;
-    public string Name;
-    public string Task;
-    public string AfterGive;
-    public int ID;
-}
-
-[System.Serializable]
-public record QuestData
-{
-    public QuestData(QuestClass questClass, bool isComplete)
+    [System.Serializable]
+    public record QuestsList
     {
-        Name = questClass.Name;
-        Task = questClass.Task;
-        ID = questClass.ID;
-        IsComplete = isComplete;
+        public int[] IDs;
     }
 
-    public string Name;
-    public string Task;
-    public int ID;
-    public bool IsComplete;
-}
+    [System.Serializable]
+    public record Quest
+    {
+        public Quest(Interact.QuestClass questClass, bool isComplete)
+        {
+            Name = questClass.Name;
+            Task = questClass.Task;
+            ID = questClass.ID;
+            IsComplete = isComplete;
+        }
 
-[System.Serializable]
-public record ActiveQuestsIDData
-{
-    public int[] IDs;
+        public string Name;
+        public string Task;
+        public int ID;
+        public bool IsComplete;
+    }
 }
 
 namespace Interact
 {
+    [System.Serializable]
+    public class QuestClass
+    {
+        public Slot[] Items;
+
+        public Slot Revard;
+        public string Name;
+        public string Task;
+        public string AfterGive;
+        public int ID;
+    }
+
     public class QuestGive : AbstractInteract, ITalk
     {
         private List<int> ids = new();
@@ -49,7 +52,7 @@ namespace Interact
 
         private BinaryFormatter _formatter = new();
         private FileStream _file;
-        private UI.TalkMenu _talkMenu;
+        private UI.Talk _talkUI;
         private UI.QuestList _questList;
         private bool _isGive = false;
         private bool _isComplete = false;
@@ -59,13 +62,13 @@ namespace Interact
             if (!_isGive && !_isComplete) return;
 
             _file = File.Create($"{Application.persistentDataPath}/Quest{Quest.ID}.dat");
-            _formatter.Serialize(_file, new QuestData(Quest, _isComplete));
+            _formatter.Serialize(_file, new Data.Quest(Quest, _isComplete));
             _file.Close();
 
-            if (File.Exists($"{Application.persistentDataPath}/ActiveQuests.dat"))
+            if (File.Exists($"{Application.persistentDataPath}/QuestsList.dat"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/ActiveQuests.dat", FileMode.Open);
-                ActiveQuestsIDData data = (ActiveQuestsIDData)_formatter.Deserialize(_file);
+                _file = File.Open($"{Application.persistentDataPath}/QuestsList.dat", FileMode.Open);
+                Data.QuestsList data = (Data.QuestsList)_formatter.Deserialize(_file);
                 _file.Close();
 
                 ids = data.IDs.ToList();
@@ -78,15 +81,15 @@ namespace Interact
             else if (!_isComplete)
                 ids.Add(Quest.ID);
 
-            _file = File.Create($"{Application.persistentDataPath}/ActiveQuests.dat");
-            _formatter.Serialize(_file, new ActiveQuestsIDData { IDs = ids.ToArray() });
+            _file = File.Create($"{Application.persistentDataPath}/QuestsList.dat");
+            _formatter.Serialize(_file, new Data.QuestsList { IDs = ids.ToArray() });
             _file.Close();
         }
 
         private void OnTriggerExit(Collider col)
         {
             if (col.CompareTag("Player"))
-                _talkMenu.SwitchMenu(this, "", false);
+                _talkUI.SwitchMenu(this, "", false);
         }
 
         private void Start()
@@ -94,7 +97,7 @@ namespace Interact
             if (File.Exists($"{Application.persistentDataPath}/Quest{Quest.ID}.dat"))
             {
                 _file = File.Open($"{Application.persistentDataPath}/Quest{Quest.ID}.dat", FileMode.Open);
-                QuestData data = (QuestData)_formatter.Deserialize(_file);
+                Data.Quest data = (Data.Quest)_formatter.Deserialize(_file);
                 _file.Close();
 
                 _isGive = true;
@@ -102,20 +105,20 @@ namespace Interact
             }
 
             _questList = FindObjectOfType<UI.QuestList>();
-            _talkMenu = UI.TalkMenu.StaticTalk;
+            _talkUI = UI.Talk.StaticTalk;
         }
 
         public override void Interact()
         {
             if (!_isComplete)
-                _talkMenu.SwitchMenu(this, _isGive ? Quest.AfterGive : Quest.Task);
+                _talkUI.SwitchMenu(this, _isGive ? Quest.AfterGive : Quest.Task);
         }
 
         public void Talk()
         {
             if (_isGive && FindObjectOfType<PlayerComponent.Inventory>().DeleteSlots(Quest.Items))
             {
-                _isComplete= true;
+                _isComplete = true;
                 FindObjectOfType<PlayerComponent.Inventory>().AddItem(ref Quest.Revard);
                 _questList.RemoveQuestLabel(Quest.ID);
             }
