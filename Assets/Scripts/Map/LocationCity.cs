@@ -1,15 +1,10 @@
-using UnityEngine;
-
 namespace Map
 {
     public class LocationCity : AbstractLocation
     {
         public Slot[] Slots = new Slot[10];
 
-        [SerializeField] private SlotsSerialize _slotsSerialize;
-        [SerializeField] private int _storageID;
-
-        private void Start() => _slotsSerialize.DeserializeData(Slots, $"Storage{_storageID}");
+        private void Start() => new SlotsSerialize().DeserializeData(Slots, $"Storage{_mapID}");
 
         protected override void OnDown()
         {

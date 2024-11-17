@@ -31,16 +31,16 @@ namespace UI
                 _imagesForward[i].fillAmount = timers[i];
         }
 
-        public void SetSkills(int count, Sprite[] sprites)
+        public void SetSkills(Sprite[] sprites)
         {
             _moveTimer = 0f;
-            _skillCount = count;
+            _skillCount = sprites.Length;
 
             for (int i = 0; i < _imagesBack.Length; i++)
             {
-                _imagesBack[i].gameObject.SetActive(i < count);
+                _imagesBack[i].gameObject.SetActive(i < _skillCount);
 
-                if (i >= count) continue;
+                if (i >= _skillCount) continue;
 
                 _imagesForward[i].sprite = sprites[i];
                 _imagesBack[i].sprite = sprites[i];

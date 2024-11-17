@@ -8,19 +8,10 @@ using UnityEngine;
 namespace Data
 {
     [Serializable]
-    public record LocationsList
-    {
-        public int[] IDs;
-    }
-
-    [Serializable]
     public record LocationState : Slots
     {
-        public LocationState(bool[] isAlive, Slot[] slots, Vector3 position, int id) : base(slots)
+        public LocationState(bool[] isAlive, Slot[] slots) : base(slots)
         {
-            PositionX = position.x;
-            PositionZ = position.z;
-            LocationID = id;
             IsAlive = isAlive;
 
             if (IsClean())
@@ -30,17 +21,10 @@ namespace Data
         public LocationState(Slot[] slots, LocationState state, bool isWork) : base(slots)
         {
             IsAlive = state.IsAlive;
-            PositionX = state.PositionX;
-            PositionZ = state.PositionZ;
-            LocationID = state.LocationID;
             IsWork = isWork;
         }
 
         public bool[] IsAlive;
-
-        public float PositionX;
-        public float PositionZ;
-        public int LocationID;
         public bool IsWork;
 
         public bool IsClean()
@@ -82,10 +66,12 @@ namespace Location
 
         private void OnEnable()
         {
-            if (File.Exists($"{Application.persistentDataPath}/LocationState{_mapID}.dat"))
+            if (File.Exists($"{Application.persistentDataPath}/Location{_mapID}.dat"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/LocationState{_mapID}.dat", FileMode.Open);
+                _file = File.Open($"{Application.persistentDataPath}/Location{_mapID}.dat", FileMode.Open);
                 Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
+                _file.Close();
+
                 _isClean = state.IsClean();
                 _alives = state.IsAlive;
 
@@ -95,7 +81,6 @@ namespace Location
                     return;
                 }
 
-                _file.Close();
                 return;
             }
 
@@ -116,17 +101,15 @@ namespace Location
         {
             if (_isClean) return;
 
-            _file = File.Create($"{Application.persistentDataPath}/LocationState{_mapID}.dat");
-            _formatter.Serialize(_file, new Data.LocationState(_alives, _repairMaterials, _mapPosition, _mapID));
+            _file = File.Create($"{Application.persistentDataPath}/Location{_mapID}.dat");
+            _formatter.Serialize(_file, new Data.LocationState(_alives, _repairMaterials));
             _file.Close();
 
-            if (File.Exists($"{Application.persistentDataPath}/LocationsList.dat"))
+            if (File.Exists($"{Application.persistentDataPath}/LocationsID.dat"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/LocationsList.dat", FileMode.Open);
-                Data.LocationsList data = (Data.LocationsList)_formatter.Deserialize(_file);
+                _file = File.Open($"{Application.persistentDataPath}/LocationsID.dat", FileMode.Open);
+                _ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs.ToList();
                 _file.Close();
-
-                _ids = data.IDs.ToList();
 
                 if (_ids.IndexOf(_mapID) == -1)
                     _ids.Add(_mapID);
@@ -134,8 +117,8 @@ namespace Location
             else
                 _ids.Add(_mapID);
 
-            _file = File.Create($"{Application.persistentDataPath}/LocationsList.dat");
-            _formatter.Serialize(_file, new Data.LocationsList { IDs = _ids.ToArray() });
+            _file = File.Create($"{Application.persistentDataPath}/LocationsID.dat");
+            _formatter.Serialize(_file, new Data.IDArray { IDs = _ids.ToArray() });
             _file.Close();
         }
     }

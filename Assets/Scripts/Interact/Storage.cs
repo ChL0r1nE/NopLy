@@ -5,35 +5,39 @@ namespace Interact
     [RequireComponent(typeof(Animator))]
     public class Storage : AbstractInteract
     {
+        public void UpdateMenu() => _storageUI.UpdateMenu(Slots);
+
         public Slot[] Slots;
 
         [SerializeField] private Animator _animator;
-        [SerializeField] private SlotsSerialize _slotsSerialize;
         [SerializeField] private string _saveID;
-        private UI.Storage _inventoryStorage;
+        private SlotsSerialize _slotsSerialize;
+        private UI.Storage _storageUI;
         private bool _isOpen = false;
 
         private void OnDisable() => _slotsSerialize.SerializeData(Slots, $"Storage{_saveID}");
 
         private void Start()
         {
-            _inventoryStorage = FindObjectOfType<UI.Storage>();
+            _storageUI = FindObjectOfType<UI.Storage>();
+
+            _slotsSerialize = new SlotsSerialize();
             _slotsSerialize.DeserializeData(Slots, $"Storage{_saveID}");
         }
 
         private void OnTriggerExit()
         {
             if (_isOpen)
-                _inventoryStorage.SwitchOpen(false);
+                _storageUI.SwitchOpen(false);
         }
 
         public override void Interact()
         {
-            _inventoryStorage.StorageStrategy = this;
-            _inventoryStorage.SwitchOpen(true);
+            _storageUI.StorageStrategy = this;
+            _storageUI.SwitchOpen(true);
 
             if (_isOpen)
-                _inventoryStorage.UpdateMenu(Slots);
+                _storageUI.UpdateMenu(Slots);
         }
 
         public void SetOpen(bool isOpen)
@@ -41,8 +45,6 @@ namespace Interact
             _isOpen = isOpen;
             _animator.SetBool("IsOpen", _isOpen);
         }
-
-        public void UpdateMenu() => _inventoryStorage.UpdateMenu(Slots);
 
         public void AddItem(ref Slot slot)
         {
@@ -57,8 +59,7 @@ namespace Interact
 
                 if (remain != 0) continue;
 
-                _inventoryStorage.UpdateMenu(Slots);
-
+                _storageUI.UpdateMenu(Slots);
                 return;
             }
 
@@ -72,9 +73,7 @@ namespace Interact
                     Slots[i] = new(slot.Item, remain);
 
                 slot.Count = 0;
-
-                _inventoryStorage.UpdateMenu(Slots);
-
+                _storageUI.UpdateMenu(Slots);
                 return;
             }
         }

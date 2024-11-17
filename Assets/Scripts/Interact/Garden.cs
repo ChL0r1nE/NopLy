@@ -20,8 +20,8 @@ namespace Interact
         [SerializeField] private MeshFilter[] _plantMeshes = new MeshFilter[4];
         private int[] _plantProgress = new int[4];
 
-        [SerializeField] private SlotsSerialize _slotsSerialize;
         [SerializeField] private string _saveID;
+        private SlotsSerialize _slotsSerialize;
         private UI.Garden _inventoryGarden;
         private int _plantNumber;
 
@@ -36,6 +36,8 @@ namespace Interact
         private void Start()
         {
             _inventoryGarden = FindObjectOfType<UI.Garden>();
+
+            _slotsSerialize = new SlotsSerialize();
             _slotsSerialize.DeserializeData(Slots, $"Garden{_saveID}");
 
             for (int i = 0; i < 4; i++)

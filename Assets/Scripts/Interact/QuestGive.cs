@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Data
 {
     [System.Serializable]
-    public record QuestsList
+    public record IDArray
     {
         public int[] IDs;
     }
@@ -65,10 +65,10 @@ namespace Interact
             _formatter.Serialize(_file, new Data.Quest(Quest, _isComplete));
             _file.Close();
 
-            if (File.Exists($"{Application.persistentDataPath}/QuestsList.dat"))
+            if (File.Exists($"{Application.persistentDataPath}/QuestsID.dat"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/QuestsList.dat", FileMode.Open);
-                Data.QuestsList data = (Data.QuestsList)_formatter.Deserialize(_file);
+                _file = File.Open($"{Application.persistentDataPath}/QuestsID.dat", FileMode.Open);
+                Data.IDArray data = (Data.IDArray)_formatter.Deserialize(_file);
                 _file.Close();
 
                 ids = data.IDs.ToList();
@@ -81,8 +81,8 @@ namespace Interact
             else if (!_isComplete)
                 ids.Add(Quest.ID);
 
-            _file = File.Create($"{Application.persistentDataPath}/QuestsList.dat");
-            _formatter.Serialize(_file, new Data.QuestsList { IDs = ids.ToArray() });
+            _file = File.Create($"{Application.persistentDataPath}/QuestsID.dat");
+            _formatter.Serialize(_file, new Data.IDArray { IDs = ids.ToArray() });
             _file.Close();
         }
 

@@ -19,12 +19,11 @@ namespace PlayerComponent
             public Skill.AbstractSkill[] SkillComponents;
             public string[] AnimTriggers;
 
+            [SerializeField] public string _name;
             public Sprite Sprite;
             public Info.WeaponType WeaponType;
             public int WeaponEndurance;
-
             public int ReloadTime;
-            [SerializeField] public string _name;
 
             public void Execute()
             {
@@ -96,7 +95,7 @@ namespace PlayerComponent
         public void WeaponUse(int use)
         {
             Endurance -= use;
-            _ammunitionUI.UpdateEndurance((float)Endurance / _weapon.MaxEndurance);
+            _ammunitionUI.SetEndurance((float)Endurance / _weapon.MaxEndurance);
 
             if (Endurance < 0f)
                 SetWeapon(_defaultMainWeapon, int.MaxValue);
@@ -110,8 +109,7 @@ namespace PlayerComponent
             if (position.z > 0)
                 angle += 180;
 
-            angle = Mathf.Repeat(angle, 359);
-            _playerMove.SetTargetRotation(angle);
+            _playerMove.SetTargetRotation(Mathf.Repeat(angle, 359));
         }
 
         private void SetWeapon(Info.Weapon weapon, int endurance)
@@ -132,7 +130,7 @@ namespace PlayerComponent
                 for (int i = 0; i < _activeSkillsID.Count; i++)
                     skillSprites[i] = _skills[_activeSkillsID[i]].Sprite;
 
-                _skillList.SetSkills(_activeSkillsID.Count, skillSprites);
+                _skillList.SetSkills(skillSprites);
             }
 
             _weapon = weapon;
@@ -140,8 +138,8 @@ namespace PlayerComponent
             _weaponMesh.mesh = _weapon.WeaponMesh;
             _playerAttack.WeaponDamage = _weapon.Damage;
 
-            _ammunitionUI.UpdateWeaponImage(_weapon);
-            _ammunitionUI.UpdateEndurance((float)Endurance / _weapon.MaxEndurance);
+            _ammunitionUI.SetWeaponImage(_weapon);
+            _ammunitionUI.SetEndurance((float)Endurance / _weapon.MaxEndurance);
         }
     }
 }

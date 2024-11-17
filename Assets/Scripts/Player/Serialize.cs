@@ -1,7 +1,7 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.IO;
 using UnityEngine;
 
 namespace Data
@@ -73,8 +73,8 @@ namespace PlayerComponent
             Data.PlayerInventory data = (Data.PlayerInventory)_formatter.Deserialize(_file);
             _file.Close();
 
-            _isWeapon = data.WeaponRecord != null;
             GetComponent<Health>().HealthValue = data.Health;
+            _isWeapon = data.WeaponRecord != null;
 
             if (!_isWeapon)
                 _playerWeapon.SetWeaponSlot(null);

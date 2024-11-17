@@ -9,7 +9,7 @@ namespace UI
         private List<RectTransform> _buffImages = new();
 
         [SerializeField] private RectTransform _buffImagePrefab;
-        private Vector2 _offset = new(45, 0);
+        private readonly Vector2 _offset = new(45, 0);
         private int _buffCount = 0;
 
         public void AddBuff(Sprite sprite)

@@ -212,7 +212,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 33330519}
-  - component: {fileID: 33330524}
   - component: {fileID: 33330523}
   - component: {fileID: 33330522}
   - component: {fileID: 33330521}
@@ -232,7 +231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33330518}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 0, z: 0.419}
+  m_LocalPosition: {x: -0.15, y: 0.02, z: 0.419}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -316,6 +315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
   _move: {fileID: 2112565683}
+  _mapID: 4502
   _sprite: {fileID: 21300000, guid: ec25f2a47e409c941acaafded4b7277c, type: 3}
   _name: City
   Slots:
@@ -339,20 +339,6 @@ MonoBehaviour:
     _count: 0
   - Item: {fileID: 0}
     _count: 0
-  _slotsSerialize: {fileID: 33330524}
-  _storageID: 780
---- !u!114 &33330524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33330518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366deb7f0db0c4548b25a69a45af20e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &98110676
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,6 +915,51 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &335398434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 335398436}
+  - component: {fileID: 335398435}
+  m_Layer: 0
+  m_Name: CaravanSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &335398435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335398434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d75b2844b93802468860f6f514fd9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _caravanPrefab: {fileID: 3323186266004810419, guid: 6830503d5fe3ff244bdd66880d065d12, type: 3}
+--- !u!4 &335398436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335398434}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &408979925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,6 +1040,59 @@ RectTransform:
   m_AnchoredPosition: {x: -25, y: 30}
   m_SizeDelta: {x: 150, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &506831147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 506831149}
+  - component: {fileID: 506831148}
+  m_Layer: 0
+  m_Name: LocationDictionary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &506831148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506831147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9151641f673d78f488f912f9df56521e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Locations:
+  - ID: 4500
+    Transform: {fileID: 1339355698}
+  - ID: 4501
+    Transform: {fileID: 1379729588}
+  - ID: 4502
+    Transform: {fileID: 33330519}
+  - ID: 4503
+    Transform: {fileID: 572748066}
+--- !u!4 &506831149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506831147}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.1851633, y: 2.4539165, z: -1.3080199}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &524814810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1287,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572748065}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1162, y: 0, z: 0.3728}
+  m_LocalPosition: {x: 0.281, y: 0.02, z: 0.513}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1287,11 +1371,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
   _move: {fileID: 2112565683}
+  _mapID: 4503
   _sprite: {fileID: 21300000, guid: 804a4dfe96b4dfe4bb4a19f734e49982, type: 3}
   _name: Mill
-  _repairMaterials: []
   _damage: 18-20
-  _mapID: 0
 --- !u!1 &584154232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,7 +1769,7 @@ RectTransform:
   m_Children:
   - {fileID: 1706246735}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2015,7 +2098,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!1 &1339355695
 GameObject:
@@ -2095,7 +2178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339355695}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.35, y: 0, z: 0.7}
+  m_LocalPosition: {x: -0.35, y: 0.02, z: 0.7}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2129,9 +2212,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
   _move: {fileID: 2112565683}
+  _mapID: 4500
   _sprite: {fileID: 21300000, guid: d09c3a52457d2e343a0419cb826f0416, type: 3}
   _name: RuinVillage
-  _product: 123
+  _product: Stones
 --- !u!1 &1362388902
 GameObject:
   m_ObjectHideFlags: 0
@@ -2290,7 +2374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379729585}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.033, y: 0, z: 0.767}
+  m_LocalPosition: {x: 0.033, y: 0.02, z: 0.767}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2324,6 +2408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
   _move: {fileID: 2112565683}
+  _mapID: 4501
   _sprite: {fileID: 21300000, guid: 3c6d438be3752c54ab5252d9676ffdf0, type: 3}
   _name: Village
   _product: Patisson
@@ -2646,7 +2731,7 @@ Transform:
   - {fileID: 33330519}
   - {fileID: 572748066}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1590557533
 GameObject:
@@ -3338,7 +3423,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2060830623
 GameObject:
@@ -3430,7 +3515,7 @@ GameObject:
   - component: {fileID: 2112565681}
   - component: {fileID: 2112565680}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3495,11 +3580,11 @@ Transform:
   m_GameObject: {fileID: 2112565679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.58, y: 0, z: 8.62}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 1, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2112565683
 MonoBehaviour:

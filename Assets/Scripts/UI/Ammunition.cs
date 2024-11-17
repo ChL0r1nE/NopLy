@@ -79,6 +79,8 @@ namespace UI
 
             _inventoryPlayer.AddItem(ref slot);
 
+            if (slot.Count != 0) return;
+
             if (id == 0)
                 _playerWeapon.SetWeaponSlot(null);
             else
@@ -105,14 +107,14 @@ namespace UI
             _cameraFollowing.SwitchToPlayer();
         }
 
-        public void UpdateWeaponImage(Info.Weapon weapon)
+        public void SetWeaponImage(Info.Weapon weapon)
         {
             _images[5].gameObject.SetActive(_playerWeapon.GetInfoWeapon());
             _images[5].sprite = _playerWeapon.GetInfoWeapon()?.Sprite;
             _weaponImage.sprite = weapon.Sprite;
         }
 
-        public void UpdateEndurance(float endurance)
+        public void SetEndurance(float endurance)
         {
             _weaponEnduranceImage.fillAmount = endurance;
             _weaponEnduranceImage.color = Color.green * endurance + Color.red * (1 - endurance);

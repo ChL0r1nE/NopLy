@@ -34,12 +34,10 @@ public class CameraFollowing : MonoBehaviour
     {
         if (_toPlayer)
         {
-            _time += Time.deltaTime;
-
             if (_time > 1f) return;
 
-            transform.position = Vector3.Lerp(transform.position, _toPlayerPosition, _time / 3f);
-            transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.eulerAngles, _toPlayerRotation, _time / 3f));
+            _time += Time.deltaTime;
+            transform.SetPositionAndRotation(Vector3.Lerp(transform.position, _toPlayerPosition, _time / 3f), Quaternion.Euler(Vector3.Lerp(transform.eulerAngles, _toPlayerRotation, _time / 3f)));
         }
         else
             transform.position = _playerTransform.position + _cameraPositionOffset;

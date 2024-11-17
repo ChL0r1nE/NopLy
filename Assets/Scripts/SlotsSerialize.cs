@@ -1,6 +1,5 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using UnityEngine;
 
 namespace Data
 {
@@ -32,7 +31,6 @@ namespace Data
 
             for (int i = 0; i < slots.Length; i++)
             {
-                Debug.Log($"{i}. {slots[i]}");
                 if (!slots[i].Item) continue;
 
                 if (slots[i] is WeaponSlot weaponSlot)
@@ -44,7 +42,7 @@ namespace Data
     }
 }
 
-public class SlotsSerialize : MonoBehaviour
+public class SlotsSerialize
 {
     private static readonly BinaryFormatter _formatter = new();
 
@@ -52,9 +50,9 @@ public class SlotsSerialize : MonoBehaviour
 
     public void DeserializeData(Slot[] slots, string fileName)
     {
-        if (!File.Exists($"{Application.persistentDataPath}/{fileName}.dat")) return;
+        if (!File.Exists($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat")) return;
 
-        _file = File.Open($"{Application.persistentDataPath}/{fileName}.dat", FileMode.Open);
+        _file = File.Open($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat", FileMode.Open);
         Data.Slots data = (Data.Slots)_formatter.Deserialize(_file);
         _file.Close();
 
@@ -76,7 +74,7 @@ public class SlotsSerialize : MonoBehaviour
 
     public void SerializeData(Slot[] slots, string name)
     {
-        _file = File.Create($"{Application.persistentDataPath}/{name}.dat");
+        _file = File.Create($"{UnityEngine.Application.persistentDataPath}/{name}.dat");
         _formatter.Serialize(_file, new Data.Slots(slots));
         _file.Close();
     }

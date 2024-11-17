@@ -7,9 +7,9 @@ namespace UI
         [SerializeField] private Player _inventoryPlayer;
         private AbstractInventory _secondInventory;
 
-        public void SetMenu(AbstractInventory inventory, bool isOpenInventory)
+        public void SetMenu(AbstractInventory inventory, bool isOpen)
         {
-            if (!isOpenInventory)
+            if (!isOpen)
             {
                 _secondInventory = null;
                 _inventoryPlayer.SetSecondInventory(null);

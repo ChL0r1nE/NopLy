@@ -11092,7 +11092,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 618019493}
-  - component: {fileID: 618019496}
   - component: {fileID: 618019495}
   - component: {fileID: 618019491}
   - component: {fileID: 618019490}
@@ -11270,20 +11269,7 @@ MonoBehaviour:
   - Item: {fileID: 0}
     _count: 0
   _animator: {fileID: 618019494}
-  _slotsSerialize: {fileID: 618019496}
-  _saveID: 780
---- !u!114 &618019496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618019486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366deb7f0db0c4548b25a69a45af20e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _saveID: 4502
 --- !u!1001 &618938512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23334,7 +23320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78748f2f1b1487949830e9f40385672e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapID: 780
+  _cityStorage: {fileID: 618019495}
+  _mapID: 4502
 --- !u!4 &1332556603
 Transform:
   m_ObjectHideFlags: 0

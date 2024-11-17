@@ -6330,7 +6330,8 @@ MonoBehaviour:
     Position: {x: -55, y: 4, z: -65}
   - EnemyPrefab: {fileID: 5514822378961867992, guid: 36dd150c618f59e49afbf4c707b84a94, type: 3}
     Position: {x: -65, y: 4, z: -55}
-  _mapID: 0
+  _mapPosition: {x: 0, y: 0, z: 0}
+  _mapID: 4503
 --- !u!1001 &388552978
 PrefabInstance:
   m_ObjectHideFlags: 0

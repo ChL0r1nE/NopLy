@@ -106,10 +106,9 @@ namespace PlayerComponent
                 {
                     if (slot.Item != recipeSlot.Item) continue;
 
-                    slot.DeleteCount(_slotCount, out int remain);
-                    _slotCount = remain;
+                    slot.DeleteCount(_slotCount, out _slotCount);
 
-                    if (remain == 0) break;
+                    if (_slotCount == 0) break;
                 }
             }
 

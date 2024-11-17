@@ -17,10 +17,10 @@ namespace UI
 
         private void Start()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/ActiveQuests.dat")) return;
+            if (!File.Exists($"{Application.persistentDataPath}/QuestsID.dat")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/ActiveQuests.dat", FileMode.Open);
-            Data.QuestsList activeQuestsRecord = (Data.QuestsList)_formatter.Deserialize(_file);
+            _file = File.Open($"{Application.persistentDataPath}/QuestsID.dat", FileMode.Open);
+            Data.IDArray activeQuestsRecord = (Data.IDArray)_formatter.Deserialize(_file);
             _file.Close();
 
             _questIDs = activeQuestsRecord.IDs;
