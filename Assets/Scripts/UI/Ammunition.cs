@@ -9,13 +9,13 @@ namespace UI
 
         public void SetPlayerArmor(PlayerComponent.Armor armor) => _playerArmor = armor;
 
-        public void SetPlayerBuff(PlayerComponent.Buff buff) => _playerBuff = buff;
+        public void SetPlayerBuff(PlayerComponent.Buffs buff) => _playerBuff = buff;
 
         [SerializeField] private Image _weaponEnduranceImage;
         [SerializeField] private Image _weaponImage;
         private PlayerComponent.Weapon _playerWeapon;
         private PlayerComponent.Armor _playerArmor;
-        private PlayerComponent.Buff _playerBuff;
+        private PlayerComponent.Buffs _playerBuff;
         private CameraFollowing _cameraFollowing;
 
         private void Start()

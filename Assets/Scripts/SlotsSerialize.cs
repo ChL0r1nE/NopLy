@@ -60,15 +60,10 @@ public class SlotsSerialize
         {
             if (data.ItemRecords[i] == null) continue;
 
-            for (int j = 0; j < ItemDictionary.Instance.Items.Length; j++)
-            {
-                if (ItemDictionary.Instance.Items[j].ID != data.ItemRecords[i].ID) continue;
-
-                if (data.ItemRecords[i] is Data.Weapon weaponRecord)
-                    slots[i] = new WeaponSlot(ItemDictionary.Instance.Items[j], weaponRecord.Count, weaponRecord.Endurance);
-                else
-                    slots[i] = new(ItemDictionary.Instance.Items[j], data.ItemRecords[i].Count);
-            }
+            if (data.ItemRecords[i] is Data.Weapon weaponRecord)
+                slots[i] = new WeaponSlot(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), weaponRecord.Count, weaponRecord.Endurance);
+            else
+                slots[i] = new(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), data.ItemRecords[i].Count);
         }
     }
 

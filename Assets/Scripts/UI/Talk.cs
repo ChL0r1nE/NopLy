@@ -1,6 +1,5 @@
 using UnityEngine.UI;
 using UnityEngine;
-using Interact;
 
 namespace UI
 {
@@ -10,7 +9,7 @@ namespace UI
 
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private Text _text;
-        private ITalk _iTalk;
+        private Interact.ITalk _iTalk;
         private Vector2 _position = new(0, -1000);
         private bool _isOpen;
 
@@ -24,7 +23,7 @@ namespace UI
             _rectTransform.anchoredPosition = _position;
         }
 
-        public void SwitchMenu(ITalk iTalk, string text, bool baseOpen = true)
+        public void SwitchMenu(Interact.ITalk iTalk, string text, bool baseOpen = true)
         {
             _isOpen = !_isOpen && baseOpen;
 

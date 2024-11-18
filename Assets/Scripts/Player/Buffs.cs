@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace PlayerComponent
 {
-    public class Buff : MonoBehaviour
+    public class Buffs : MonoBehaviour
     {
-        public static Buff StaticBuff;
+        public static Buffs StaticBuff;
 
         public record BuffRecord
         {

@@ -85,31 +85,22 @@ namespace PlayerComponent
                     _playerArmor.SetDefaultArmor(i - 10);
             }
 
-            foreach (Info.Item item in ItemDictionary.Instance.Items)
+            if (_isWeapon)
+                _playerWeapon.SetWeaponSlot(new(ItemDictionary.Instance.GetInfo(data.WeaponRecord.ID), data.WeaponRecord.Count, data.WeaponRecord.Endurance));
+
+            for (int i = 0; i < 10; i++)
             {
-                if (_isWeapon && data.WeaponRecord.ID == item.ID)
-                    _playerWeapon.SetWeaponSlot(new(item, data.WeaponRecord.Count, data.WeaponRecord.Endurance));
+                if (data.ItemRecords[i] == null) continue;
 
-                for (int i = 0; i < 10; i++)
-                {
-                    if (data.ItemRecords[i] == null || item.ID != data.ItemRecords[i].ID) continue;
-
-                    if (data.ItemRecords[i] is Data.Weapon weaponRecord)
-                        _playerInventory.Slots[i] = new WeaponSlot(item, weaponRecord.Count, weaponRecord.Endurance);
-                    else
-                        _playerInventory.Slots[i] = new(item, data.ItemRecords[i].Count);
-                }
-
-                List<Info.Armor> armors = new();
-
-                for (int i = 10; i < 15; i++)
-                {
-                    if (data.ItemRecords[i] == null || item.ID != data.ItemRecords[i].ID) continue;
-
-                    armors.Add(item as Info.Armor);
-                    _playerArmor.SetArmor(armors.ToArray());
-                }
+                if (data.ItemRecords[i] is Data.Weapon weaponRecord)
+                    _playerInventory.Slots[i] = new WeaponSlot(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), weaponRecord.Count, weaponRecord.Endurance);
+                else
+                    _playerInventory.Slots[i] = new(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), data.ItemRecords[i].Count);
             }
+
+            for (int i = 10; i < 15; i++)
+                if (data.ItemRecords[i].ID > 0)
+                    _playerArmor.SetArmor(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID) as Info.Armor);
 
             _playerInventory.Inizilize();
         }

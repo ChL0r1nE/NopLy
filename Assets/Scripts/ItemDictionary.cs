@@ -4,7 +4,7 @@ public class ItemDictionary : MonoBehaviour
 {
     public static ItemDictionary Instance;
 
-    public Info.Item[] Items;
+    [SerializeField] private Info.Item[] _items;
 
     private void OnEnable()
     {
@@ -16,5 +16,14 @@ public class ItemDictionary : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         Instance = this;
+    }
+
+    public Info.Item GetInfo(int id)
+    {
+        foreach (Info.Item item in _items)
+            if (item.ID == id)
+                return item;
+
+        return null;
     }
 }

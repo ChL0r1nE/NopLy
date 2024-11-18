@@ -27,25 +27,15 @@ namespace Map
             if (!_isFile) return;
 
             _file = File.Open($"{Application.persistentDataPath}/Location{_mapID}.dat", FileMode.Open);
-            _state = (Data.LocationState)_formatter.Deserialize(_file);
+            _state = _formatter.Deserialize(_file) as Data.LocationState;
             _file.Close();
 
             if (!_state.IsClean() || _state.IsWork) return;
 
             _repairMaterials.Value.Slots = new Slot[_state.ItemRecords.Length];
 
-            foreach (Info.Item item in ItemDictionary.Instance.Items)
-            {
-                for (int i = 0; i < _state.ItemRecords.Length; i++)
-                {
-                    if (_state.ItemRecords[i] == null || item.ID != _state.ItemRecords[i].ID) continue;
-
-                    if (_state.ItemRecords[i] is Data.Weapon weaponRecord)
-                        _repairMaterials.Value.Slots[i] = new WeaponSlot(item, weaponRecord.Count, weaponRecord.Endurance);
-                    else
-                        _repairMaterials.Value.Slots[i] = new(item, _state.ItemRecords[i].Count);
-                }
-            }
+            for (int i = 0; i < _state.ItemRecords.Length; i++)
+                _repairMaterials.Value.Slots[i] = new(ItemDictionary.Instance.GetInfo(_state.ItemRecords[i].ID), _state.ItemRecords[i].Count);
         }
 
         protected override void OnDown()

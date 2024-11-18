@@ -395,7 +395,7 @@ MonoBehaviour:
         - m_Target: {fileID: 5157519296412692087}
           m_TargetAssemblyTypeName: UI.Caravan, Assembly-CSharp
           m_MethodName: AddCaravan
-          m_Mode: 3
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -875,7 +875,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a220fab7b15ab3b429108b3c4b188a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iconPrefab: {fileID: 7371079980409420459, guid: bc3f2562cbad9f541a642a8a34f24782, type: 3}
 --- !u!222 &4752074259267388099
 CanvasRenderer:
   m_ObjectHideFlags: 0

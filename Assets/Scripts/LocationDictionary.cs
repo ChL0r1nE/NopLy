@@ -11,7 +11,7 @@ public class LocationDictionary : MonoBehaviour
         public Transform Transform;
     }
 
-    public LocationClass[] Locations;
+    [SerializeField] private LocationClass[] _locations;
 
     private void OnEnable()
     {
@@ -22,5 +22,14 @@ public class LocationDictionary : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    public Transform GetTransform(int id)
+    {
+        foreach (LocationClass location in _locations)
+            if (location.ID == id)
+                return location.Transform;
+
+        return null;
     }
 }

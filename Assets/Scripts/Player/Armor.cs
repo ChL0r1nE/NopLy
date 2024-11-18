@@ -58,31 +58,6 @@ namespace PlayerComponent
             UpdateArmor();
         }
 
-        public void SetArmor(Info.Armor[] armors)
-        {
-            foreach (Info.Armor armor in armors)
-            {
-                _partID = (int)armor.ArmorType;
-                Armors[_partID] = armor;
-
-                if (_partID > 1)
-                {
-                    _partID = 2 + (_partID - 2) * 3;
-
-                    for (int i = 0; i < 3; i++)
-                        _armorMeshes[_partID + i].mesh = armor.ArmorMeshes[i];
-
-                    if (_partID == 8)
-                        for (int i = 0; i < 3; i++)
-                            _armorMeshes[_partID + i + 3].mesh = armor.ArmorMeshes[i];
-                }
-                else
-                    _armorMeshes[_partID].mesh = armor.ArmorMeshes[0];
-            }
-
-            UpdateArmor();
-        }
-
         private void UpdateArmor()
         {
             _ammunitionUI.UpdateMenu(null);

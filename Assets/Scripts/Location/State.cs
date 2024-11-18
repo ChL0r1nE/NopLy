@@ -18,12 +18,6 @@ namespace Data
                 SlotsSerialize(slots);
         }
 
-        public LocationState(Slot[] slots, LocationState state, bool isWork) : base(slots)
-        {
-            IsAlive = state.IsAlive;
-            IsWork = isWork;
-        }
-
         public bool[] IsAlive;
         public bool IsWork;
 
@@ -58,7 +52,6 @@ namespace Location
         [SerializeField] private EnemyRecord[] _enemys;
         private bool[] _alives;
 
-        [SerializeField] private Vector3 _mapPosition;
         [SerializeField] private int _mapID;
         private BinaryFormatter _formatter = new();
         private FileStream _file;
