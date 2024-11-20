@@ -79,23 +79,31 @@ namespace UI
             Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
             _file.Close();
 
-            Slot[] slots = new Slot[state.ItemRecords.Length];
+            Data.Caravan caravan;
 
-            for (int i = 0; i < state.ItemRecords.Length; i++)
-                slots[i] = new(ItemDictionary.Instance.GetInfo(state.ItemRecords[i].ID), state.ItemRecords[i].Count);
+            if (state.IsWork)
+                caravan = new(_startID, mapID, _caravansID[_selectCaravanID]);
+            else
+            {
+                Slot[] slots = new Slot[state.ItemRecords.Length];
 
-            if (!LocationDictionary.Instance.GetTransform(_startID).GetComponent<Map.LocationCity>().DeleteSlots(slots)) return;
+                for (int i = 0; i < state.ItemRecords.Length; i++)
+                    slots[i] = new(ItemDictionary.Instance.GetInfo(state.ItemRecords[i].ID), state.ItemRecords[i].Count);
 
-            Data.Caravan caravan = new(slots, _startID, mapID, _caravansID[_selectCaravanID], true);
+                if (!LocationDictionary.Instance.GetTransform(_startID).GetComponent<Map.Storage>().DeleteSlots(slots)) return;
+
+                caravan = new(_startID, mapID, _caravansID[_selectCaravanID], true);
+
+                _file = File.Create($"{Application.persistentDataPath}/Caravan{_caravansID[_selectCaravanID]}.dat");
+                _formatter.Serialize(_file, caravan);
+                _file.Close();
+
+                foreach (int targetID in _targetsID)
+                    LocationDictionary.Instance.GetTransform(targetID).Translate(Vector3.down);
+            }
+
+            Debug.Log(caravan.TargetID);
             _caravanSpawn.Spawn(caravan);
-
-            _file = File.Create($"{Application.persistentDataPath}/Caravan{_caravansID[_selectCaravanID]}.dat");
-            _formatter.Serialize(_file, caravan);
-            _file.Close();
-
-            foreach (int targetID in _targetsID)
-                LocationDictionary.Instance.GetTransform(targetID).Translate(Vector3.down);
-
             Map.AbstractLocation.IsPlayerMoveMode = true;
             _isStart = false;
         }

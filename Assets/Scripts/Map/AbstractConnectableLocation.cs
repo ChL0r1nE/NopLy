@@ -6,6 +6,8 @@ namespace Map
     {
         public List<int> TargetsID = new();
 
+        public abstract void SetCargo(int id, int count);
+
         protected abstract void SetTargetsID();
     }
 }

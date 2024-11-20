@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 33330521}
   - component: {fileID: 33330520}
   m_Layer: 0
-  m_Name: City
+  m_Name: Town
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -318,7 +318,7 @@ MonoBehaviour:
   _move: {fileID: 2112565683}
   _mapID: 4502
   _sprite: {fileID: 21300000, guid: ec25f2a47e409c941acaafded4b7277c, type: 3}
-  _name: City
+  _name: Town
   TargetsID: 
   Slots:
   - Item: {fileID: 0}
@@ -1140,6 +1140,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d0c3be991e713fd47b3c0af6617528e7, type: 2}
   - {fileID: 11400000, guid: 550a707490beb1441ab36b60441088ee, type: 2}
   - {fileID: 11400000, guid: 4160b8cba78a43b4bb7285ffa42d996c, type: 2}
+  - {fileID: 11400000, guid: c7e4c51b68effab49aed4cd64d627f4d, type: 2}
+  - {fileID: 11400000, guid: 3e0eb0c78c1f61945b803cc0fa3c1fc9, type: 2}
 --- !u!4 &524814812
 Transform:
   m_ObjectHideFlags: 0
@@ -1271,6 +1273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 572748066}
   - component: {fileID: 572748070}
+  - component: {fileID: 572748071}
   - component: {fileID: 572748069}
   - component: {fileID: 572748068}
   - component: {fileID: 572748067}
@@ -1378,6 +1381,29 @@ MonoBehaviour:
   _sprite: {fileID: 21300000, guid: 804a4dfe96b4dfe4bb4a19f734e49982, type: 3}
   _name: Mill
   _damage: 18-20
+--- !u!114 &572748071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572748065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad877e5dddef6474aa3b630cb1ec58cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapLocation: {fileID: 1706246738}
+  _mercenariesList: {fileID: 1946889871}
+  _move: {fileID: 2112565683}
+  _mapID: 4503
+  _sprite: {fileID: 21300000, guid: 15311a1585efac54c811667781af9aa6, type: 3}
+  _name: Mill
+  TargetsID: 
+  Item: {fileID: 11400000, guid: c7e4c51b68effab49aed4cd64d627f4d, type: 2}
+  ItemCount: 0
+  ProductItem: {fileID: 11400000, guid: 3e0eb0c78c1f61945b803cc0fa3c1fc9, type: 2}
+  ProductItemCount: 0
 --- !u!1 &584154232
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,16 +2237,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1339355695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89632761c2decf04e8e8a84662762bbe, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f70feef377ff1b4783bdf0968663aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
   _mercenariesList: {fileID: 1946889871}
   _move: {fileID: 2112565683}
   _mapID: 4500
-  _sprite: {fileID: 21300000, guid: d09c3a52457d2e343a0419cb826f0416, type: 3}
-  _name: RuinVillage
-  _product: Stones
+  _sprite: {fileID: 21300000, guid: 9191b047dfba33244b44e87e25e4854e, type: 3}
+  _name: Ruins
+  _damage: 5-10
 --- !u!1 &1362388902
 GameObject:
   m_ObjectHideFlags: 0
@@ -2310,7 +2336,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1379729588}
-  - component: {fileID: 1379729591}
+  - component: {fileID: 1379729590}
   - component: {fileID: 1379729587}
   - component: {fileID: 1379729586}
   - component: {fileID: 1379729589}
@@ -2399,7 +2425,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1379729591
+--- !u!114 &1379729590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2408,7 +2434,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1379729585}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89632761c2decf04e8e8a84662762bbe, type: 3}
+  m_Script: {fileID: 11500000, guid: ad877e5dddef6474aa3b630cb1ec58cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mapLocation: {fileID: 1706246738}
@@ -2417,7 +2443,11 @@ MonoBehaviour:
   _mapID: 4501
   _sprite: {fileID: 21300000, guid: 3c6d438be3752c54ab5252d9676ffdf0, type: 3}
   _name: Village
-  _product: Patisson
+  TargetsID: 
+  Item: {fileID: 0}
+  ItemCount: 0
+  ProductItem: {fileID: 11400000, guid: c7e4c51b68effab49aed4cd64d627f4d, type: 2}
+  ProductItemCount: 0
 --- !u!1 &1435664415
 GameObject:
   m_ObjectHideFlags: 0

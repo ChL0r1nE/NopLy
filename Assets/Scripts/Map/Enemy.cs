@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Map
 {
-    public class LocationEnemy : AbstractLocation
+    public class Enemy : AbstractLocation
     {
         private class RepairMaterialsClass
         {
@@ -30,7 +30,15 @@ namespace Map
             _state = _formatter.Deserialize(_file) as Data.LocationState;
             _file.Close();
 
-            if (!_state.IsClean() || _state.IsWork) return;
+            if (_state.IsWork)
+            {
+                Destroy(this);
+                return;
+            }
+            else if (TryGetComponent(out Production production))
+                Destroy(production);
+
+            if (!_state.IsClean()) return;
 
             _repairMaterials.Value.Slots = new Slot[_state.ItemRecords.Length];
 
@@ -44,10 +52,8 @@ namespace Map
 
             if (!_isFile || !_state.IsClean())
                 _mapLocation.SetEnemyMenu(_damage);
-            else if (!_state.IsWork)
-                _mapLocation.SetCityMenu(_repairMaterials.Value.Slots);
             else
-                _mapLocation.SetProductMenu("Prod");
+                _mapLocation.SetCityMenu(_repairMaterials.Value.Slots);
         }
     }
 }

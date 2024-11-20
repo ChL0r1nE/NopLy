@@ -53,7 +53,7 @@ public class SlotsSerialize
         if (!File.Exists($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat")) return;
 
         _file = File.Open($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat", FileMode.Open);
-        Data.Slots data = (Data.Slots)_formatter.Deserialize(_file);
+        Data.Slots data = _formatter.Deserialize(_file) as Data.Slots;
         _file.Close();
 
         for (int i = 0; i < slots.Length; i++)
@@ -67,10 +67,40 @@ public class SlotsSerialize
         }
     }
 
+    public void DeserializeData(Slot[] slots, Data.Item[] itemRecords)
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (itemRecords[i] == null) continue;
+
+            if (itemRecords[i] is Data.Weapon weaponRecord)
+                slots[i] = new WeaponSlot(ItemDictionary.Instance.GetInfo(itemRecords[i].ID), weaponRecord.Count, weaponRecord.Endurance);
+            else
+                slots[i] = new(ItemDictionary.Instance.GetInfo(itemRecords[i].ID), itemRecords[i].Count);
+        }
+    }
+
     public void SerializeData(Slot[] slots, string name)
     {
         _file = File.Create($"{UnityEngine.Application.persistentDataPath}/{name}.dat");
         _formatter.Serialize(_file, new Data.Slots(slots));
         _file.Close();
+    }
+
+    public Data.Item[] ItemRecords(Slot[] slots)
+    {
+        Data.Item[] itemRecords = new Data.Item[slots.Length];
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (!slots[i].Item) continue;
+
+            if (slots[i] is WeaponSlot weaponSlot)
+                itemRecords[i] = new Data.Weapon { ID = weaponSlot.Item.ID, Count = weaponSlot.Count, Endurance = weaponSlot.Endurance };
+            else
+                itemRecords[i] = new Data.Item { ID = slots[i].Item.ID, Count = slots[i].Count };
+        }
+
+        return itemRecords;
     }
 }

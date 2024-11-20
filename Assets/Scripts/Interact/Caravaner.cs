@@ -7,22 +7,25 @@ using UnityEngine;
 namespace Data
 {
     [System.Serializable]
-    public record Caravan : Slots
+    public record Caravan
     {
-        public Caravan(Slot[] slots, int startID, int targetID, int id, bool isRepair = false) : base(slots)
+        public Caravan(int startID, int targetID, int id, bool isRepair = false)
         {
-            SlotsSerialize(slots);
             Progress = 0;
+            TargetID = targetID;
             StartID = startID;
             ID = id;
-            TargetID = targetID;
             IsRepair = isRepair;
+            IsForward = true;
         }
 
         public float Progress;
-        public int ID;
-        public int StartID;
+        public int ItemCount;
         public int TargetID;
+        public int StartID;
+        public int ItemID;
+        public int ID;
+        public bool IsForward;
         public bool IsRepair;
     }
 }
@@ -78,7 +81,7 @@ namespace Interact
             _file.Close();
 
             _file = File.Create($"{Application.persistentDataPath}/Caravan{id}.dat");
-            _formatter.Serialize(_file, new Data.Caravan(null, -1, -1, id));
+            _formatter.Serialize(_file, new Data.Caravan(-1, -1, id));
             _file.Close();
         }
     }

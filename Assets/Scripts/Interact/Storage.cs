@@ -2,27 +2,29 @@ using UnityEngine;
 
 namespace Interact
 {
-    [RequireComponent(typeof(Animator))]
     public class Storage : AbstractInteract
     {
+        protected virtual void OnDisableStorage() => _slotsSerialize.SerializeData(Slots, $"Storage{_saveID}");
+
+        protected virtual void StartStorage() => _slotsSerialize.DeserializeData(Slots, $"Storage{_saveID}");
+
         public void UpdateMenu() => _storageUI.UpdateMenu(Slots);
 
         public Slot[] Slots;
 
+        [SerializeField] protected int _saveID;
+
         [SerializeField] private Animator _animator;
-        [SerializeField] private string _saveID;
-        private SlotsSerialize _slotsSerialize;
+        private SlotsSerialize _slotsSerialize = new();
         private UI.Storage _storageUI;
         private bool _isOpen = false;
 
-        private void OnDisable() => _slotsSerialize.SerializeData(Slots, $"Storage{_saveID}");
+        private void OnDisable() => OnDisableStorage();
 
         private void Start()
         {
             _storageUI = FindObjectOfType<UI.Storage>();
-
-            _slotsSerialize = new SlotsSerialize();
-            _slotsSerialize.DeserializeData(Slots, $"Storage{_saveID}");
+            StartStorage();
         }
 
         private void OnTriggerExit()
