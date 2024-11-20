@@ -16,7 +16,7 @@ namespace UI
         public override void SwitchOpen(bool baseOpen)
         {
             base.SwitchOpen(baseOpen);
-            GardenStrategy.IsOpen = _isOpen;
+            GardenStrategy.SetOpen(_isOpen);
         }
     }
 }

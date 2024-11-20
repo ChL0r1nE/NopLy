@@ -1,5 +1,3 @@
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -25,23 +23,19 @@ namespace Map
     {
         public void Exit() => _isInside = false;
 
-        private readonly BinaryFormatter _formatter = new();
-
         [SerializeField] private UI.MapLocation _locationMenu;
         private Vector3 _targetPosition;
-        private FileStream _file;
         private string _targetName;
         private bool _isInside = false;
         private bool _isMoving = false;
 
+        private readonly Serialize _serialize = new();
+
         private void Awake()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/MapPosition.dat")) return;
+            if (!_serialize.ExistSave("MapPosition")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/MapPosition.dat", FileMode.Open);
-            Data.PositionOnMap positionData = (Data.PositionOnMap)_formatter.Deserialize(_file);
-            _file.Close();
-
+            Data.PositionOnMap positionData = _serialize.LoadSave<Data.PositionOnMap>("MapPosition");
             transform.position = new(positionData.X, 0, positionData.Z);
         }
 
@@ -72,10 +66,7 @@ namespace Map
 
         public void LoadLocation()
         {
-            _file = File.Create($"{Application.persistentDataPath}/MapPosition.dat");
-            _formatter.Serialize(_file, new Data.PositionOnMap(transform.position));
-            _file.Close();
-
+            _serialize.CreateSave("MapPosition", new Data.PositionOnMap(transform.position));
             SceneManager.LoadScene(_targetName);
         }
     }

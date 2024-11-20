@@ -1,7 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using UnityEngine;
 
 namespace Data
@@ -34,10 +32,10 @@ namespace Interact
 {
     public class Caravaner : AbstractInteract
     {
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private UI.Caravan _caravanUI;
         private bool _isOpen = false;
+
+        private readonly Serialize _serialize = new();
 
         private void OnTriggerExit()
         {
@@ -61,28 +59,19 @@ namespace Interact
         {
             List<int> caravansID = new();
 
-            if (File.Exists($"{Application.persistentDataPath}/CaravansID.dat"))
-            {
-                _file = File.Open($"{Application.persistentDataPath}/CaravansID.dat", FileMode.Open);
-                caravansID = (_formatter.Deserialize(_file) as Data.IDArray).IDs.ToList();
-                _file.Close();
-            }
+            if (_serialize.ExistSave("CaravansID"))
+                caravansID = _serialize.LoadSave<Data.IDArray>("CaravansID").IDs.ToList();
 
             int id;
 
             do
                 id = Random.Range(0, 100000);
-            while (File.Exists($"{Application.persistentDataPath}/Caravan{id}.dat"));
+            while (_serialize.ExistSave($"Caravan{id}"));
 
             caravansID.Add(id);
 
-            _file = File.Create($"{Application.persistentDataPath}/CaravansID.dat");
-            _formatter.Serialize(_file, new Data.IDArray { IDs = caravansID.ToArray() });
-            _file.Close();
-
-            _file = File.Create($"{Application.persistentDataPath}/Caravan{id}.dat");
-            _formatter.Serialize(_file, new Data.Caravan(-1, -1, id));
-            _file.Close();
+            _serialize.CreateSave("CaravansID", new Data.IDArray { IDs = caravansID.ToArray() });
+            _serialize.CreateSave($"Caravan{id}", new Data.Caravan(-1, -1, id));
         }
     }
 }

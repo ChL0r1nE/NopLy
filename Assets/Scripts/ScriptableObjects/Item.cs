@@ -25,16 +25,32 @@ public record Slot
 
     [SerializeField] protected int _count;
 
-    public void AddCount(int count, out int remain)
+    public void AddCount(ref int count)
     {
-        remain = _count + count > Item.MaxStack ? _count + count - Item.MaxStack : 0;
-        _count = _count + count - remain;
+        if (_count + count > Item.MaxStack)
+        {
+            count = _count + count - Item.MaxStack;
+            _count = Item.MaxStack;
+
+            return;
+        }
+
+        _count += count;
+        count = 0;
     }
 
-    public void DeleteCount(int count, out int remain)
+    public void DeleteCount(ref int count)
     {
-        remain = _count - count < 0 ? count - _count : 0;
-        Count = _count - count + remain;
+        if (_count <= count)
+        {
+            count -= _count;
+            Count = 0;
+
+            return;
+        }
+
+        _count -= count;
+        count = 0;
     }
 }
 

@@ -77,7 +77,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amount: 0
+    - _Amount: 0.426
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -85,7 +85,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.678
     - _GlossyReflections: 1
-    - _Mark: 0.05
+    - _Mark: 0.048
     - _Metallic: 0.241
     - _Mode: 0
     - _OcclusionStrength: 1

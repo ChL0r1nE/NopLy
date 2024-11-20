@@ -1,6 +1,4 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -12,26 +10,21 @@ namespace UI
         private int[] _questIDs = new int[0];
 
         [SerializeField] private RectTransform _questLabel;
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
+
+        private readonly Serialize _serialize = new();
 
         private void Start()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/QuestsID.dat")) return;
+            if (!_serialize.ExistSave("QuestsID")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/QuestsID.dat", FileMode.Open);
-            Data.IDArray activeQuestsRecord = (Data.IDArray)_formatter.Deserialize(_file);
-            _file.Close();
-
+            Data.IDArray activeQuestsRecord = _serialize.LoadSave<Data.IDArray>("QuestsID");
             _questIDs = activeQuestsRecord.IDs;
+
             Data.Quest questRecord;
 
             foreach (int id in _questIDs)
             {
-                _file = File.Open($"{Application.persistentDataPath}/Quest{id}.dat", FileMode.Open);
-                questRecord = (Data.Quest)_formatter.Deserialize(_file);
-                _file.Close();
-
+                questRecord = _serialize.LoadSave<Data.Quest>($"Quest{id}");
                 AddQuestLabel(questRecord.Name, questRecord.Task, questRecord.ID);
             }
         }

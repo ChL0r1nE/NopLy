@@ -1,7 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System;
 using UnityEngine;
 
@@ -53,26 +51,20 @@ namespace Location
         private bool[] _alives;
 
         [SerializeField] private int _mapID;
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private bool _isClean;
+
+        private readonly Serialize _serialize = new();
 
         private void OnEnable()
         {
-            if (File.Exists($"{Application.persistentDataPath}/Location{_mapID}.dat"))
+            if (_serialize.ExistSave($"Location{_mapID}"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/Location{_mapID}.dat", FileMode.Open);
-                Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
-                _file.Close();
-
+                Data.LocationState state = _serialize.LoadSave<Data.LocationState>($"Location{_mapID}");
                 _isClean = state.IsClean();
                 _alives = state.IsAlive;
 
                 if (_isClean)
-                {
                     Destroy(this);
-                    return;
-                }
 
                 return;
             }
@@ -94,15 +86,11 @@ namespace Location
         {
             if (_isClean) return;
 
-            _file = File.Create($"{Application.persistentDataPath}/Location{_mapID}.dat");
-            _formatter.Serialize(_file, new Data.LocationState(_alives, _repairMaterials));
-            _file.Close();
+            _serialize.CreateSave($"Location{_mapID}", new Data.LocationState(_alives, _repairMaterials));
 
-            if (File.Exists($"{Application.persistentDataPath}/LocationsID.dat"))
+            if (_serialize.ExistSave("LocationsID"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/LocationsID.dat", FileMode.Open);
-                _ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs.ToList();
-                _file.Close();
+                _ids = _serialize.LoadSave<Data.IDArray>("LocationsID").IDs.ToList();
 
                 if (_ids.IndexOf(_mapID) == -1)
                     _ids.Add(_mapID);
@@ -110,9 +98,7 @@ namespace Location
             else
                 _ids.Add(_mapID);
 
-            _file = File.Create($"{Application.persistentDataPath}/LocationsID.dat");
-            _formatter.Serialize(_file, new Data.IDArray { IDs = _ids.ToArray() });
-            _file.Close();
+            _serialize.CreateSave("LocationsID", new Data.IDArray { IDs = _ids.ToArray() });
         }
     }
 }

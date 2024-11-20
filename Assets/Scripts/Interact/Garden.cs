@@ -4,41 +4,36 @@ namespace Interact
 {
     public class Garden : AbstractInteract
     {
-        public void UpdateNullMeshes()
-        {
-            for (int i = 0; i < 4; i++)
-                if (!Slots[i].Item)
-                    _plantMeshes[i].mesh = null;
-        }
-
         public void UpdateMenu() => _inventoryGarden.UpdateMenu(Slots);
 
-        public Slot[] Slots;
+        public void SetOpen(bool open) => _isOpen = open;
 
-        public bool IsOpen = false;
+        public Slot[] Slots;
 
         [SerializeField] private MeshFilter[] _plantMeshes = new MeshFilter[4];
         private int[] _plantProgress = new int[4];
 
         [SerializeField] private string _saveID;
-        private SlotsSerialize _slotsSerialize;
         private UI.Garden _inventoryGarden;
         private int _plantNumber;
+        private bool _isOpen;
+
+        private readonly Serialize _serialize = new();
 
         private void OnEnable() => TickMachine.OnTick += OnTick;
 
         private void OnDisable()
         {
             TickMachine.OnTick -= OnTick;
-            _slotsSerialize.SerializeData(Slots, $"Garden{_saveID}");
+            _serialize.CreateSave($"Garden{_saveID}", new Data.Slots(Slots));
         }
 
         private void Start()
         {
             _inventoryGarden = FindObjectOfType<UI.Garden>();
 
-            _slotsSerialize = new SlotsSerialize();
-            _slotsSerialize.DeserializeData(Slots, $"Garden{_saveID}");
+            if (_serialize.ExistSave($"Garden{_saveID}"))
+                _serialize.Records2Slots(_serialize.LoadSave<Data.Slots>($"Garden{_saveID}").ItemRecords, Slots);
 
             for (int i = 0; i < 4; i++)
                 _plantMeshes[i].mesh = Slots[i].Item ? (Slots[_plantNumber].Item as Info.Seed).PlantMeshes[0] : null;
@@ -46,7 +41,7 @@ namespace Interact
 
         private void OnTriggerExit()
         {
-            if (IsOpen)
+            if (_isOpen)
                 _inventoryGarden.SwitchOpen(false);
         }
 
@@ -55,8 +50,15 @@ namespace Interact
             _inventoryGarden.GardenStrategy = this;
             _inventoryGarden.SwitchOpen(true);
 
-            if (IsOpen)
+            if (_isOpen)
                 _inventoryGarden.UpdateMenu(Slots);
+        }
+
+        public void UpdateNullMeshes()
+        {
+            for (int i = 0; i < 4; i++)
+                if (!Slots[i].Item)
+                    _plantMeshes[i].mesh = null;
         }
 
         public void AddSeed(ref Slot slot)
@@ -96,7 +98,7 @@ namespace Interact
                 Slots[i].Item = seed.Harvest;
                 Slots[i].Count = Random.Range(2, 5);
 
-                if (IsOpen)
+                if (_isOpen)
                     _inventoryGarden.UpdateMenu(Slots);
             }
         }

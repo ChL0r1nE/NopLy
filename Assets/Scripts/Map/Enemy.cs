@@ -1,7 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System;
 using UnityEngine;
+using System;
 
 namespace Map
 {
@@ -15,20 +13,24 @@ namespace Map
         private Lazy<RepairMaterialsClass> _repairMaterials = new();
 
         [SerializeField] private string _damage;
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private Data.LocationState _state;
         private bool _isFile;
 
-        private void Start()
+        private readonly Serialize _serialize = new();
+
+        private void OnEnable()
         {
-            _isFile = File.Exists($"{Application.persistentDataPath}/Location{_mapID}.dat");
+            _isFile = _serialize.ExistSave($"Location{_mapID}");
 
-            if (!_isFile) return;
+            if (!_isFile)
+            {
+                if (TryGetComponent(out Production production))
+                    Destroy(production);
 
-            _file = File.Open($"{Application.persistentDataPath}/Location{_mapID}.dat", FileMode.Open);
-            _state = _formatter.Deserialize(_file) as Data.LocationState;
-            _file.Close();
+                return;
+            }
+
+            _state = _serialize.LoadSave<Data.LocationState>($"Location{_mapID}");
 
             if (_state.IsWork)
             {

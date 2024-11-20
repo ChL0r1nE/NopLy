@@ -1,5 +1,3 @@
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 using UnityEngine;
 
 namespace Map
@@ -7,20 +5,15 @@ namespace Map
     public class Caravan : MonoBehaviour
     {
         [SerializeField] private LineRenderer _lineRenderer;
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private Data.Caravan _caravanData;
         private Vector3 _startPosition;
         private Vector3 _deltaPosition;
         private float _progressWay;
         private float _lengthWay;
 
-        private void OnDisable()
-        {
-            _file = File.Create($"{Application.persistentDataPath}/Caravan{_caravanData.ID}.dat");
-            _formatter.Serialize(_file, _caravanData);
-            _file.Close();
-        }
+        private readonly Serialize _serialize = new();
+
+        private void OnDisable() => _serialize.CreateSave($"Caravan{_caravanData.ID}", _caravanData);
 
         private void FixedUpdate()
         {
@@ -32,20 +25,15 @@ namespace Map
             {
                 if (_caravanData.IsRepair)
                 {
-                    _file = File.Open($"{Application.persistentDataPath}/Location{_caravanData.TargetID}.dat", FileMode.Open);
-                    Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
-                    _file.Close();
-
-                    _file = File.Create($"{Application.persistentDataPath}/Location{_caravanData.TargetID}.dat");
-                    _formatter.Serialize(_file, state with { IsWork = true });
-                    _file.Close();
+                    Data.LocationState state = _serialize.LoadSave<Data.LocationState>($"Location{_caravanData.TargetID}");
+                    _serialize.CreateSave($"Location{_caravanData.TargetID}", state with { IsWork = true });
 
                     _caravanData.TargetID = -1;
                     Destroy(gameObject);
                     return;
                 }
 
-                if (_caravanData.IsForward)
+                if (_caravanData.IsForward && _caravanData.ItemCount != 0)
                     LocationDictionary.Instance.GetTransform(_caravanData.TargetID).GetComponent<AbstractConnectableLocation>().SetCargo(_caravanData.ItemID, _caravanData.ItemCount);
                 else
                     _caravanData.ItemCount = LocationDictionary.Instance.GetTransform(_caravanData.StartID).GetComponent<Production>().GetCargo(100);
@@ -61,7 +49,6 @@ namespace Map
 
         public void SetData(Data.Caravan caravan)
         {
-            Debug.Log(caravan.TargetID);
             _caravanData = caravan;
 
             if (!caravan.IsRepair && caravan.Progress == 0)

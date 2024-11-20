@@ -1,7 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using UnityEngine;
 
 namespace Data
@@ -50,28 +48,23 @@ namespace Interact
 
         public QuestClass Quest;
 
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private UI.Talk _talkUI;
         private UI.QuestList _questList;
         private bool _isGive = false;
         private bool _isComplete = false;
 
+        private readonly Serialize _serialize = new();
+
         private void OnDisable()
         {
             if (!_isGive && !_isComplete) return;
 
-            _file = File.Create($"{Application.persistentDataPath}/Quest{Quest.ID}.dat");
-            _formatter.Serialize(_file, new Data.Quest(Quest, _isComplete));
-            _file.Close();
+            _serialize.CreateSave($"Quest{Quest.ID}", new Data.Quest(Quest, _isComplete));
 
-            if (File.Exists($"{Application.persistentDataPath}/QuestsID.dat"))
+            if (_serialize.ExistSave("QuestsID"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/QuestsID.dat", FileMode.Open);
-                Data.IDArray data = (Data.IDArray)_formatter.Deserialize(_file);
-                _file.Close();
-
-                ids = data.IDs.ToList();
+                Data.IDArray idArray = _serialize.LoadSave<Data.IDArray>("QuestsID");
+                ids = idArray.IDs.ToList();
 
                 if (_isComplete)
                     ids.Remove(Quest.ID);
@@ -81,9 +74,7 @@ namespace Interact
             else if (!_isComplete)
                 ids.Add(Quest.ID);
 
-            _file = File.Create($"{Application.persistentDataPath}/QuestsID.dat");
-            _formatter.Serialize(_file, new Data.IDArray { IDs = ids.ToArray() });
-            _file.Close();
+            _serialize.CreateSave("QuestsID", new Data.IDArray { IDs = ids.ToArray() });
         }
 
         private void OnTriggerExit(Collider col)
@@ -94,14 +85,10 @@ namespace Interact
 
         private void Start()
         {
-            if (File.Exists($"{Application.persistentDataPath}/Quest{Quest.ID}.dat"))
+            if (_serialize.ExistSave($"Quest{Quest.ID}"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/Quest{Quest.ID}.dat", FileMode.Open);
-                Data.Quest data = (Data.Quest)_formatter.Deserialize(_file);
-                _file.Close();
-
+                _isComplete = _serialize.LoadSave<Data.Quest>($"Quest{Quest.ID}").IsComplete; //Destroy if Complete
                 _isGive = true;
-                _isComplete = data.IsComplete;
             }
 
             _questList = FindObjectOfType<UI.QuestList>();

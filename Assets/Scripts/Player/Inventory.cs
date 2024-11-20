@@ -29,7 +29,7 @@ namespace PlayerComponent
             {
                 if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                foreachSlot.AddCount(slot.Count, out remain);
+                foreachSlot.AddCount(ref remain);
                 slot.Count = remain;
 
                 if (remain != 0) continue;
@@ -106,7 +106,7 @@ namespace PlayerComponent
                 {
                     if (slot.Item != recipeSlot.Item) continue;
 
-                    slot.DeleteCount(_slotCount, out _slotCount);
+                    slot.DeleteCount(ref _slotCount);
 
                     if (_slotCount == 0) break;
                 }

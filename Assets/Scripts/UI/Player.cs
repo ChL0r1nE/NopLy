@@ -1,6 +1,5 @@
 using UnityEngine.UI;
 using UnityEngine;
-using System.IO;
 
 namespace UI
 {
@@ -19,7 +18,7 @@ namespace UI
 
         private void OnEnable()
         {
-            bool _isLinks = PlayerPrefs.HasKey($"QuickPanel0") && File.Exists($"{Application.persistentDataPath}/Player.dat");
+            bool _isLinks = PlayerPrefs.HasKey($"QuickPanel0") && new Serialize().ExistSave("Player");
 
             for (int i = 0; i < 10; i++)
                 _quickPanelLinks[i] = _isLinks ? PlayerPrefs.GetInt($"QuickPanel{i}") : -1;

@@ -42,32 +42,34 @@ namespace Data
     }
 }
 
-public class SlotsSerialize
+public class Serialize
 {
     private static readonly BinaryFormatter _formatter = new();
 
     private FileStream _file;
 
-    public void DeserializeData(Slot[] slots, string fileName)
+    public bool ExistSave(string fileName) => File.Exists($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat");
+
+    public T LoadSave<T>(string fileName)
     {
-        if (!File.Exists($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat")) return;
+        if (!File.Exists($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat"))
+            return default;
 
         _file = File.Open($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat", FileMode.Open);
-        Data.Slots data = _formatter.Deserialize(_file) as Data.Slots;
+        T data = (T)_formatter.Deserialize(_file);
         _file.Close();
 
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (data.ItemRecords[i] == null) continue;
-
-            if (data.ItemRecords[i] is Data.Weapon weaponRecord)
-                slots[i] = new WeaponSlot(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), weaponRecord.Count, weaponRecord.Endurance);
-            else
-                slots[i] = new(ItemDictionary.Instance.GetInfo(data.ItemRecords[i].ID), data.ItemRecords[i].Count);
-        }
+        return data;
     }
 
-    public void DeserializeData(Slot[] slots, Data.Item[] itemRecords)
+    public void CreateSave(string fileName, object data)
+    {
+        _file = File.Create($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat");
+        _formatter.Serialize(_file, data);
+        _file.Close();
+    }
+
+    public void Records2Slots(Data.Item[] itemRecords, Slot[] slots)
     {
         for (int i = 0; i < slots.Length; i++)
         {
@@ -80,14 +82,7 @@ public class SlotsSerialize
         }
     }
 
-    public void SerializeData(Slot[] slots, string name)
-    {
-        _file = File.Create($"{UnityEngine.Application.persistentDataPath}/{name}.dat");
-        _formatter.Serialize(_file, new Data.Slots(slots));
-        _file.Close();
-    }
-
-    public Data.Item[] ItemRecords(Slot[] slots)
+    public Data.Item[] Slots2Record(Slot[] slots)
     {
         Data.Item[] itemRecords = new Data.Item[slots.Length];
 

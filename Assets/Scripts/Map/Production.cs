@@ -1,7 +1,3 @@
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using UnityEngine;
-
 namespace Map
 {
     public class Production : AbstractConnectableLocation
@@ -13,24 +9,15 @@ namespace Map
         public Info.Item ProductItem;
         public int ProductItemCount;
 
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
-        private int _frameCount = 0; //ToTickMachine
+        private int _productCount;
+
+        private readonly Serialize _serialize = new();
+
+        private void OnEnable() => TickMachine.OnTick += OnTick;
+
+        private void OnDisable() => TickMachine.OnTick -= OnTick;
 
         private void Start() => SetTargetsID();
-
-        private void FixedUpdate()
-        {
-            if (_frameCount++ < 250) return;
-
-            if (Item == null)
-                ProductItemCount += 10;
-            else
-            {
-                ItemCount -= 10;
-                ProductItemCount += 2;
-            }
-        }
 
         protected override void OnDown()
         {
@@ -41,17 +28,15 @@ namespace Map
 
         protected override void SetTargetsID()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/LocationsID.dat")) return;
+            if (!_serialize.ExistSave("LocationsID")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/LocationsID.dat", FileMode.Open);
-            int[] ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs;
-            _file.Close();
+            int[] ids = _serialize.LoadSave<Data.IDArray>("LocationsID").IDs;
 
             foreach (int id in ids)
             {
                 if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Production production) && (production.Item.ID == ProductItem.ID))
                     TargetsID.Add(id);
-                else if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Storage storage))
+                else if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Storage _))
                     TargetsID.Add(id);
             }
         }
@@ -66,6 +51,18 @@ namespace Map
                 ProductItemCount = 0;
 
             return startCount - ProductItemCount;
+        }
+
+        private void OnTick()
+        {
+            if (Item == null)
+                ProductItemCount += 10;
+            else
+            {
+                _productCount = ItemCount > 10 ? 10 : ItemCount;
+                ItemCount -= _productCount;
+                ProductItemCount += _productCount / 2;
+            }
         }
     }
 }

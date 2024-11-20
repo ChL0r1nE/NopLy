@@ -1,42 +1,37 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace UI
 {
     public class MercenariesList : MonoBehaviour
     {
-        private List<int> _caravansID = new();
+        private List<int> _freeCaravansID = new();
         private List<int> _targetsID = new();
 
         [SerializeField] private Map.CaravanSpawn _caravanSpawn;
         [SerializeField] private Button _caravanButtonPrefab;
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
         private int _selectCaravanID;
         private int _startID;
         private bool _isStart = false;
 
+        private readonly Serialize _serialize = new();
+
         private void Start()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/CaravansID.dat")) return;
+            if (!_serialize.ExistSave("CaravansID")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/CaravansID.dat", FileMode.Open);
-            int[] ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs;
-            _file.Close();
-
+            int[] ids = _serialize.LoadSave<Data.IDArray>("CaravansID").IDs;
+            Data.Caravan caravan;
             int i = 0;
 
             foreach (int id in ids)
             {
-                _caravansID.Add(id);
-                _file = File.Open($"{Application.persistentDataPath}/Caravan{id}.dat", FileMode.Open);
-                Data.Caravan caravan = _formatter.Deserialize(_file) as Data.Caravan;
-                _file.Close();
+                caravan = _serialize.LoadSave<Data.Caravan>($"Caravan{id}");
 
-                if (caravan.TargetID == -1)
-                    Instantiate(_caravanButtonPrefab, transform).SetMercenariesList(this, i++);
+                if (caravan.TargetID != -1) continue;
+
+                _freeCaravansID.Add(id);
+                Instantiate(_caravanButtonPrefab, transform).SetMercenariesList(this, i++);
             }
         }
 
@@ -75,14 +70,11 @@ namespace UI
 
             if (_targetsID.IndexOf(mapID) == -1) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/Location{mapID}.dat", FileMode.Open);
-            Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
-            _file.Close();
-
+            Data.LocationState state = _serialize.LoadSave<Data.LocationState>($"Location{mapID}");
             Data.Caravan caravan;
 
             if (state.IsWork)
-                caravan = new(_startID, mapID, _caravansID[_selectCaravanID]);
+                caravan = new(_startID, mapID, _freeCaravansID[_selectCaravanID]);
             else
             {
                 Slot[] slots = new Slot[state.ItemRecords.Length];
@@ -92,17 +84,13 @@ namespace UI
 
                 if (!LocationDictionary.Instance.GetTransform(_startID).GetComponent<Map.Storage>().DeleteSlots(slots)) return;
 
-                caravan = new(_startID, mapID, _caravansID[_selectCaravanID], true);
-
-                _file = File.Create($"{Application.persistentDataPath}/Caravan{_caravansID[_selectCaravanID]}.dat");
-                _formatter.Serialize(_file, caravan);
-                _file.Close();
+                caravan = new(_startID, mapID, _freeCaravansID[_selectCaravanID], true);
+                _serialize.CreateSave($"Caravan{_freeCaravansID[_selectCaravanID]}", caravan);
 
                 foreach (int targetID in _targetsID)
                     LocationDictionary.Instance.GetTransform(targetID).Translate(Vector3.down);
             }
 
-            Debug.Log(caravan.TargetID);
             _caravanSpawn.Spawn(caravan);
             Map.AbstractLocation.IsPlayerMoveMode = true;
             _isStart = false;

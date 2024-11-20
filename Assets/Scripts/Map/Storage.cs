@@ -1,8 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using UnityEngine;
 
 namespace Map
 {
@@ -12,23 +9,18 @@ namespace Map
 
         public Slot[] Slots = new Slot[10];
 
-        private BinaryFormatter _formatter = new();
-        private FileStream _file;
-        private SlotsSerialize _slotsSerialize = new();
         private Data.LocationState _locationState;
         private int _slotCount;
 
+        private readonly Serialize _serialize = new();
+
         private void OnDisable()
         {
-            _file = File.Create($"{Application.persistentDataPath}/Location{_mapID}.dat");
-            _formatter.Serialize(_file, _locationState with { ItemRecords = _slotsSerialize.ItemRecords(Slots), IsWork = true });
-            _file.Close();
+            _serialize.CreateSave($"Location{_mapID}", _locationState with { ItemRecords = _serialize.Slots2Record(Slots), IsWork = true });
 
-            if (File.Exists($"{Application.persistentDataPath}/LocationsID.dat"))
+            if (_serialize.ExistSave("LocationsID"))
             {
-                _file = File.Open($"{Application.persistentDataPath}/LocationsID.dat", FileMode.Open);
-                _ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs.ToList();
-                _file.Close();
+                _ids = _serialize.LoadSave<Data.IDArray>("LocationsID").IDs.ToList();
 
                 if (_ids.IndexOf(_mapID) == -1)
                     _ids.Add(_mapID);
@@ -36,14 +28,12 @@ namespace Map
             else
                 _ids.Add(_mapID);
 
-            _file = File.Create($"{Application.persistentDataPath}/LocationsID.dat");
-            _formatter.Serialize(_file, new Data.IDArray { IDs = _ids.ToArray() });
-            _file.Close();
+            _serialize.CreateSave("LocationsID", new Data.IDArray { IDs = _ids.ToArray() });
         }
 
         private void Start()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/Location{_mapID}.dat"))
+            if (!_serialize.ExistSave($"Location{_mapID}"))
             {
                 bool[] b = { false };
                 _locationState = new(b, null)
@@ -54,11 +44,8 @@ namespace Map
                 return;
             }
 
-            _file = File.Open($"{Application.persistentDataPath}/Location{_mapID}.dat", FileMode.Open);
-            _locationState = _formatter.Deserialize(_file) as Data.LocationState;
-            _file.Close();
-
-            _slotsSerialize.DeserializeData(Slots, _locationState.ItemRecords);
+            _locationState = _serialize.LoadSave<Data.LocationState>($"Location{_mapID}");
+            _serialize.Records2Slots(_locationState.ItemRecords, Slots);
             SetTargetsID();
         }
 
@@ -66,13 +53,12 @@ namespace Map
         {
             Slot slot = new(ItemDictionary.Instance.GetInfo(id), count);
             int remain = slot.Count;
-            Debug.Log(slot);
 
             foreach (Slot foreachSlot in Slots)
             {
                 if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                foreachSlot.AddCount(slot.Count, out remain);
+                foreachSlot.AddCount(ref remain);
                 slot.Count = remain;
 
                 if (remain != 0) continue;
@@ -104,19 +90,15 @@ namespace Map
 
         protected override void SetTargetsID()
         {
-            if (!File.Exists($"{Application.persistentDataPath}/LocationsID.dat")) return;
+            if (!_serialize.ExistSave("LocationsID")) return;
 
-            _file = File.Open($"{Application.persistentDataPath}/LocationsID.dat", FileMode.Open);
-            int[] ids = (_formatter.Deserialize(_file) as Data.IDArray).IDs;
-            _file.Close();
+            int[] ids = _serialize.LoadSave<Data.IDArray>("LocationsID").IDs;
 
             foreach (int id in ids)
             {
                 if (id == _mapID) continue;
 
-                _file = File.Open($"{Application.persistentDataPath}/Location{id}.dat", FileMode.Open);
-                Data.LocationState state = _formatter.Deserialize(_file) as Data.LocationState;
-                _file.Close();
+                Data.LocationState state = _serialize.LoadSave<Data.LocationState>($"Location{id}");
 
                 if (state.IsClean() && !state.IsWork)
                 {
@@ -170,7 +152,7 @@ namespace Map
                 {
                     if (slot.Item != recipeSlot.Item) continue;
 
-                    slot.DeleteCount(_slotCount, out _slotCount);
+                    slot.DeleteCount(ref _slotCount);
 
                     if (_slotCount == 0) break;
                 }

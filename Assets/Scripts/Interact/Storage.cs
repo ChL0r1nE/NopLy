@@ -4,9 +4,13 @@ namespace Interact
 {
     public class Storage : AbstractInteract
     {
-        protected virtual void OnDisableStorage() => _slotsSerialize.SerializeData(Slots, $"Storage{_saveID}");
+        protected virtual void OnDisableStorage() => _serialize.CreateSave($"Storage{_saveID}", new Data.Slots(Slots));
 
-        protected virtual void StartStorage() => _slotsSerialize.DeserializeData(Slots, $"Storage{_saveID}");
+        protected virtual void StartStorage()
+        {
+            if (_serialize.ExistSave($"Storage{_saveID}"))
+                _serialize.Records2Slots(_serialize.LoadSave<Data.Slots>($"Storage{_saveID}").ItemRecords, Slots);
+        }
 
         public void UpdateMenu() => _storageUI.UpdateMenu(Slots);
 
@@ -15,9 +19,10 @@ namespace Interact
         [SerializeField] protected int _saveID;
 
         [SerializeField] private Animator _animator;
-        private SlotsSerialize _slotsSerialize = new();
         private UI.Storage _storageUI;
         private bool _isOpen = false;
+
+        private readonly Serialize _serialize = new();
 
         private void OnDisable() => OnDisableStorage();
 
@@ -56,7 +61,7 @@ namespace Interact
             {
                 if (!foreachSlot.Item || foreachSlot.Item.ID != slot.Item.ID) continue;
 
-                foreachSlot.AddCount(slot.Count, out remain);
+                foreachSlot.AddCount(ref remain);
                 slot.Count = remain;
 
                 if (remain != 0) continue;
