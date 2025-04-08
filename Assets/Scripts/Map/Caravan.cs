@@ -15,59 +15,43 @@ namespace Map
 
         private void OnDisable() => _serialize.CreateSave($"Caravan{_caravanData.ID}", _caravanData);
 
+        private void Update() => transform.position = _startPosition + _deltaPosition * _caravanData.Progress;
+
         private void FixedUpdate()
         {
-            _progressWay += .01f;
+            _progressWay += _caravanData.ToBack ? -.01f : .01f;
             _caravanData.Progress = _progressWay / _lengthWay;
-            transform.position = _startPosition + _deltaPosition * _caravanData.Progress;
 
-            if (_caravanData.Progress >= 1f)
+            if (_caravanData.Progress > 0f && _caravanData.Progress < 1f) return;
+
+            _caravanData.ToBack = !_caravanData.ToBack;
+
+            if(_caravanData.MoveType == Data.MoveType.Replace)
             {
-                if (_caravanData.IsRepair)
-                {
-                    Data.LocationState state = _serialize.LoadSave<Data.LocationState>($"Location{_caravanData.TargetID}");
-                    _serialize.CreateSave($"Location{_caravanData.TargetID}", state with { IsWork = true });
-
-                    _caravanData.TargetID = -1;
-                    Destroy(gameObject);
-                    return;
-                }
-
-                if (_caravanData.IsForward && _caravanData.ItemCount != 0)
-                    LocationDictionary.Instance.GetTransform(_caravanData.TargetID).GetComponent<AbstractConnectableLocation>().SetCargo(_caravanData.ItemID, _caravanData.ItemCount);
-                else
-                    _caravanData.ItemCount = LocationDictionary.Instance.GetTransform(_caravanData.StartID).GetComponent<Production>().GetCargo(100);
-
-                _startPosition += _deltaPosition;
-                _deltaPosition *= -1;
-
-                _progressWay = 0;
-                _caravanData.Progress = 0f;
-                _caravanData.IsForward = !_caravanData.IsForward;
+                _caravanData.StartID = _caravanData.TargetID;
+                _caravanData.TargetID = -1;
+                Destroy(gameObject);
+                return;
             }
+
+            if (_caravanData.ToBack)
+                _caravanData.ItemCount = LocationDictionary.Instance.GetTransform(_caravanData.TargetID).GetComponent<Production>().GetCargo(ref _caravanData.ItemID, 100);
+            else
+                LocationDictionary.Instance.GetTransform(_caravanData.StartID).GetComponent<AbstractConnectableLocation>().UnitInteract(_caravanData.ItemID, _caravanData.ItemCount);
         }
 
         public void SetData(Data.Caravan caravan)
         {
             _caravanData = caravan;
 
-            if (!caravan.IsRepair && caravan.Progress == 0)
-            {
-                _caravanData.ItemID = LocationDictionary.Instance.GetTransform(caravan.StartID).GetComponent<Production>().ProductItem.ID;
-                _caravanData.ItemCount = LocationDictionary.Instance.GetTransform(caravan.StartID).GetComponent<Production>().GetCargo(100); //100 is capacity
-            }
+            _startPosition = LocationDictionary.Instance.GetTransform(_caravanData.StartID).position;
+            _lineRenderer.SetPosition(0, _startPosition);
 
-            Vector3 position = LocationDictionary.Instance.GetTransform(_caravanData.StartID).position;
-            _lineRenderer.SetPosition(0, position);
-            _startPosition = position;
-
-            position = LocationDictionary.Instance.GetTransform(_caravanData.TargetID).position;
-            _lineRenderer.SetPosition(1, position);
-            _deltaPosition = position;
-
+            _deltaPosition = LocationDictionary.Instance.GetTransform(_caravanData.TargetID).position;
+            _lineRenderer.SetPosition(1, _deltaPosition);
             _deltaPosition -= _startPosition;
 
-            if (!caravan.IsForward)
+            if (_caravanData.ToBack)
             {
                 _startPosition += _deltaPosition;
                 _deltaPosition *= -1;

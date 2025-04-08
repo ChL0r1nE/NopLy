@@ -1,18 +1,24 @@
+using UnityEngine.UI;
 using UnityEngine;
 
 namespace UI
 {
-	public class Button : MonoBehaviour
-	{
-		public void ButtonDown() => _mercenariesist.CaravanButtonDown(_id);
+    public class Button : MonoBehaviour
+    {
+        public void ButtonDown() => _mercenariesList.CaravanButtonDown(_id);
 
-		private MercenariesList _mercenariesist;
-		private int _id;
+        [SerializeField] private Text _text;
 
-		public void SetMercenariesList(MercenariesList mercenariesList, int id)
-		{
-			_mercenariesist = mercenariesList;
-			_id = id;
-		}
-	}
+        private MercenariesList _mercenariesList;
+        private int _id;
+
+        public void SetButtonInfo(MercenariesList mercenariesList, int id, int startID, UnitType type) //typeForTest?
+        {
+            if (type == UnitType.RepairSquad) GetComponent<Image>().color = Color.green; //Test
+
+            _mercenariesList = mercenariesList;
+            _text.text = $"#{id}; Start {startID}";
+            _id = id;
+        }
+    }
 }

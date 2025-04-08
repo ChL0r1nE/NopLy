@@ -73,7 +73,7 @@ public class Serialize
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            if (itemRecords[i] == null) continue;
+            if (itemRecords == null || itemRecords[i] == null) continue;
 
             if (itemRecords[i] is Data.Weapon weaponRecord)
                 slots[i] = new WeaponSlot(ItemDictionary.Instance.GetInfo(itemRecords[i].ID), weaponRecord.Count, weaponRecord.Endurance);

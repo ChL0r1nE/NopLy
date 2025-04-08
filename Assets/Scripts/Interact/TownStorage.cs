@@ -7,26 +7,19 @@ namespace Interact
     {
         private List<int> _ids = new();
 
-        private Data.LocationState _locationState;
+        private Data.Slots _locationState;
 
         private readonly Serialize _serialize = new();
 
         protected override void StartStorage()
         {
-            if (!_serialize.ExistSave($"Location{_saveID}"))
-            {
-                bool[] b = { false };
-                _locationState = new(b, Slots);
-                return;
-            }
-
-            _locationState = _serialize.LoadSave<Data.LocationState>($"Location{_saveID}");
+            _locationState = _serialize.LoadSave<Data.Slots>($"Location{_saveID}");
             _serialize.Records2Slots(_locationState.ItemRecords, Slots);
         }
 
         protected override void OnDisableStorage()
         {
-            _serialize.CreateSave($"Location{_saveID}", _locationState with { ItemRecords = _serialize.Slots2Record(Slots), IsWork = true });
+            _serialize.CreateSave($"Location{_saveID}", new Data.Slots(Slots));
 
             if (_serialize.ExistSave("LocationsID"))
             {

@@ -19,9 +19,9 @@ namespace Map
             if (IsPlayerMoveMode)
                 OnDown();
             else
-                _mercenariesList.SetLocationID(transform, _mapID);
+                _mercenariesList.SetLocationID(_mapID);
         }
 
-        protected virtual void OnDown() => _move.SetTargetPosition(transform.position, _sprite, _name);
+        protected virtual void OnDown() => _move.SetTargetPosition(transform.position, _sprite, _name); //ReWork from sprite, name
     }
 }

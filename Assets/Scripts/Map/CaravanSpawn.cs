@@ -4,9 +4,12 @@ namespace Map
 {
     public class CaravanSpawn : MonoBehaviour
     {
-        public void Spawn(Data.Caravan caravan) => Instantiate(_caravanPrefab).SetData(caravan);
+        public void SpawnCaravan(Data.Caravan caravan) => Instantiate(_caravanPrefab).SetData(caravan);
+
+        public void SpawnRepairSquad(Data.RepairSquad repairSquad) => Instantiate(_repairSquadPrefab).SetData(repairSquad);
 
         [SerializeField] private Caravan _caravanPrefab;
+        [SerializeField] private RepairSquad _repairSquadPrefab;
 
         private readonly Serialize _serialize = new();
 

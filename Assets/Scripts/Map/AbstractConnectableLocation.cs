@@ -4,10 +4,10 @@ namespace Map
 {
     public abstract class AbstractConnectableLocation : AbstractLocation
     {
-        public List<int> TargetsID = new();
+        public List<int> CaravanTargetsID = new();
 
-        public abstract void SetCargo(int id, int count);
+        public abstract void UnitInteract(int id, int count);
 
-        protected abstract void SetTargetsID();
+        protected abstract void UpdateTargetsID();
     }
 }

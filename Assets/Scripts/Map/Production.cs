@@ -1,13 +1,41 @@
+using System;
+
+namespace Data
+{
+    [Serializable]
+    public record Production
+    {
+        public Production(int baseProductCount, int resultProductCount, bool isWork)
+        {
+            BaseProductCount = baseProductCount;
+            ResultProductCount = resultProductCount;
+            IsWork = isWork;
+        }
+
+        public bool IsWork;
+        public int BaseProductCount;
+        public int ResultProductCount;
+    }
+}
+
 namespace Map
 {
     public class Production : AbstractConnectableLocation
     {
-        public override void SetCargo(int id, int count) => ItemCount += count;
+        public static Action<int> UpdateTarget;
 
-        public Info.Item Item;
-        public int ItemCount;
+        public override void UnitInteract(int id, int count) => _production.BaseProductCount += count;
+
+        public void Repair()
+        {
+            _production.IsWork = true;
+            UpdateTarget?.Invoke(_mapID);
+        }
+
+        public Info.Item BaseItem;
         public Info.Item ProductItem;
-        public int ProductItemCount;
+
+        private Data.Production _production;
 
         private int _productCount;
 
@@ -15,53 +43,67 @@ namespace Map
 
         private void OnEnable() => TickMachine.OnTick += OnTick;
 
-        private void OnDisable() => TickMachine.OnTick -= OnTick;
+        private void OnDisable()
+        {
+            TickMachine.OnTick -= OnTick;
+            //createsave
+        }
 
-        private void Start() => SetTargetsID();
+        private void Start()
+        {
+            if (_serialize.LoadSave<object>($"Location{_mapID}") is Data.Production)
+            {
+                UpdateTargetsID();
+                _production = _serialize.LoadSave<Data.Production>($"Location{_mapID}");
+            }
+            else
+                Destroy(this);
+        }
 
         protected override void OnDown()
         {
             base.OnDown();
-            Slot[] slots = { new Slot(ProductItem, ProductItemCount) };
+            Slot[] slots = { new Slot(ProductItem, _production.ResultProductCount) };
             _mapLocation.SetCityMenu(slots);
         }
 
-        protected override void SetTargetsID()
+        protected override void UpdateTargetsID()
         {
-            if (!_serialize.ExistSave("LocationsID")) return;
-
             int[] ids = _serialize.LoadSave<Data.IDArray>("LocationsID").IDs;
 
-            foreach (int id in ids)
+            foreach (int id in ids) //rework
             {
-                if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Production production) && (production.Item.ID == ProductItem.ID))
-                    TargetsID.Add(id);
-                else if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Storage _))
-                    TargetsID.Add(id);
+                if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Production production) && production.BaseItem && production.BaseItem.ID == ProductItem.ID)
+                    CaravanTargetsID.Add(id);
+                else if (LocationDictionary.Instance.GetTransform(id).TryGetComponent(out Town _))
+                    CaravanTargetsID.Add(id);
             }
         }
 
-        public int GetCargo(int count)
+        public int GetCargo(ref int itemID, int count)
         {
-            int startCount = ProductItemCount;
+            itemID = ProductItem.ID;
+            int startCount = _production.ResultProductCount;
 
-            ProductItemCount -= count;
+            _production.ResultProductCount -= count;
 
-            if (ProductItemCount < 0)
-                ProductItemCount = 0;
+            if (_production.ResultProductCount < 0)
+                _production.ResultProductCount = 0;
 
-            return startCount - ProductItemCount;
+            return startCount - _production.ResultProductCount;
         }
 
         private void OnTick()
         {
-            if (Item == null)
-                ProductItemCount += 10;
+            if (!_production.IsWork) return;
+
+            if (BaseItem == null)
+                _production.ResultProductCount += 10;
             else
             {
-                _productCount = ItemCount > 10 ? 10 : ItemCount;
-                ItemCount -= _productCount;
-                ProductItemCount += _productCount / 2;
+                _productCount = _production.BaseProductCount > 10 ? 10 : _production.BaseProductCount;
+                _production.BaseProductCount -= _productCount;
+                _production.ResultProductCount += _productCount / 2;
             }
         }
     }

@@ -4,27 +4,50 @@ using UnityEngine;
 
 namespace Data
 {
-    [System.Serializable]
-    public record Caravan
+    public enum MoveType
     {
-        public Caravan(int startID, int targetID, int id, bool isRepair = false)
+        Main,
+        Replace
+    }
+
+    [System.Serializable]
+    public record TargetUnit
+    {
+        public int ID;
+        public float Progress;
+        public int TargetID;
+        public int StartID;
+        public MoveType MoveType;
+    }
+
+    [System.Serializable]
+    public record RepairSquad : TargetUnit
+    {
+        public RepairSquad(int id, int startID, int targetID = -1, int progress = 0)
         {
+            ID = id;
+            StartID = startID;
+            TargetID = targetID;
+            Progress = progress;
+        }
+    }
+
+    [System.Serializable]
+    public record Caravan : TargetUnit
+    {
+        public Caravan(int id, int startID, int targetID = -1, MoveType moveType = MoveType.Main)
+        {
+            ID = id;
             Progress = 0;
             TargetID = targetID;
             StartID = startID;
-            ID = id;
-            IsRepair = isRepair;
-            IsForward = true;
+            ToBack = false;
+            MoveType = moveType;
         }
 
-        public float Progress;
-        public int ItemCount;
-        public int TargetID;
-        public int StartID;
         public int ItemID;
-        public int ID;
-        public bool IsForward;
-        public bool IsRepair;
+        public int ItemCount;
+        public bool ToBack;
     }
 }
 
@@ -32,6 +55,8 @@ namespace Interact
 {
     public class Caravaner : AbstractInteract
     {
+        public int LocationID;
+
         private UI.Caravan _caravanUI;
         private bool _isOpen = false;
 
@@ -55,23 +80,24 @@ namespace Interact
             _caravanUI.SetOpen(_isOpen);
         }
 
-        public void AddCaravan()
+        public void AddUnit(UI.UnitType unitType)
         {
-            List<int> caravansID = new();
+            string unitName = unitType == UI.UnitType.Caravan ? "Caravan" : "RepairSquad";
+            List<int> IDs = new();
 
-            if (_serialize.ExistSave("CaravansID"))
-                caravansID = _serialize.LoadSave<Data.IDArray>("CaravansID").IDs.ToList();
+            if (_serialize.ExistSave($"{unitName}sID"))
+                IDs = _serialize.LoadSave<Data.IDArray>($"{unitName}sID").IDs.ToList();
 
             int id;
 
             do
                 id = Random.Range(0, 100000);
-            while (_serialize.ExistSave($"Caravan{id}"));
+            while (_serialize.ExistSave($"{unitName}{id}"));
 
-            caravansID.Add(id);
+            IDs.Add(id);
 
-            _serialize.CreateSave("CaravansID", new Data.IDArray { IDs = caravansID.ToArray() });
-            _serialize.CreateSave($"Caravan{id}", new Data.Caravan(-1, -1, id));
+            _serialize.CreateSave($"{unitName}sID", new Data.IDArray { IDs = IDs.ToArray() });
+            _serialize.CreateSave($"{unitName}{id}", unitType == UI.UnitType.Caravan ? new Data.Caravan(id, LocationID) : new Data.RepairSquad(id, LocationID));
         }
     }
 }

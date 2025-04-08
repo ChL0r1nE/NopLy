@@ -4,7 +4,9 @@ namespace UI
 {
     public class Caravan : MonoBehaviour
     {
-        public void AddCaravan() => _caravaner.AddCaravan();
+        public void AddCaravan() => _caravaner.AddUnit(UnitType.Caravan);
+
+        public void AddRepairSquad() => _caravaner.AddUnit(UnitType.RepairSquad);
 
         public void SetCaravaner(Interact.Caravaner caravaner) => _caravaner = caravaner;
 
