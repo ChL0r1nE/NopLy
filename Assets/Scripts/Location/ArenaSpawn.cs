@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Location
 {
-    public class ArenaSpawn : MonoBehaviour, Enemy.IEnemyLeft
+    public class ArenaSpawn : MonoBehaviour, Enemy.IEnemySpawn
     {
         public void Open() => _animator.SetBool("IsOpen", true);
 
@@ -32,8 +32,7 @@ namespace Location
             if (!_isInside) return;
 
             _arenaEnter.SetClose();
-            Instantiate(_enemy, _enemyPositions, Quaternion.identity).AddComponent<Enemy.Health>().SetSpawn(this);
-            _enemyCount++;
+            Instantiate(_enemy, _enemyPositions, Quaternion.identity).AddComponent<Enemy.Health>().SetSpawn(this, _enemyCount++);
         }
 
         public void EnemyLeft(int number)

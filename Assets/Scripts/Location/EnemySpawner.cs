@@ -6,18 +6,13 @@ namespace Data
     [Serializable]
     public record Enemy
     {
-        public Enemy(bool[] alive)
-        {
-            Alives = alive;
-        }
-
         public bool[] Alives;
     }
 }
 
 namespace Location
 {
-    public class State : MonoBehaviour, Enemy.IEnemyLeft
+    public class EnemySpawner : MonoBehaviour, Enemy.IEnemySpawn
     {
         public void EnemyLeft(int number) => _enemyRecord.Alives[number] = false;
 
@@ -32,6 +27,7 @@ namespace Location
 
         private Data.Enemy _enemyRecord;
         [SerializeField] private int _mapID;
+        [SerializeField] private bool _isProduction;
 
         private readonly Serialize _serialize = new();
 
@@ -52,14 +48,14 @@ namespace Location
 
         private void OnDisable()
         {
-            foreach (bool b in _enemyRecord.Alives)
-                if (b)
+            foreach (bool alive in _enemyRecord.Alives)
+                if (alive)
                 {
                     _serialize.CreateSave($"Location{_mapID}", _enemyRecord);
                     return;
                 }
 
-            _serialize.CreateSave($"Location{_mapID}", new Data.Production(0, 0, false));
+            _serialize.CreateSave($"Location{_mapID}", _isProduction ? new Data.Production(0, 0, false) : _enemyRecord);
         }
     }
 }

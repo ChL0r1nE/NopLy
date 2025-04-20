@@ -1,15 +1,54 @@
-using UnityEngine;
+using UI;
+
+namespace Data
+{
+    public enum MoveType
+    {
+        Main,
+        Replace
+    }
+
+    [System.Serializable]
+    public record RepairSquad
+    {
+        public RepairSquad(int id, int startID, int targetID = -1)
+        {
+            ID = id;
+            StartID = startID;
+            TargetID = targetID;
+        }
+
+        public int ID;
+        public float Progress;
+        public int TargetID;
+        public int StartID;
+    }
+
+    [System.Serializable]
+    public record Caravan : RepairSquad
+    {
+        public Caravan(int id, int startID, int targetID = -1, MoveType moveType = MoveType.Main) : base(id, startID, targetID)
+        {
+            ID = id;
+            Progress = 0;
+            TargetID = targetID;
+            StartID = startID;
+            ToBack = false;
+            MoveType = moveType;
+        }
+
+        public MoveType MoveType;
+        public int ItemID;
+        public int ItemCount;
+        public bool ToBack;
+    }
+}
 
 namespace Map
 {
-    public class Caravan : MonoBehaviour
+    public class Caravan : AbstractUnit
     {
-        [SerializeField] private LineRenderer _lineRenderer;
         private Data.Caravan _caravanData;
-        private Vector3 _startPosition;
-        private Vector3 _deltaPosition;
-        private float _progressWay;
-        private float _lengthWay;
 
         private readonly Serialize _serialize = new();
 
@@ -24,42 +63,29 @@ namespace Map
 
             if (_caravanData.Progress > 0f && _caravanData.Progress < 1f) return;
 
-            _caravanData.ToBack = !_caravanData.ToBack;
-
-            if(_caravanData.MoveType == Data.MoveType.Replace)
+            if (_caravanData.MoveType == Data.MoveType.Replace)
             {
+                MercenariesList.Static.AddPanel(_caravanData.ID, _caravanData.StartID, UnitType.Caravan);
                 _caravanData.StartID = _caravanData.TargetID;
                 _caravanData.TargetID = -1;
                 Destroy(gameObject);
                 return;
             }
 
-            if (_caravanData.ToBack)
-                _caravanData.ItemCount = LocationDictionary.Instance.GetTransform(_caravanData.TargetID).GetComponent<Production>().GetCargo(ref _caravanData.ItemID, 100);
-            else
-                LocationDictionary.Instance.GetTransform(_caravanData.StartID).GetComponent<AbstractConnectableLocation>().UnitInteract(_caravanData.ItemID, _caravanData.ItemCount);
+            _caravanData.ToBack = !_caravanData.ToBack;
+            LocationDictionary.Instance.GetTransform(_caravanData.ToBack ? _caravanData.TargetID : _caravanData.StartID).GetComponent<AbstractConnectableLocation>().UnitInteract(ref _caravanData.ItemID, ref _caravanData.ItemCount);
         }
 
         public void SetData(Data.Caravan caravan)
         {
             _caravanData = caravan;
 
+            if(_caravanData.Progress == 0f && !_caravanData.ToBack)
+                LocationDictionary.Instance.GetTransform(_caravanData.StartID).GetComponent<AbstractConnectableLocation>().UnitInteract(ref _caravanData.ItemID, ref _caravanData.ItemCount);
+
             _startPosition = LocationDictionary.Instance.GetTransform(_caravanData.StartID).position;
-            _lineRenderer.SetPosition(0, _startPosition);
-
             _deltaPosition = LocationDictionary.Instance.GetTransform(_caravanData.TargetID).position;
-            _lineRenderer.SetPosition(1, _deltaPosition);
-            _deltaPosition -= _startPosition;
-
-            if (_caravanData.ToBack)
-            {
-                _startPosition += _deltaPosition;
-                _deltaPosition *= -1;
-            }
-
-            _lengthWay = _deltaPosition.magnitude;
-            _progressWay = _lengthWay * _caravanData.Progress;
-            transform.position = _startPosition + _deltaPosition * _caravanData.Progress;
+            SetWay(_caravanData.Progress);
         }
     }
 }
