@@ -27,52 +27,55 @@ namespace UI
 
     public class MercenariesList : MonoBehaviour
     {
+        public static MercenariesList Static;
+
         private List<UnitInfo> _unitsInfo = new();
         private List<int> _targetsID = new();
 
-        [SerializeField] private RectTransform _choisePanelTransform;
+        [SerializeField] private RectTransform _modesPanelTransform;
         [SerializeField] private Map.CaravanSpawn _caravanSpawn;
-        [SerializeField] private Button _unitButtonPrefab;
+        [SerializeField] private UnitButton _unitButtonPrefab;
+        private Vector2 _modesPanelPosition = new(275, 0);
         private Vector2 _buttonOffset = new(0, 105);
         private Data.MoveType _moveType;
         private int _selectUnitNumber;
+        private int _unitCount;
         private bool _isChoiceType = false;
 
         private readonly Serialize _serialize = new();
 
         private void Start()
         {
+            Static = this;
+
             if (!_serialize.ExistSave("CaravansID")) return;
 
             int[] ids = _serialize.LoadSave<Data.IDArray>("CaravansID").IDs;
-            int i = 0;
+            Data.Caravan caravan;
 
             foreach (int id in ids)
             {
-                Data.Caravan caravan = _serialize.LoadSave<Data.Caravan>($"Caravan{id}");
+                caravan = _serialize.LoadSave<Data.Caravan>($"Caravan{id}");
 
                 if (caravan.TargetID != -1) continue;
 
-                Button button = Instantiate(_unitButtonPrefab, transform);
-                button.SetButtonInfo(this, caravan.ID, caravan.StartID, UnitType.Caravan);
-                _unitsInfo.Add(new(id, caravan.StartID, UnitType.Caravan, button.GetComponent<RectTransform>()));
-                _unitsInfo[^1].RectTransform.anchoredPosition = _buttonOffset * i++;
+                _unitCount++;
+                AddPanel(caravan.ID, caravan.StartID, UnitType.Caravan);
             }
 
             if (!_serialize.ExistSave("RepairSquadsID")) return;
 
             ids = _serialize.LoadSave<Data.IDArray>("RepairSquadsID").IDs;
+            Data.RepairSquad repairSquad;
 
             foreach (int id in ids)
             {
-                Data.RepairSquad repairSquad = _serialize.LoadSave<Data.RepairSquad>($"RepairSquad{id}");
+                repairSquad = _serialize.LoadSave<Data.RepairSquad>($"RepairSquad{id}");
 
                 if (repairSquad.TargetID != -1) continue;
 
-                Button button = Instantiate(_unitButtonPrefab, transform);
-                button.SetButtonInfo(this, repairSquad.ID, repairSquad.StartID, UnitType.RepairSquad);
-                _unitsInfo.Add(new(id, repairSquad.StartID, UnitType.RepairSquad, button.GetComponent<RectTransform>()));
-                _unitsInfo[^1].RectTransform.anchoredPosition = _buttonOffset * i++;
+                _unitCount++;
+                AddPanel(repairSquad.ID, repairSquad.StartID, UnitType.RepairSquad);
             }
         }
 
@@ -81,7 +84,7 @@ namespace UI
             if (!Input.GetKeyDown(KeyCode.Q)) return;
 
             _isChoiceType = false;
-            Map.AbstractLocation.IsPlayerMoveMode = true;
+            ActivateMenu(false);
         }
 
         public void SetMoveType(bool isMain)
@@ -90,16 +93,28 @@ namespace UI
             _moveType = isMain ? Data.MoveType.Main : Data.MoveType.Replace;
         }
 
-        public void CaravanButtonDown(int id)
+        public void AddPanel(int id, int startId, UnitType type)
+        {
+            UnitButton button = Instantiate(_unitButtonPrefab, transform);
+            button.SetButtonInfo(id, startId, type);
+            _unitsInfo.Add(new(id, startId, type, button.GetComponent<RectTransform>()));
+            _unitsInfo[^1].RectTransform.anchoredPosition = _buttonOffset * _unitCount;
+        }
+
+        public void UnitButtonDown(int id)
         {
             _isChoiceType = false;
+            ActivateMenu(true);
 
             for (int i = 0; i < _unitsInfo.Count; i++)
                 if (_unitsInfo[i].ID == id)
+                {
                     _selectUnitNumber = i;
+                    break;
+                }
 
-            Map.AbstractLocation.IsPlayerMoveMode = false;
-            _choisePanelTransform.anchoredPosition = new Vector2(275, 105 * _selectUnitNumber); //new vec
+            _modesPanelPosition.y = 105 * _selectUnitNumber;
+            _modesPanelTransform.anchoredPosition = _modesPanelPosition;
 
             Transform transform = LocationDictionary.Instance.GetTransform(_unitsInfo[_selectUnitNumber].StartID);
 
@@ -121,12 +136,19 @@ namespace UI
             if (_unitsInfo[_selectUnitNumber].Type == UnitType.RepairSquad)
                 _caravanSpawn.SpawnRepairSquad(new(_unitsInfo[_selectUnitNumber].ID, _unitsInfo[_selectUnitNumber].StartID, mapID));
 
-            Map.AbstractLocation.IsPlayerMoveMode = true;
+            _unitCount--;
+            ActivateMenu(false);
             Destroy(_unitsInfo[_selectUnitNumber].RectTransform.gameObject);
             _unitsInfo.RemoveAt(_selectUnitNumber);
 
             for (int i = _selectUnitNumber; i < _unitsInfo.Count; i++)
                 _unitsInfo[i].RectTransform.anchoredPosition -= _buttonOffset;
+        }
+
+        private void ActivateMenu(bool isActive)
+        {
+            Map.Player.IsChoiced = !isActive;
+            _modesPanelTransform.gameObject.SetActive(isActive);
         }
     }
 }

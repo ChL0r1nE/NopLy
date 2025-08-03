@@ -18,12 +18,6 @@ public class LocationDictionary : MonoBehaviour
 
     private void OnEnable()
     {
-        if (Instance)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         Instance = this;
 
         if (_serialize.ExistSave("LocationsID")) return;
@@ -34,10 +28,10 @@ public class LocationDictionary : MonoBehaviour
             IDs.Add(location.ID);
 
         bool[] alive = { true, true, true };
-        _serialize.CreateSave("Location4500", new Data.Enemy(alive));
+        _serialize.CreateSave("Location4500", new Data.Enemy { Alives = alive });
         _serialize.CreateSave("Location4501", new Data.Production(0, 0, true));
         _serialize.CreateSave("Location4502", new Data.Slots(null));
-        _serialize.CreateSave("Location4503", new Data.Enemy(alive));
+        _serialize.CreateSave("Location4503", new Data.Enemy { Alives = alive });
 
         _serialize.CreateSave("LocationsID", new Data.IDArray { IDs = IDs.ToArray() });
     }

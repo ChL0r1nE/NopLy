@@ -10,15 +10,15 @@ namespace Map
 
         private void OnEnable()
         {
-            if (_serialize.LoadSave<object>($"Location{_mapID}") is Data.Production)
-                Destroy(this);
-            else if (gameObject.TryGetComponent(out Production production))
-                Destroy(production);
+            if (_serialize.LoadSave<object>($"Location{_mapID}") is Data.Enemy) return;
+
+            gameObject.GetComponent<Production>().SetMain();
+            Destroy(this);
         }
 
-        protected override void OnDown()
+        public override void ShowMenu()
         {
-            base.OnDown();
+            base.ShowMenu();
             _mapLocation.SetEnemyMenu(_damage);
         }
     }

@@ -15,7 +15,6 @@ namespace PlayerComponent
 #if UNITY_EDITOR
             public string SkillName;
 #endif
-
             public Skill.AbstractSkill[] SkillComponents;
             public string[] AnimTriggers;
 

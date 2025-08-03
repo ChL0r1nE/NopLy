@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public interface IEnemyLeft
+    public interface IEnemySpawn
     {
         public void EnemyLeft(int number);
     }
@@ -17,14 +17,14 @@ namespace Enemy
         [SerializeField] private GameObject _enemy;
         [SerializeField] private int _maxHealth;
         [SerializeField] private DamageText _damageText;
-        private IEnemyLeft _iEnemyLeft;
+        private IEnemySpawn _iEnemySpawn;
         private int _number;
 
         private void Start() => HealthValue = _maxHealth;
 
-        public void SetSpawn(IEnemyLeft iEnemyleft, int number = 0)
+        public void SetSpawn(IEnemySpawn iEnemySpawn, int number)
         {
-            _iEnemyLeft = iEnemyleft;
+            _iEnemySpawn = iEnemySpawn;
             _number = number;
         }
 
@@ -38,7 +38,7 @@ namespace Enemy
 
             if (HealthValue > 0) return;
 
-            _iEnemyLeft.EnemyLeft(_number);
+            _iEnemySpawn.EnemyLeft(_number);
             Instantiate(_loot, transform.position, Quaternion.identity);
             Destroy(_enemy);
         }

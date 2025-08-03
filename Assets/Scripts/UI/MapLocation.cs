@@ -5,19 +5,29 @@ namespace UI
 {
     public class MapLocation : MonoBehaviour
     {
-        public void LoadLocation() => _player.LoadLocation();
+        public void LoadLocation() => Map.Player.Static.LoadLocation();
 
         public void Open() => _isOpen = true;
 
+        [Header("TownUI")]
+        [SerializeField] private GameObject _townPanel;
         [SerializeField] private Image[] _images;
         [SerializeField] private Text[] _textes;
 
-        [SerializeField] private GameObject _enemyMenu;
-        [SerializeField] private GameObject _cityMenu;
+        [Header("ProductionUI")]
+        [SerializeField] private GameObject _productionPanel;
+        [SerializeField] private Image _baseProductImage;
+        [SerializeField] private Image _resultProductImage;
+        [SerializeField] private Text _baseProductCount;
+        [SerializeField] private Text _resultProductCount;
+
+        [Header("EnemyUI")]
+        [SerializeField] private GameObject _enemyPanel;
+
+        [Header("")]
         [SerializeField] private Image _locationImage;
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _subText;
-        [SerializeField] private Map.Player _player;
         private GameObject _oldMenu;
         private RectTransform _rectTransform;
         private Vector3 _position;
@@ -34,44 +44,18 @@ namespace UI
         public void Close()
         {
             _isOpen = false;
-            _player.Exit();
+            Map.Player.Static.Exit();
         }
 
-        public void SetLocationImage(Sprite sprite, string locationName)
+        public void SetLocationHead(Sprite sprite, string locationName)
         {
-            _nameText.text = locationName;
             _locationImage.sprite = sprite;
+            _nameText.text = locationName;
         }
 
-        public void SetProductMenu(string st)
+        public void SetTownMenu(Slot[] slots)
         {
-            if (_isOpen) return;
-
-            _oldMenu?.SetActive(false);
-            _enemyMenu.SetActive(true);
-            _oldMenu = _enemyMenu;
-
-            _subText.text = st;
-        }
-
-        public void SetBildingMenu(string st2)
-        {
-            if (_isOpen) return;
-
-            _oldMenu?.SetActive(false);
-            _enemyMenu.SetActive(true);
-            _oldMenu = _enemyMenu;
-
-            _subText.text = st2;
-        }
-
-        public void SetCityMenu(Slot[] slots)
-        {
-            if (_isOpen) return;
-
-            _oldMenu?.SetActive(false);
-            _cityMenu.SetActive(true);
-            _oldMenu = _cityMenu;
+            ChangePanel(_townPanel);
 
             for (int i = 0; i < slots.Length; i++)
             {
@@ -84,26 +68,41 @@ namespace UI
             }
         }
 
-        public void SetVillageMenu(string product)
+        public void SetProductionMenu(Sprite resultProductSprite, int resultProductCount)
         {
-            if (_isOpen) return;
+            ChangePanel(_productionPanel);
 
-            _oldMenu?.SetActive(false);
-            _enemyMenu.SetActive(true);
-            _oldMenu = _enemyMenu;
+            _baseProductImage.enabled = false;
+            _baseProductCount.enabled = false;
+            _resultProductImage.sprite = resultProductSprite;
+            _resultProductCount.text = resultProductCount.ToString();
+        }
 
-            _subText.text = $"Production - {product}";
+        public void SetProductionMenu(Sprite baseProductSprite, int baseProductCount, Sprite resultProductSprite, int resultProductCount)
+        {
+            ChangePanel(_productionPanel);
+
+            _baseProductImage.enabled = true;
+            _baseProductCount.enabled = true;
+            _baseProductImage.sprite = baseProductSprite;
+            _baseProductCount.text = baseProductCount.ToString();
+
+            _resultProductImage.sprite = resultProductSprite;
+            _resultProductCount.text = resultProductCount.ToString();
         }
 
         public void SetEnemyMenu(string damage)
         {
-            if (_isOpen) return;
-
-            _oldMenu?.SetActive(false);
-            _enemyMenu.SetActive(true);
-            _oldMenu = _enemyMenu;
+            ChangePanel(_enemyPanel);
 
             _subText.text = damage;
+        }
+
+        private void ChangePanel(GameObject newPanel)
+        {
+            _oldMenu?.SetActive(false);
+            newPanel.SetActive(true);
+            _oldMenu = newPanel;
         }
     }
 }

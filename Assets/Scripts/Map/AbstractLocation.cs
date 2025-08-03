@@ -4,11 +4,7 @@ namespace Map
 {
     public abstract class AbstractLocation : MonoBehaviour
     {
-        public static bool IsPlayerMoveMode = true;
-
         [SerializeField] protected UI.MapLocation _mapLocation;
-        [SerializeField] protected UI.MercenariesList _mercenariesList;
-        [SerializeField] protected Player _move;
         [SerializeField] protected int _mapID;
 
         [SerializeField] private Sprite _sprite;
@@ -16,12 +12,16 @@ namespace Map
 
         private void OnMouseDown()
         {
-            if (IsPlayerMoveMode)
-                OnDown();
+            if (Player.IsChoiced)
+                Player.Static.SetTargetPosition(this, transform.position, _name);
             else
-                _mercenariesList.SetLocationID(_mapID);
+                UI.MercenariesList.Static.SetLocationID(_mapID);
         }
 
-        protected virtual void OnDown() => _move.SetTargetPosition(transform.position, _sprite, _name); //ReWork from sprite, name
+        public virtual void ShowMenu()
+        {
+            _mapLocation.Open();
+            _mapLocation.SetLocationHead(_sprite, _name);
+        }
     }
 }

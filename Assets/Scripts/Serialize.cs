@@ -69,6 +69,8 @@ public class Serialize
         _file.Close();
     }
 
+    public void DeleteSave(string fileName) => File.Delete($"{UnityEngine.Application.persistentDataPath}/{fileName}.dat");
+
     public void Records2Slots(Data.Item[] itemRecords, Slot[] slots)
     {
         for (int i = 0; i < slots.Length; i++)
@@ -80,22 +82,5 @@ public class Serialize
             else
                 slots[i] = new(ItemDictionary.Instance.GetInfo(itemRecords[i].ID), itemRecords[i].Count);
         }
-    }
-
-    public Data.Item[] Slots2Record(Slot[] slots)
-    {
-        Data.Item[] itemRecords = new Data.Item[slots.Length];
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (!slots[i].Item) continue;
-
-            if (slots[i] is WeaponSlot weaponSlot)
-                itemRecords[i] = new Data.Weapon { ID = weaponSlot.Item.ID, Count = weaponSlot.Count, Endurance = weaponSlot.Endurance };
-            else
-                itemRecords[i] = new Data.Item { ID = slots[i].Item.ID, Count = slots[i].Count };
-        }
-
-        return itemRecords;
     }
 }

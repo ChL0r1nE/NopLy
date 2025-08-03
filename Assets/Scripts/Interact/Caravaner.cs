@@ -2,55 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Data
-{
-    public enum MoveType
-    {
-        Main,
-        Replace
-    }
-
-    [System.Serializable]
-    public record TargetUnit
-    {
-        public int ID;
-        public float Progress;
-        public int TargetID;
-        public int StartID;
-        public MoveType MoveType;
-    }
-
-    [System.Serializable]
-    public record RepairSquad : TargetUnit
-    {
-        public RepairSquad(int id, int startID, int targetID = -1, int progress = 0)
-        {
-            ID = id;
-            StartID = startID;
-            TargetID = targetID;
-            Progress = progress;
-        }
-    }
-
-    [System.Serializable]
-    public record Caravan : TargetUnit
-    {
-        public Caravan(int id, int startID, int targetID = -1, MoveType moveType = MoveType.Main)
-        {
-            ID = id;
-            Progress = 0;
-            TargetID = targetID;
-            StartID = startID;
-            ToBack = false;
-            MoveType = moveType;
-        }
-
-        public int ItemID;
-        public int ItemCount;
-        public bool ToBack;
-    }
-}
-
 namespace Interact
 {
     public class Caravaner : AbstractInteract
